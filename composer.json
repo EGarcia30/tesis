@@ -1,0 +1,17 @@
+{
+    "name": "penad/tesis",
+    "autoload": {
+        "psr-4": {
+            "Penad\\Tesis\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Erick Penado",
+            "email": "penado188@gmail.com"
+        }
+    ],
+    "require": {
+        "bramus/router": "~1.6"
+    }
+}
