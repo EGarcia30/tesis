@@ -8,7 +8,6 @@ $dotenv->load();
 
 $router->get('/', function(){
     echo "Inicio";
-    echo $_ENV['DB'];
 });
 
 $router->get('/login', function(){
