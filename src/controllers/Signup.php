@@ -33,8 +33,8 @@ class Signup extends Controller{
             !is_null($this->_nombre)
         ){
             $user = new User($this->_usuario, $this->_clave, $this->_rol_usuario, $this->_nombre);
-            $user->save();
-            header('location: /tesis/login');
+            $user->insertUser();
+            header('location: /tesis/');
         }
         else{
             $this->render('errors/index');

@@ -1,21 +1,23 @@
 <?php
 
+//Uso de controladores
+use Penad\Tesis\controllers\Signup;
+use Penad\Tesis\controllers\Login;
+
 $router = new \Bramus\Router\Router();
 session_start();
 
+//Inicializando archivo .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__. '/../config');
 $dotenv->load();
 
 $router->get('/', function(){
-    echo "<h1>ALEJANDRO ME LA PELASSSSSSS</h1>";
-});
-
-$router->get('/login', function(){
-    echo "Hola soy Login";
+    $controller = new Login;
+    $controller->render('login/index');
 });
 
 $router->get('/signup', function(){
-    $controller = new Penad\Tesis\controllers\Signup;
+    $controller = new Signup;
     $controller->render('signup/index');
 });
 
