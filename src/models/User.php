@@ -8,6 +8,7 @@ use PDOException;
 
 class User extends Model{
 
+    private int $_id;
     private string $_usuario; 
     private string $_clave;
     private string $_rol_usuario;
@@ -23,18 +24,19 @@ class User extends Model{
     }
 
     //insertar usuarios
-    public function save(){
+    public function insertUser(){
         try{
             //TODO: validar si existe usuario
-            $data = $this->getUserVlaidation($this->_usuario);
+            $data = $this->getExists($this->_usuario);
             $validation = intval($data[0]['num']);
             if($validation === 0){
                 $hash = $this->getHashedPassword($this->_clave);
-                $sql = 'INSERT INTO usuarios (usuario, clave, tipo_usuario) VALUES(:usuario, :clave, :tipo_usuario)';
+                $sql = 'INSERT INTO usuarios (usuario, clave, rol_usuario, nombre) VALUES(:usuario, :clave, :rol_usuario, :nombre)';
                 $query = $this->prepare($sql);
                 $query->bindValue(':usuario',$this->_usuario);
                 $query->bindValue(':clave',$hash);
-                $query->bindValue(':tipo_usuario',$this->_rol_usuario);
+                $query->bindValue(':rol_usuario',$this->_rol_usuario);
+                $query->bindValue(':nombre',$this->_nombre);
                 $res = $query->execute();
                 return $res;
             }
@@ -51,7 +53,7 @@ class User extends Model{
 
 
     //obtener usuario
-    public function getUserValidation(string $user){
+    public function getExists(string $user){
         try{
             $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario=$user";
             $query = $this->query($sql);
@@ -68,5 +70,37 @@ class User extends Model{
     //encriptar contraseñas
     private function getHashedPassword($clave){
         return password_hash($clave, PASSWORD_DEFAULT, ['cost' == 10]);
+    }
+
+    public function getId(){
+        return $this->_id;
+    }
+
+    public function setId(int $value){
+        return $this->_id = $value;
+    }
+
+    public function getUser(){
+        return $this->_usuario;
+    }
+
+    public function setUser(string $value){
+        return $this->_usuario = $value;
+    }
+
+    public function getRol(){
+        return $this->_id;
+    }
+
+    public function setRol(string $value){
+        return $this->_rol_usuario = $value;
+    }
+
+    public function getName(){
+        return $this->_nombre;
+    }
+
+    public function setName(string $value){
+        return $this->_nombre = $value;
     }
 }
