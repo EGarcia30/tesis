@@ -1,8 +1,8 @@
 <?php
 
-namespace Penad\tesis\lib;
+namespace Penad\Tesis\lib;
 
-use Penad\tesis\lib\View;
+use Penad\Tesis\lib\View;
 
 class Controller{
 
@@ -16,14 +16,14 @@ class Controller{
         $this->_view->render($name,$data);
     }
 
-    public function get(string $params){
+    protected function get(string $param){
         if(!isset($_GET[$param])){
             return NULL;
         }
         return $_GET[$param];
     }
 
-    public function post(string $params){
+    protected function post(string $param){
         if(!isset($_POST[$param])){
             return NULL;
         }

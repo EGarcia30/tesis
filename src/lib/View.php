@@ -1,10 +1,10 @@
 <?php
 
-namespace Penad\tesis\lib;
+namespace Penad\Tesis\lib;
 
 class View{
 
-    function render(string $name, array $data = []){
+    public function render(string $name, array $data = []){
         $this->d = $data;
         require_once 'src/views/'. $name . '.php';
     }

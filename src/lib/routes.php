@@ -7,7 +7,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__. '/../config');
 $dotenv->load();
 
 $router->get('/', function(){
-    echo "Inicio";
+    echo "<h1>ALEJANDRO ME LA PELASSSSSSS</h1>";
 });
 
 $router->get('/login', function(){
@@ -15,7 +15,13 @@ $router->get('/login', function(){
 });
 
 $router->get('/signup', function(){
-    echo "Hola soy signup";
+    $controller = new Penad\Tesis\controllers\Signup;
+    $controller->render('signup/index');
+});
+
+$router->post('/register', function(){
+    $controller = new Penad\Tesis\controllers\Signup;
+    $controller->register();
 });
 
 $router->run();
