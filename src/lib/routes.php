@@ -4,6 +4,7 @@
 use Penad\Tesis\controllers\Signup;
 use Penad\Tesis\controllers\Login;
 use Penad\Tesis\controllers\Home;
+use Penad\Tesis\controllers\Error;
 
 $router = new \Bramus\Router\Router();
 session_start();
@@ -30,7 +31,11 @@ function Auth(){
 $router->get('/', function(){
     Auth();
     $controller = new Login;
-    $controller->render('login/index');
+    $data = [
+        'color' => unserialize($_SESSION['color']),
+        'message' => unserialize($_SESSION['message'])
+    ];
+    $controller->render('login/index', $data);
 });
 
 $router->post('/auth', function(){
@@ -60,6 +65,17 @@ $router->get('/signout', function(){
 $router->post('/register', function(){
     $controller = new Signup;
     $controller->register();
+});
+
+$router->set404(function() {
+    header('HTTP/1.1 404 Not Found');
+    $data = [
+        'status' => '404',
+        'message' => 'Pagina no encontrada'
+    ];
+
+    $controller = new Error();
+    $controller->render('404/index', $data);
 });
 
 $router->run();

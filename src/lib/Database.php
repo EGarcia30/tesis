@@ -25,17 +25,18 @@ class Database{
     public function connect():PDO{
         try{
             $connection = "mysql:host=".$this->_host.";dbname=".$this->_db.";charset=".$this->_charset;
-            // $options = [
-            //     PDO::ATTR_ERRMODE  == PDO::ERRMODE_EXCEPTION,
-            //     PDO::ATTR_EMULATE_PREPARES == false,
-            // ];
+            $options = [
+                PDO::ATTR_ERRMODE  => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ];
             $pdo = new PDO(
                 $connection,
                 $this->_user,
-                $this->_password
+                $this->_password,
+                $options
             );
 
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             return $pdo;
         }
