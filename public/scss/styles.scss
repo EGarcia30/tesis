@@ -1,0 +1,34 @@
+// Required
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "login";
+@import "navbar";
+@import "content";
+
+
+.font-custom{
+    font-size: 10px;
+}
+
+.header-font-custom{
+    font-size: 15px;
+}
+
+@media screen and (min-width:576px){
+    .font-custom{
+        font-size: 13px;
+    }
+    
+    .header-font-custom{
+        font-size: 23px;
+    }
+}
+
+$custom-colors: (
+    "utec": #6D1D3C
+);
+
+$theme-colors: map-merge($theme-colors , $custom-colors );
+
+// Required
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
