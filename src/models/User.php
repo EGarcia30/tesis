@@ -115,7 +115,7 @@ class User extends Model{
     }
 
     public function getRol(){
-        return $this->_id;
+        return $this->_user_role;
     }
 
     public function setRol(string $value){
