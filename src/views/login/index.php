@@ -37,11 +37,9 @@
                             <input type="password" name="clave" class="form-control">
                         </div>
                         <div class="mt-4 mb-2">
-                            <label for="" class="alert alert-<?= $this->d['color']?> w-100"><?= $this->d['message']?></label>
-                        </div>
-                        <div>
                             <input type="submit" class="btn btn-utec d-block w-100" value="Iniciar Sesión">
                         </div>
+                        <?php require __DIR__ . '/../../components/alerts.php'; ?>
                     </form>
                 </div>
             </div>
@@ -49,5 +47,6 @@
         </div>
     </div>
 </main>
+    <script src="<?= URL_PATH ?>/../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

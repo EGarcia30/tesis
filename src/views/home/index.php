@@ -36,25 +36,31 @@
             </div>
             <div class="">
                 <h3 class="font-custom pb-3 text-center m-0">¿Que te gustaría hacer?</h3>
-                <div class="card mx-auto bg-white p-3 ms-2">
-                    <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                        <span class="icon profile-icon pe-2">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                        <p class="font-custom m-0">Crear nuevo plan de estudio</p>
-                    </div>
-                    <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                        <span class="icon profile-icon pe-2">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <p class="font-custom m-0">Buscar plan de estudio</p>
-                    </div>
-                    <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                        <span class="icon profile-icon pe-2">
-                            <i class="fas fa-eye"></i>
-                        </span>
-                        <p class="font-custom m-0">Ver todos los planes de estudio</p>
-                    </div>
+                <div class="card mx-auto bg-white p-3 ms-0 ms-md-2">
+                    <a href="/tesis/create" class="text-dark text-decoration-none">
+                        <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
+                            <span class="icon profile-icon pe-2">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <p class="font-custom m-0">Crear nuevo plan de estudio</p>
+                        </div>
+                    </a>
+                    <a href="/tesis/home" class="text-dark text-decoration-none">
+                        <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
+                            <span class="icon profile-icon pe-2">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <p class="font-custom m-0">Buscar plan de estudio</p>
+                        </div>
+                    </a>
+                    <a href="/tesis/plan" class="text-dark text-decoration-none">
+                        <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
+                            <span class="icon profile-icon pe-2">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <p class="font-custom m-0">Ver todos los planes de estudio</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div> 
