@@ -128,6 +128,12 @@ $router->get('/delete/{id}', function($id){
 
 });
 
+//descargar documento de word
+$router->get('/word/{id}', function($id){
+    $controller = new CurricularDesign;
+    $controller->word($id);
+});
+
 //CRUD plan de estudio
 //Ingresar
 $router->post('/create', function(){
