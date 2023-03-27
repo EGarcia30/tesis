@@ -51,24 +51,31 @@
         </div>
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
-        <div class="container pt-3 pe-3 d-flex flex-column text-center">
-            <a href="/tesis/create" class="mb-3 text-dark text-decoration-none">
-                <span class="icon">
-                    <i class="fas fa-plus"></i>
-                </span>
-                <p class="font-custom">Agregar</p>
+        <div class="container pt-3 pe-3 d-flex flex-column text-start">
+            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link active font-custom">
+                Portada
             </a>
-            <a href="/tesis/home" class="mb-3 text-dark text-decoration-none">
-                <span class="icon">
-                    <i class="fas fa-search"></i>
-                </span>
-                <p class="font-custom">Buscar</p>
+            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Índice
             </a>
-            <a href="/tesis/plan" class="text-dark text-decoration-none">
-                <span class="icon">
-                    <i class="fas fa-eye"></i>
-                </span>
-                <p class="font-custom">Ver</p>
+            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Fundamentos
+            </a>
+            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Cuadro Resumen <br/>
+                de los Especialistas <br/>
+                que participaron <br/>
+                en el Diseño <br/>
+                Curricular
+            </a>
+            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Generalidad de la <br/>
+                Carrera
+            </a>
+            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Justificación y <br/>
+                Modalidad de <br/>
+                Entrega
             </a>
         </div>
     </div>
