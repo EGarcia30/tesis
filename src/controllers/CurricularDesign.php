@@ -56,7 +56,7 @@ class CurricularDesign extends Controller{
         $content = $this->post('contenido');
 
         if(!is_null($title) && !is_null($content)){
-
+            
             $studyPlan = new StudyPlan($title, $content);
             $res = $studyPlan->createPlan();
             if($res){
@@ -102,5 +102,10 @@ class CurricularDesign extends Controller{
             $_SESSION['message'] = 'Los datos vienen nulos';
             header("location:/tesis/update/$id");
         }
+    }
+
+    public function word(int $id){
+        $req = StudyPlan::getPlan($id);
+        require_once __DIR__ . '/../lib/word.php';
     }
 }

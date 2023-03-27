@@ -22,6 +22,7 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Titulo</th>
+                            <th scope="col">Descargar</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
                         </tr>
@@ -30,6 +31,12 @@
                         <tr >
                             <td scope="row"><?= $this->d['studyPlan']->getId() ?></td>
                             <td><?= $this->d['studyPlan']->getTitle() ?></td>
+                            <td><a href="/tesis/word/<?= $this->d['studyPlan']->getId() ?>" class="btn btn-utec">
+                                    <div class="img-word">
+                                        <img src="<?= URL_PATH ?>/img/word.png" class="img-fluid" alt="">
+                                    </div>
+                                </a>
+                            </td>
                             <td><a href="/tesis/update/<?= $this->d['studyPlan']->getId() ?>" class="btn btn-success">Editar</a></td>
                             <td><a href="/tesis/delete/<?= $this->d['studyPlan']->getId() ?>" class="btn btn-danger">Eliminar</a></td>
                         </tr>
