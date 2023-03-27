@@ -87,6 +87,10 @@
   position: relative;
 }
 
+.card-height {
+  --bs-card-height: 35em !important;
+}
+
 .card::after {
   content: "";
   display: block;
@@ -112,17 +116,48 @@
   height: 12em;
 }
 
+.nav_link {
+  color: #000;
+}
+
+.active,
+.nav_link:hover {
+  color: #fff;
+  background-color: #6D1D3C;
+  transition: all 400ms ease-in;
+}
+
+.w-custom-crud {
+  width: 100%;
+}
+
+@media screen and (min-width: 576px) {
+  /*content*/
+  .w-custom-crud {
+    width: calc(100% - 161px);
+    margin-left: 161px;
+  }
+}
+.search-icon {
+  padding: 0;
+  font-size: 1em;
+}
+
 .font-custom {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .header-font-custom {
   font-size: 15px;
 }
 
+.table-height {
+  height: 30em;
+}
+
 @media screen and (min-width: 576px) {
   .font-custom {
-    font-size: 13px;
+    font-size: 14px;
   }
   .header-font-custom {
     font-size: 23px;

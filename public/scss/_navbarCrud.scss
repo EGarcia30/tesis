@@ -1,0 +1,23 @@
+.nav_link{
+    color: #000;
+}
+
+.active,
+.nav_link:hover{
+    color: #fff;
+    background-color: #6D1D3C;
+    transition: all 400ms ease-in;
+}
+
+.w-custom-crud{
+    width: 100%;
+}
+
+@media screen and (min-width:576px) {
+
+    /*content*/
+    .w-custom-crud{
+        width: calc(100% - 161px);
+        margin-left: 161px;
+    }
+}

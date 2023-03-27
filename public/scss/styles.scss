@@ -3,20 +3,26 @@
 @import "../../node_modules/bootstrap/scss/variables";
 @import "login";
 @import "navbar";
-@import "content";
+@import "create";
+@import"navbarCrud";
+@import "plan";
 
 
 .font-custom{
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .header-font-custom{
     font-size: 15px;
 }
 
+.table-height{
+    height: 30em;
+}
+
 @media screen and (min-width:576px){
     .font-custom{
-        font-size: 13px;
+        font-size: 14px;
     }
     
     .header-font-custom{

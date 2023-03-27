@@ -6,6 +6,10 @@
     position: relative;
 }
 
+.card-height{
+    --bs-card-height: 35em !important;
+}
+
 .card::after{
     content: '';
     display: block;
