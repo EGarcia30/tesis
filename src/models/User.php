@@ -21,7 +21,20 @@ class User extends Model{
         $this->_password = $password;
         $this->_user_role = $user_role;
         $this->_name = $name;
-        // $this->db = $this->_db->connect();
+    }
+
+    public static function getUsers(){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM usuarios";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);         
+            return $res;            
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
+        }
     }
 
     public static function getUser(string $name):User{
@@ -43,6 +56,24 @@ class User extends Model{
         }
     }
 
+    //obtener usuario
+    public static function existsUser(string $user){
+        try{
+            $_db = new Database();
+            $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario=$user";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetch(PDO::FETCH_ASSOC);
+            return $res;
+
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }        
+    }
+
+
+    //CRUD
     //insertar usuarios
     public function insertUser(){
         try{
@@ -71,23 +102,7 @@ class User extends Model{
         }
     }
 
-
-    //obtener usuario
-    public static function getExists(string $user){
-        try{
-            $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario=$user";
-            $query = $_db->connect()->query($sql);
-            $res = $query->fetch(PDO::FETCH_ASSOC);
-            return $res;
-
-        }
-        catch(PDOException $e){
-            error_log($e->getMessage());
-            return false;
-        }        
-    }
-
+    //Seguridad
     //encriptar contraseñas
     private function getHashedPassword(string $password){
         return password_hash($password, PASSWORD_DEFAULT, ['cost' == 10]);
@@ -98,6 +113,7 @@ class User extends Model{
         return password_verify($password, $this->_password);
     }
 
+    //get y set de Objeto user
     public function getId(){
         return $this->_id;
     }

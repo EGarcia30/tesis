@@ -7,19 +7,7 @@ use Penad\Tesis\models\User;
 
 class Home extends Controller{
 
-    private User $_user;
-
-    public function __construct(User $user){
+    public function __construct(){
         parent::__construct();
-        $this->_user = $user;
-    }
-
-    public function index(){
-
-        $data = [
-            'title' => 'Home',
-            'user' => $this->_user
-        ];
-        $this->render('home/index', $data);
     }
 }
