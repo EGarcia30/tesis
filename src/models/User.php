@@ -14,6 +14,7 @@ class User extends Model{
     private string $_password;
     private string $_user_role;
     private string $_name;
+    private int $_status;
 
     public function __construct(string $username, string $password, string $user_role, string $name){
         parent::__construct(); 
@@ -23,12 +24,13 @@ class User extends Model{
         $this->_name = $name;
     }
 
-    public static function getUsers(){
+    public static function getUsers(int $start,int $end){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM usuarios";
-            $query = $_db->connect()->query($sql);
-            $res = $query->fetchAll(PDO::FETCH_ASSOC);         
+            $sql = "SELECT * FROM usuarios WHERE status=1 ORDER BY usuario_id DESC LIMIT $start, $end";
+            $query = $_db->connect()->prepare($sql);
+            $query->execute();
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);       
             return $res;            
         }
         catch(PDOException $e){
@@ -37,15 +39,51 @@ class User extends Model{
         }
     }
 
-    public static function getUser(string $name):User{
+    public static function rowUsers(){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM usuarios WHERE usuario=$name";
+            $sql = "SELECT * FROM usuarios WHERE status=1";
+            $query = $_db->connect()->prepare($sql);
+            $query->execute();
+            $rows = $query->rowCount();       
+            return $rows;            
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
+        }
+    }
+
+    public static function searchUser($data){
+        try{
+
+            $_db = new Database();
+            $int = intval($data);
+            $sql = "SELECT * FROM usuarios WHERE status=1 AND usuario_id=$int 
+            OR nombre_usuario LIKE '%".$data."%' 
+            OR usuario LIKE '%".$data."%' 
+            OR rol_usuario LIKE '%".$data."%'";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);         
+            return $res;   
+
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
+        }
+    }
+
+    public static function getUser($value){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM usuarios WHERE usuario_id=$value OR usuario=$value";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             
-            $user = new User($res['usuario'], $res['clave'], $res['rol_usuario'], $res['nombre']);
+            $user = new User($res['usuario'], $res['clave'], $res['rol_usuario'], $res['nombre_usuario']);
             $user->setId($res['usuario_id']);
+            $user->setStatus($res['status']);
             
             return $user;
             
@@ -64,7 +102,6 @@ class User extends Model{
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
-
         }
         catch(PDOException $e){
             error_log($e->getMessage());
@@ -75,30 +112,72 @@ class User extends Model{
 
     //CRUD
     //insertar usuarios
-    public function insertUser(){
+    public function createUser(){
         try{
             //TODO: validar si existe usuario
-            $data = $this->getExists($this->_username);
+            $data = $this->existsUser($this->_username);
             $validation = intval($data['num']);
-            if(empty($data['num'])){
-                $hash = $this->getHashedPassword($this->_password);
-                $sql = 'INSERT INTO usuarios (usuario, clave, rol_usuario, nombre) VALUES(:usuario, :clave, :rol_usuario, :nombre)';
-                $query = $this->prepare($sql);
-                $query->bindValue(':usuario',$this->_username);
-                $query->bindValue(':clave',$hash);
-                $query->bindValue(':rol_usuario',$this->_user_role);
-                $query->bindValue(':nombre',$this->_name);
-                $res = $query->execute();
-                return $res;
-            }
-            else{
+            if(!empty($data['num'])){
                 $message = array('Usuario ya existente.');
                 return $message;
-            }            
+                exit();
+            }
+
+            $hash = $this->getHashedPassword($this->_password);
+            $sql = 'INSERT INTO usuarios (nombre_usuario, usuario, clave, rol_usuario, status) VALUES(?, ?, ?, ?, ?)';
+            $query = $this->prepare($sql);
+            $data = [$this->_name,$this->_username,$hash,$this->_user_role,1];
+            $res = $query->execute($data);
+            return $res;           
         }
         catch(PDOException $e){
             error_log($e->getMessage());
             return false;
+        }
+    }
+
+    public function updateUser(){
+        try{
+            $sql = 'UPDATE usuarios SET nombre_usuario=?, usuario=?, clave=?, rol_usuario=? WHERE usuario_id=?';
+            $query = $this->prepare($sql);
+            $data = [$this->_name,$this->_username,$this->_password,$this->_user_role,$this->_id];
+            $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
+        }
+    }
+
+    public function updatePassword(){
+        try{
+            $newHash = $this->getHashedPassword($this->_password);
+            $sql = 'UPDATE usuarios SET clave=? WHERE usuario_id=?';
+            $query = $this->prepare($sql);
+            $data = [$newHash,$this->_id];
+            $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOexception $e){
+            error_log($e->getMessage());
+            return NULL;
+        }
+
+    }
+
+    public static function deleteUser($id){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE usuarios SET status=? WHERE usuario_id=?";
+            $query = $_db->connect()->prepare($sql);
+            $data = [0,$id];
+            $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
         }
     }
 
@@ -108,7 +187,7 @@ class User extends Model{
         return password_hash($password, PASSWORD_DEFAULT, ['cost' == 10]);
     }
 
-    //comprar contraseña
+    //comparar contraseña
     public function comparePassword(string $password):bool{
         return password_verify($password, $this->_password);
     }
@@ -144,5 +223,21 @@ class User extends Model{
 
     public function setName(string $value){
         return $this->_name = $value;
+    }
+
+    public function getPassword(){
+        return $this->_password;
+    }
+
+    public function setPassword(string $value){
+        return $this->_password = $value;
+    }
+
+    public function getStatus(){
+        return $this->_status;
+    }
+
+    public function setStatus(int $value){
+        return $this->_status = $value;
     }
 }

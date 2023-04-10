@@ -34,20 +34,38 @@ class StudyPlan extends Model{
         }
     }
 
+    public static function searchPlan($data){
+        try{
+            $_db = new Database();
+            $int = intval($data);
+            $sql = "SELECT * FROM datos WHERE documento_id=$int OR titulo LIKE '%".$data."%' OR contenido LIKE '%".$data."%'";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            if(!$res){
+                return null;
+                exit();
+            }
+            return $res; 
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+
     public static function getPlan(int $data){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM datos WHERE documento_id=$data";
+            $int = intval($data);
+            $sql = "SELECT * FROM datos WHERE documento_id=$int";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             if(!$res){
                 return null;
-            }else
-            {
-                $StudyPlan = new StudyPlan($res['titulo'], $res['contenido']);
-                $StudyPlan->setId($res['documento_id']);
-                return $StudyPlan; 
+                exit();
             }
+            $StudyPlan = new StudyPlan($res['titulo'], $res['contenido']);
+            $StudyPlan->setId($res['documento_id']);
+            return $StudyPlan; 
         }
         catch(Exception $e){
             return $e->getMessage();
@@ -101,7 +119,7 @@ class StudyPlan extends Model{
             $query = $this->prepare($sql);
             $data = [$this->_id];
             $res = $query->execute($data);
-            var_dump($res->rowCount());
+            return $res;
         }
         catch(Exception $e){
             return $e->getMessage();

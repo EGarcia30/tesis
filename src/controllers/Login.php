@@ -12,9 +12,8 @@ class Login extends Controller{
     }
 
     public function auth(){
-        $username = $this->post('usuario') != '' ? $this->post('usuario') : '';
-        $password= $this->post('clave') != '' ? $this->post('clave') : '';
-        $data = $username !== '' ? User::existsUser($username) : ['num' => '0'];
+        $username = $this->post('usuario');
+        $password= $this->post('clave');
 
         //inputs vacios
         if(empty($username) || empty($password)){
@@ -23,31 +22,31 @@ class Login extends Controller{
             
             error_log('Incomplete Data');
             header('location: /tesis/');
+            exit();
         }
+        $data = $username != null ? User::existsUser($username) : ['num' => '0'];
         //busar usuario en bd
-        else if(empty($data['num'])){
+        if(empty($data['num'])){
             $_SESSION['color'] = "warning";
             $_SESSION['message'] = "Usuario no encontrado";
 
             error_log('User not found');
             header('location: /tesis/');
+            exit();
         }
-        else{
-            $user = User::getUser($username);
-            //comparacion de contraseña
-            if(!$user->comparePassword($password)){
-                $_SESSION['color'] = "danger";
-                $_SESSION['message'] = "Contraseña Incorrecta";
+        $user = User::getUser($username);
+        //comparacion de contraseña
+        if(!$user->comparePassword($password)){
+            $_SESSION['color'] = "danger";
+            $_SESSION['message'] = "Contraseña Incorrecta";
 
-                error_log('Password Incorrect');
-                header('location: /tesis/');
-            }
-            else{
-                $_SESSION['user'] = $user;
-                
-                error_log('User loggedd in');
-                header('location: /tesis/home');
-            }
+            error_log('Password Incorrect');
+            header('location: /tesis/');
+            exit();
         }
+        $_SESSION['user'] = $user;
+        
+        error_log('User loggedd in');
+        header('location: /tesis/home');
     }
 }
