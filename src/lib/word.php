@@ -13,53 +13,7 @@ $imagePathLogo = __DIR__.'/../../public/img/logo_res_utec.png';
 // Adding an empty Section to the document...
 $section = $phpWord->addSection();
 
-$styleFont = array('name' => 'Times New Roman', 'size' => 14, 'bold' => true);
-$alignFont = array('align' => 'center');
 
-// $section->setAlignment('center');
-//Imagen titulo Universidad
-$section->addImage($imagePathTitle, array('width' => 450, 'height' => 80, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
-
-//Facultad 
-$section->addText(
-    "FACULTAD DE INFORMATICA Y CIENCIAS APLICADAS\n".
-    "TECNICO EN INGENIERIA DE SOFTWARE.",
-    $styleFont,
-    $alignFont
-);
-
-//Imagen Logo
-$section->addImage($imagePathLogo, array('width' => 150, 'height' => 150, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
-
-$section->addText(
-    "TEMA:",
-    $styleFont,
-    $alignFont
-);
-
-//Mi Titulo
-$section->addText(
-    $req->getTitle(),
-    $styleFont,
-    $alignFont
-);
-
-$section->addText(
-    $req->getContent(),
-    $styleFont,
-    $alignFont
-);
-
-date_default_timezone_get('America/El_Salvador');
-
-$date = getdate();
-
-$section->addText(
-    "FECHA DE DOCUMENTO CREADO:\n".
-    $date['mday']."/".$date['mon']."/".$date['year'],
-    $styleFont,
-    $alignFont
-);
 
 // Saving the document as OOXML file...
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');

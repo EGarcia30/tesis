@@ -42,6 +42,7 @@ class Database{
         }
         catch(PDOException $e){
             //throw exception
+            error_log('Fallo conexión bd');
             throw $e;
         }
     }
