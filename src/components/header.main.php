@@ -40,8 +40,8 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li class="dropdown-item font-custom pointer-event"><?= $this->d['user']->getRol()?></li>
-                            <li><a class="dropdown-item font-custom" href="/tesis/home">Perfil</a></li>
-                            <li><a class="dropdown-item font-custom" href="/tesis/home">Administrar Usuarios</a></li>
+                            <li><a class="dropdown-item font-custom" href="/tesis/perfil">Perfil</a></li>
+                            <li><a class="dropdown-item font-custom" href="/tesis/users/1">Administrar Usuarios</a></li>
                             <li><a class="dropdown-item font-custom" href="/tesis/signout">Cerrar Sesión</a></li>
                         </ul>
                     </div>
@@ -51,25 +51,41 @@
         </div>
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
-        <div class="container pt-3 pe-3 d-flex flex-column text-center">
-            <a href="/tesis/create" class="mb-3 text-dark text-decoration-none">
-                <span class="icon">
-                    <i class="fas fa-plus"></i>
-                </span>
-                <p class="font-custom">Agregar</p>
+        <div class="container pt-5 pe-3 d-flex flex-column text-start">
+            <a href="/tesis/home" class="text-dark text-decoration-none">
+                <p class="font-custom ms-3">Inicio</p>
             </a>
-            <a href="/tesis/home" class="mb-3 text-dark text-decoration-none">
-                <span class="icon">
-                    <i class="fas fa-search"></i>
-                </span>
-                <p class="font-custom">Buscar</p>
+            <a href="/tesis/facultades/1" class="text-dark text-decoration-none">
+                <p class="font-custom ms-3">Facultades</p>
             </a>
-            <a href="/tesis/plan" class="text-dark text-decoration-none">
-                <span class="icon">
-                    <i class="fas fa-eye"></i>
-                </span>
-                <p class="font-custom">Ver</p>
+            <a href="/tesis/home" class="text-dark text-decoration-none">
+                <p class="font-custom ms-3">Carreras</p>
             </a>
+            <div class="dropend">
+                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Plan de estudio
+                </button>
+                <ul class="dropdown-menu z-menu">
+                    <li><a class="dropdown-item" href="#">
+                        <span class="icon profile-icon pe-2">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        <p class="font-custom m-0">Plan de estudio vigentes</p>
+                    </a></li>
+                    <li><a class="dropdown-item" href="#">
+                        <span class="icon profile-icon pe-2">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <p class="font-custom m-0">Buscar plan de estudio</p>
+                    </a></li>
+                    <li><a class="dropdown-item" href="#">
+                        <span class="icon profile-icon pe-2">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <p class="font-custom m-0">Crear nuevo plan de estudio</p>
+                    </a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div id="back-menu"></div>
