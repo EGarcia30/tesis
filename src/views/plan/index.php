@@ -6,7 +6,7 @@
                 <a href="/tesis/home" class="btn btn-utec">Regresar</a>
                 <a href="/tesis/create" class="btn btn-primary">Crear nuevo Plan</a>
                 <form action="/tesis/plan" method="post" class="w-75 d-flex">
-                    <input type="text" name="id" class="form-control">
+                    <input type="text" name="buscar" class="form-control">
                     <div>
                         <button type="submit" class="btn btn-utec ms-0 ms-sm-2">
                             <span class="icon search-icon">
