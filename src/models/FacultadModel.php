@@ -33,6 +33,19 @@ class FacultadModel extends Model{
         }
     }
 
+    public static function getFacultades(){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM facultad WHERE status=1";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchall(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+
     public static function rowFacultad(){
         try{
             $_db = new Database();
@@ -70,7 +83,7 @@ class FacultadModel extends Model{
         try{
             $_db = new Database();
             $int = intval($data);
-            $sql = "SELECT * FROM datos WHERE facultad_id=$int";
+            $sql = "SELECT * FROM facultad WHERE facultad_id=$int";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             if(!$res){
@@ -80,7 +93,7 @@ class FacultadModel extends Model{
             $facultadModel = new FacultadModel($res['nombre_facultad'], $res['acronimo_facultad']);
             $facultadModel->setId($res['facultad_id']);
             $facultadModel->setStatus($res['status']);
-            return $StudyPlan; 
+            return $facultadModel; 
         }
         catch(Exception $e){
             return $e->getMessage();
