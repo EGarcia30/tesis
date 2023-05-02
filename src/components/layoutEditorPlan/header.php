@@ -14,6 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat&display=swap" rel="stylesheet">
 
+    <script src="<?= URL_PATH ?>/js/jquery-3.6.4.min.js"></script>
+
     <title><?= $this->d['title']. " - " . institution ?></title>
 </head>
 <body class="vh-100 bg-secondary bg-opacity-10 position-relative">
@@ -51,41 +53,29 @@
         </div>
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
-        <div class="container pt-5 pe-3 d-flex flex-column text-start">
-            <a href="/tesis/home" class="text-dark text-decoration-none">
-                <p class="font-custom ms-3">Inicio</p>
+        <div class="container pt-3 pe-3 d-flex flex-column gap-3 text-decoration-none">
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link active font-custom" data-bs-target="formInicio">
+                Portada
             </a>
-            <a href="/tesis/facultades/1" class="text-dark text-decoration-none">
-                <p class="font-custom ms-3">Facultades</p>
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formFundamentacion">
+                Fundamentos
             </a>
-            <a href="/tesis/home" class="text-dark text-decoration-none">
-                <p class="font-custom ms-3">Carreras</p>
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formCreador">
+                Cuadro Resumen <br/>
+                de los Especialistas <br/>
+                que participaron <br/>
+                en el Diseño <br/>
+                Curricular
+            </a >
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Generalidad de la <br/>
+                Carrera
             </a>
-            <div class="dropend">
-                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Plan de estudio
-                </button>
-                <ul class="dropdown-menu z-menu">
-                    <li><a class="dropdown-item" href="#">
-                        <span class="icon profile-icon pe-2">
-                            <i class="fas fa-eye"></i>
-                        </span>
-                        <p class="font-custom m-0">Plan de estudio vigentes</p>
-                    </a></li>
-                    <li><a class="dropdown-item" href="#">
-                        <span class="icon profile-icon pe-2">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <p class="font-custom m-0">Buscar plan de estudio</p>
-                    </a></li>
-                    <li><a class="dropdown-item" href="#">
-                        <span class="icon profile-icon pe-2">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                        <p class="font-custom m-0">Crear nuevo plan de estudio</p>
-                    </a></li>
-                </ul>
-            </div>
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Justificación y <br/>
+                Modalidad de <br/>
+                Entrega
+            </a >
         </div>
     </div>
     <div id="back-menu"></div>

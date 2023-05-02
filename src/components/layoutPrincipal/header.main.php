@@ -51,31 +51,18 @@
         </div>
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
-        <div class="container pt-3 pe-3 d-flex flex-column text-start">
-            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link active font-custom">
-                Portada
+        <div class="container p-4 pt-5 d-flex flex-column text-start">
+            <a href="/tesis/home" class="text-dark text-decoration-none">
+                <p class="font-custom">Inicio</p>
             </a>
-            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
-                Índice
+            <a href="/tesis/facultades/1" class="text-dark text-decoration-none">
+                <p class="font-custom">Facultades</p>
             </a>
-            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
-                Fundamentos
+            <a href="/tesis/carreras/1" class="text-dark text-decoration-none">
+                <p class="font-custom">Carreras</p>
             </a>
-            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
-                Cuadro Resumen <br/>
-                de los Especialistas <br/>
-                que participaron <br/>
-                en el Diseño <br/>
-                Curricular
-            </a>
-            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
-                Generalidad de la <br/>
-                Carrera
-            </a>
-            <a href="#" class="mb-3 text-decoration-none p-2 rounded-2 nav_link font-custom">
-                Justificación y <br/>
-                Modalidad de <br/>
-                Entrega
+            <a href="/tesis/planes/1" class="text-dark text-decoration-none">
+                <p class="font-custom">Plan de Estudio</p>
             </a>
         </div>
     </div>
