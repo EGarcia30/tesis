@@ -16,8 +16,10 @@ require_once __DIR__.'/auth.php';
 //requerimos la rutas
 require __DIR__.'/../routes/login/index.php';
 require __DIR__.'/../routes/home/index.php';
-require __DIR__.'/../routes/curricularDesign/index.php';
 require __DIR__.'/../routes/facultad/index.php';
+require __DIR__.'/../routes/carrera/index.php';
+require __DIR__.'/../routes/plan/index.php';
+require __DIR__.'/../routes/creador/index.php';
 
 //manejador de error 404
 $router->set404(function() {

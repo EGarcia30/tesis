@@ -21,9 +21,9 @@ class Perfil extends Controller{
 
         //validación de campos
         if(
-            is_null($name) &&
-            is_null($userName) &&
-            is_null($password) &&
+            is_null($name) ||
+            is_null($userName) ||
+            is_null($password) ||
             is_null($user_role)
         ){
             $_SESSION['color'] = 'warning';

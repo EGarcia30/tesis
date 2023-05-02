@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../../components/header.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
 <main id="main-content" class="w-custom">
     <div class="w-100 position-relative">
         <div class="d-flex flex-column gap-4 container mx-auto p-3">
@@ -84,4 +84,4 @@
     </div>
 </main>
 
-<?php require_once __DIR__ . '/../../components/footer.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

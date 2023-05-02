@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../../components/header.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
 <main id="main-content" class="w-custom">
     <div class="w-100 position-relative">
         <div class="d-flex flex-column gap-4 container mx-auto p-3">
@@ -11,7 +11,7 @@
             </div>
 
             <div class="card card-height container p-3 bg-white">
-                <h1 class="header-font-custom text-utec text-center">Cambiar Usuario</h1>
+                <h1 class="header-font-custom text-utec text-center">Editar Usuario</h1>
                 <form action="/tesis/updateUsers/<?= $this->d['userDB']->getId()?>" method="post" class="p-2">
                     <div class="mb-3">
                         <label for="" class="form-label text-utec">Nombre:</label>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="mt-5">
-                        <input type="submit" class="btn btn-utec" value="Modificar Usuario">
+                        <input type="submit" class="btn btn-utec" value="Editar Usuario">
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         Cambiar Contraseña
@@ -83,4 +83,4 @@
     </div>
     </div>
 </main>
-<?php require_once __DIR__ . '/../../components/footer.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

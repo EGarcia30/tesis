@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../../components/header.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
 <main id="main-content" class="w-custom">
     <div class="container mx-auto p-3 pt-5 h-custom d-flex flex-column justify-content-start justify-content-lg-center overflow-y-scroll">
         <div class="card mx-sm-auto bg-white p-4 text-center">
@@ -68,4 +68,4 @@
         
     </div>
 </main>
-<?php require_once __DIR__ . '/../../components/footer.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

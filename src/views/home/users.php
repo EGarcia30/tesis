@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../../components/header.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
 <main id="main-content" class="w-custom">
     <div class="w-100 position-relative">
         <div class="d-flex flex-column gap-4 container mx-auto p-3">
@@ -17,7 +17,7 @@
                 </form>
             </div>
             <div class="table-responsive text-center rounded-2">
-                <table class="table table-dark table-hover">
+                <table class="table table-dark table-hover table-bordered">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
@@ -29,19 +29,27 @@
                             <th scope="col">Eliminar</th>
                         </tr>
                     </thead>
-                    <tbody class="table-group-divider">
+                    <tbody class="table-group-divider table-light align-middle">
                     <?php foreach($this->d['users'] as $key => $value) :?>
                         <tr >
                             <td scope="row"><?= $value['usuario_id'] ?></td>
                             <td><?= $value['nombre_usuario'] ?></td>
                             <td><?= $value['usuario'] ?></td>
                             <td><?= $value['rol_usuario'] ?></td>
-                            <td><?= $value['status'] ?></td>
-                            <td><a href="/tesis/updateUsers/<?= $value['usuario_id'] ?>" class="btn btn-success">Editar</a></td>
+                            <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
+                            <td>
+                                <a href="/tesis/updateUsers/<?= $value['usuario_id'] ?>" class="btn btn-success p-0 px-2">
+                                    <span class="icon profile-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                </a>
+                            </td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['usuario_id'] ?>">
-                                Eliminar
+                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['usuario_id'] ?>">
+                                    <span class="icon profile-icon">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </span>
                                 </button>
                             </td>
                         </tr>
@@ -72,4 +80,4 @@
         </div>
     </div>
 </main>
-<?php require_once __DIR__ . '/../../components/footer.main.php' ?>
+<?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

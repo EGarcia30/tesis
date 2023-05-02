@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set("America/El_Salvador");
+
 error_reporting(E_ALL); // Habilitar el reporte
 
 ini_set('ignore_repeated_errors', TRUE); //ignorar si un error se repite

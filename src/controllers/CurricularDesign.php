@@ -4,7 +4,9 @@ namespace Penad\Tesis\controllers;
 
 use Penad\Tesis\lib\Controller;
 use Penad\Tesis\models\StudyPlan;
-use Penad\Tesis\models\User;
+use Penad\Tesis\models\CarreraModel;
+use Penad\Tesis\models\FacultadModel;
+// use Penad\Tesis\models\User;
 
 class CurricularDesign extends Controller{
 
@@ -14,112 +16,108 @@ class CurricularDesign extends Controller{
         parent::__construct();
     }
 
-    public function getPlans(){
+    public function getPlans($page){
         $user = $_SESSION['user'];
-        $studyPlan = StudyPlan::getPlans();
+        $totalItems = StudyPlan::rowPlans();
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $plans = StudyPlan::getPlans($start,$itemShow);
+        $facultades = FacultadModel::getFacultades();
+        $carreras = CarreraModel::getAllCarreras();
         $data = [
             'title' => 'Planes de Estudio',
             'user' => $user,
-            'studyPlan' => $studyPlan
+            'studyPlan' => $plans,
+            'facultades' => $facultades,
+            'carreras' => $carreras,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow,
+            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
         ];
 
         $this->render('plan/index', $data);
     }
 
-    public function searchPlan(){
-
-        $search = $this->post('buscar');
+    public function savePlan($id){
+        // $id= $this->post('idPlan');
+        $idPlan = intval($id);
+        $vigInicio = $this->post('vigInicio');
+        $vigFinal = $this->post('vigFinal');
+        $reviewDate = $this->post('review');
+        $fundamento = $this->post('fundamento');
+        $creador = $this->post('creador');
         $user = $_SESSION['user'];
 
-        //validar campo
-        if(is_null($search)){
-            error_log('No recibio el input buscar');
-            header("location:/tesis/plan");
-            exit();
-        }
+        $data=[
+            'id' => $idPlan,
+            'inicio' => $vigInicio,
+            'final' => $vigFinal,
+            'review' => $reviewDate,
+            'fundamento' => $fundamento,
+            'user' => $user->getName()
+        ];
 
         //traemos objeto StudyPlan de bd con su funcion estatica
-        $studyPlan = StudyPlan::searchPlan($search);
+        $studyPlan = StudyPlan::savePlan($data);
 
-        //si no nos regresa el objeto regresamos a la vista inicial
-        if(is_null($studyPlan)){
-            error_log('No se pudo buscar en bd');
-            header("location:/tesis/plan");
+        // si no nos regresa el objeto regresamos a la vista inicial
+        if(!$studyPlan){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se pudo Guardar los datos';
+            error_log('No se pudo guardar en bd');
+            header("location:/tesis/plan/create/$id");
             exit();
         }
 
-        //pasamos los datos
-        $data = [
-            'title' => 'Plan de Estudio',
-            'user' => $user,
-            'studyPlan' => $studyPlan
-        ];
-        // renderizamos nueva vista con sus datos
-        $this->render('plan/search', $data);
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Datos Guardados!.';
+        header("location:/tesis/plan/create/$id");
     }
 
-    public function create(){
-        $title = $this->post('titulo');
-        $content = $this->post('contenido');
+    public function createPlan(){
+        $id_facultad = intval($this->post('opcion'));
+        $id_carrera = intval($this->post('opcionCarrera'));
+        $facultad = [];
+        $carrera = [];
 
+        // var_dump($id_facultad);
         //validacion de campos
-        if(is_null($title) && is_null($content)){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'Datos no ingresados';
-            header('location:/tesis/create');
-            exit();
-        }
-
-        //traemos objeto StudyPlan de bd con su funcion para ingreso de datos
-        $studyPlan = new StudyPlan($title, $content);
-        $res = $studyPlan->createPlan();
-
-        //si es false envia una advertencia que no se ingresaron datos
-        if(!$res){
+        if(empty($id_facultad) || empty($id_carrera)){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Datos no ingresados en el proceso';
-            header('location:/tesis/create');
+            $_SESSION['message'] = 'No se recibieron los Datos.';
+            header('location:/tesis/planes/1');
             exit();
         }
 
-        //variables de session que confirman nuestro ingreso de datos y redirecciona a la vista
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Datos ingresados con exito';
-        header('location:/tesis/create');
-    }
+        //asignando obj de facultad y carrera para poder usar en el plan de estudio
+        $facultad = FacultadModel::getFacultad($id_facultad);
+        $carrera = CarreraModel::getCarrera($id_carrera);
+        $nameFacultad = $facultad->getName();
+        $nameCarrera = $carrera->getName();
+        $modalityCarrera = $carrera->getModality();
 
-    public function update(int $id){
-        $title = $this->post('titulo');
-        $content = $this->post('contenido');
-
-        //validación de campos
-        if(is_null($id) &&
-            is_null($title) && 
-            is_null($content)
-        ){
+        //validación por si un obj viene vacio y arrojar un error
+        if( empty($facultad) || 
+            empty($carrera) || 
+            is_null($nameFacultad) || 
+            is_null($nameCarrera) || 
+            is_null($modalityCarrera)){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'Los datos vienen nulos';
-            header("location:/tesis/update/$id");
+            $_SESSION['message'] = 'No se encontro la facultad o carrera registrada.';
+            header('location:/tesis/planes/1');
             exit();
         }
 
-        //traemos objeto StudyPlan de bd con su funcion para actualizar datos
-        $studyPlan = new StudyPlan($title, $content);
-        //asignamos al objeto el id correspondiente
-        $studyPlan->setId($id);
-        $res = $studyPlan->updatePlan();
+        //instanciamos nuestro obj plan de estudio
+        $plan_estudio = new StudyPlan($id_facultad,$nameFacultad,$id_carrera,$nameCarrera,$modalityCarrera);
+        $plan_estudio->setIdUser($_SESSION['user']->getId());
+        $plan_estudio->setUser($_SESSION['user']->getName());
+        $res = $plan_estudio->createPlan();
+        $id_plan = $res["id_plan"];
 
-        //si es false retorna advertencia de no hay actualización de datos
-        if(!$res){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se realizaron cambios en el proceso';
-            header("location:/tesis/update/$id");
-            exit();
-        }
+        header("location:/tesis/plan/create/$id_plan");
 
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se realizaron cambios con exito';
-        header("location:/tesis/update/$id");
     }
 
     public function word(int $id){
