@@ -3,7 +3,7 @@
     <div class="w-100 position-relative">
         <div class="d-flex flex-column gap-4 container mx-auto p-3">
             <div class="d-flex flex-wrap gap-2 text-center">
-                <a href="/tesis/home" class="btn btn-utec">Regresar</a>
+                <a href="/tesis/facultades/1" class="btn btn-utec">Regresar</a>
                 <a href="/tesis/facultades/1" class="btn btn-primary disabled">Crear nueva Facultad</a>
                 <form action="/tesis/facultades" method="post" class="w-75 d-flex">
                     <input type="text" name="buscar" class="form-control">
@@ -35,7 +35,7 @@
                             <td scope="row"><?= $value['facultad_id'] ?></td>
                             <td><?= $value['nombre_facultad'] ?></td>
                             <td><?= $value['acronimo_facultad'] ?></td>
-                            <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
+                            <td><?= $value['status'] ?></td>
                             <td>
                                 <a href="/tesis/verFacultad/<?= $value['facultad_id'] ?>" class="btn btn-primary p-0 px-2">
                                     <span class="icon profile-icon">
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <a href="/tesis/deleteFacultad/<?= $value['facultad_id'] ?>" class="btn btn-danger">Eliminar</a>
+                                    <a href="/tesis/deleteUser/<?= $value['facultad_id'] ?>" class="btn btn-danger">Eliminar</a>
                                 </div>
                                 </div>
                             </div>
@@ -81,8 +81,6 @@
                     </tbody>
                 </table>
             </div>
-            <!-- paginacion -->
-            <?php require_once __DIR__ . '/../../components/pagination.php'?>
         </div>
     </div>
 </main>
