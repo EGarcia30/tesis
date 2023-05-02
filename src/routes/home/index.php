@@ -21,6 +21,7 @@ $router->get('/users/{pagina}', function($page){
     notAuth();
     $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = 'users';
     $controller = new Home;
     $controller->getUsers($page);
 });
@@ -65,7 +66,7 @@ $router->get('/createUsers',function(){
 
 });
 
-//Vista creacion de usuarios
+//Vista update de usuarios
 $router->get('/updateUsers/{id}',function($id){
     notAuth();
     $controller = new Home;
