@@ -13,7 +13,7 @@
 
 /*menu vertical*/
 .vh-custom {
-  height: calc(100% - 89px) !important;
+  height: calc(100vh - 80px);
 }
 
 .img-brand {
@@ -79,12 +79,12 @@
   }
   /*menu vertical*/
   .vh-custom {
-    height: calc(100% - 79px);
+    height: calc(100vh - 89px);
   }
   /*content*/
   .w-custom {
-    width: calc(100% - 180px);
-    margin-left: 180px;
+    width: calc(100% - 144px);
+    margin-left: 144px;
   }
 }
 .img-word {
@@ -92,11 +92,12 @@
   width: 30px;
 }
 
-.img-logo {
-  display: grid;
-  place-items: center;
-  width: 12em;
-  height: 12em;
+.form-container {
+  display: none;
+}
+
+.form-show {
+  display: block;
 }
 
 .nav_link {
@@ -174,6 +175,13 @@
 
 .table-height {
   height: 30em;
+}
+
+.img-logo {
+  display: grid;
+  place-items: center;
+  width: 12em;
+  height: 12em;
 }
 
 @media screen and (min-width: 576px) {

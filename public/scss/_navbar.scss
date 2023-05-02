@@ -9,7 +9,7 @@
 
 /*menu vertical*/
 .vh-custom{
-    height: calc(100% - 89px) !important;
+    height: calc(100vh - 80px);
 }
 
 .img-brand{
@@ -83,12 +83,12 @@
 
     /*menu vertical*/
     .vh-custom{
-        height: calc(100% - 79px);
+        height: calc(100vh - 89px);
     }
 
     /*content*/
     .w-custom{
-        width: calc(100% - 180px);
-        margin-left: 180px;
+        width: calc(100% - 144px);
+        margin-left: 144px;
     }
 }
