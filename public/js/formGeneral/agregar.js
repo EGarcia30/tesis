@@ -16,3 +16,9 @@ function agregarParticipacion(){
     const select2 = select1.cloneNode(true);
     select1.parentNode.insertBefore(select2, select1.nextSibling);
 }
+
+function agregarCreador(){
+    const select1 = document.getElementById('selectsCreador');
+    const select2 = select1.cloneNode(true);
+    select1.parentNode.insertBefore(select2, select1.nextSibling);
+}

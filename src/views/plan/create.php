@@ -6,7 +6,9 @@
                 <a href="/tesis/planes/1" class="btn btn-utec" onclick="emptyInformation()">Regresar</a>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-success p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    Guardar
+                    <span class="icon profile-icon">
+                        <i class="fas fa-save"></i>
+                    </span>
                 </button>
                 <a href="/tesis/word/<?= $this->d['plan']->getId()?>" class="btn btn-utec p-0 px-2">
                     <span class="icon profile-icon">
@@ -29,6 +31,8 @@
                     <?php require_once __DIR__ . '/../../components/formPlan/portada.php' ?>
                     <?php require_once __DIR__ . '/../../components/formPlan/fundamentacion.php' ?>
                     <?php require_once __DIR__ . '/../../components/formPlan/creador.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formPlan/generalidades.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formPlan/proposito.php' ?>
                 </div>
             </div>
         </div>

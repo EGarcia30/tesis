@@ -1,21 +1,28 @@
 <form action="" method="post" class="position-relative form-container" id="formCreador">
     <h2 class="text-utec text-center header-font-custom">Especialistas/Creadores</h2>
-    <div class="w-75 mx-auto mb-3">
-        <label for="" class="form-label">Especialistas ya Creados:</label>
-        <select class="form-select form-select-lg" name="creador" id="creador">
-            <option selected>Select one</option>
-            <option value="1">New Delhi</option>
-            <option value="2">Istanbul</option>
-            <option value="3">Jakarta</option>
-        </select>
+    <div class="w-75 mx-auto mt-2 mb-3">
+        <h3 class="header-font-custom text-utec mt-2">Asignados:</h3>
+        <?php foreach($this->d['creador'] as $key => $value) :?>
+            <p class="font-custom m-0"><?= $value['Creador']?></p>
+        <?php endforeach;?>
     </div>
-    <div class="w-75 mx-auto mb-2 d-flex align-items-center flex-wrap">
-        <p class="font-custom m-0 me-2">¿Quieres agregar otro creador?</p>
-        <button type="button" class="btn btn-outline-utec">
-            <span class="icon profile-icon">
-                <i class="fas fa-user-plus"></i>
-            </span>
-        </button>
+    <div class="w-75 mx-auto mb-3">
+        <label for="" class="form-label">Asignar Especialistas:</label>
+        <div class="d-flex flex-wrap">
+            <div id="selectsCreador" class="d-block w-100 mb-2">
+                <select class="form-select form-select-lg" name="opcionCreador[]" id="opcionCreador">
+                    <option>seleccionar</option>
+                    <?php foreach($this->d['creadores'] as $key => $value) :?>
+                        <option value="<?= $value['creador_id']?>"><?= $value['nombre_creador']?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <button type="button" class="btn btn-outline-primary p-0 px-2" onclick="agregarCreador()" >
+                <span class="icon profile-icon">
+                    <i class="fas fa-plus"></i>
+                </span>
+            </button>
+        </div>
     </div>
     <div class="w-75 mx-auto mb-2">
         <small class="font-custom">No existe el especialista/creador que quieres elegir? 
@@ -28,7 +35,7 @@
                     <i class="fas fa-angle-double-left"></i>
                 </span>
             </button>
-            <button type="button" class="btn btn-outline-utec p-0 px-2" data-bs-target="formResumen">
+            <button type="button" class="btn btn-outline-utec nav_link p-0 px-2" data-bs-target="formGeneralidades">
                 <span class="icon profile-icon">
                     <i class="fas fa-angle-double-right"></i>
                 </span>

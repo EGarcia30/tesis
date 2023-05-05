@@ -67,14 +67,13 @@
                 en el Diseño <br/>
                 Curricular
             </a >
-            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formGeneralidades">
                 Generalidad de la <br/>
                 Carrera
             </a>
-            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
-                Justificación y <br/>
-                Modalidad de <br/>
-                Entrega
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formProposito">
+                Propósito de<br/>
+                la Carrera
             </a >
         </div>
     </div>

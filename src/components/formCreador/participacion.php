@@ -17,7 +17,7 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            <button type="submit" class="btn btn-success p-0 px-2 me-2">
+            <button type="submit" class="btn btn-success p-0 px-2 me-2" onclick="">
                 <span class="icon profile-icon">
                     <i class="fas fa-save"></i>
                 </span>

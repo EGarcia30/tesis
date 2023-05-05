@@ -31,6 +31,19 @@ class CreadorModel extends Model{
         }
     }
 
+    public static function getCreadoresPlan(){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM creador ORDER BY creador_id DESC";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchall(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+
     public static function rowCreadores(){
         try{
             $_db = new Database();
