@@ -44,7 +44,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/tesis/updateFacultad/<?= $value['facultad_id'] ?>" class="btn btn-success p-0 px-2">
+                                <a href="/tesis/updateFacultad/<?= $value['facultad_id'] ?>" class="btn btn-success p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-edit"></i>
                                     </span>
@@ -52,7 +52,7 @@
                             </td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['facultad_id'] ?>">
+                                <button type="button" class="btn btn-danger p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['facultad_id'] ?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-trash-alt"></i>
                                     </span>

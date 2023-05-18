@@ -23,6 +23,7 @@ $router->post('/facultades', function(){
 //vista update facultad
 $router->get('/updateFacultad/{id}', function($id){
     notAuth();
+    IsUser();
     $controller = new FacultadController;
     $req = FacultadModel::getFacultad($id);
     $user = $_SESSION['user'];
@@ -40,12 +41,16 @@ $router->get('/updateFacultad/{id}', function($id){
 //UPDATE
 $router->post('/updateFacultad/{id}',function($id){
     notAuth();
+    IsUser();
     $controller = new FacultadController;
     $controller->updateFacultad($id);
 });
 
 //delete
 $router->get('/deleteFacultad/{id}', function($id){
+    notAuth();
+    IsAdmin();
+    IsUser();
     $controller = new FacultadController;
     $controller->deleteFacultad($id);
 });

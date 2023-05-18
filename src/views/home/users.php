@@ -4,7 +4,7 @@
         <div class="d-flex flex-column gap-4 container mx-auto p-3">
             <div class="d-flex flex-wrap gap-2 text-center">
                 <a href="/tesis/home" class="btn btn-utec">Regresar</a>
-                <a href="/tesis/createUsers" class="btn btn-primary">Crear nuevo Usuario</a>
+                <a href="/tesis/createUsers" class="btn btn-primary <?= $this->d['user']->getRol() == "Administrador" ? 'disabled' : ''?>">Crear nuevo Usuario</a>
                 <form action="/tesis/users" method="post" class="w-75 d-flex">
                     <input type="text" name="buscar" class="form-control">
                     <div>

@@ -5,7 +5,7 @@
             <div class="d-flex flex-wrap gap-2 text-center">
                 <a href="/tesis/<?=$_GET['regresar']?>" class="btn btn-utec">Regresar</a>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <button type="button" class="btn btn-primary p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     Crear nuevo Plan
                 </button>
                 <!-- modal crear -->
@@ -32,6 +32,7 @@
                             <th scope="col">Id</th>
                             <th scope="col">Titulo</th>
                             <th scope="col">Vigencia</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Descargar</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
@@ -43,6 +44,7 @@
                             <td scope="row"><?= $value['plan_estudio_id'] ?></td>
                             <td><?= $value['nombre_carrera'] ?></td>
                             <td><?= $value['vigencia_inicio'].' - '.$value['vigencia_final'] ?></td>
+                            <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
                             <td><a href="/tesis/word/<?= $value['plan_estudio_id'] ?>" class="btn btn-utec p-0 px-2">
                                     <span class="icon profile-icon">
                                         <img src="<?= URL_PATH ?>/img/word.png" class="img-fluid img-word" alt="">
@@ -50,7 +52,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/tesis/plan/create/<?= $value['plan_estudio_id'] ?>" class="btn btn-success p-0 px-2">
+                                <a href="/tesis/plan/create/<?= $value['plan_estudio_id'] ?>" class="btn btn-success p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-edit"></i>
                                     </span>
@@ -58,7 +60,7 @@
                             </td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['plan_estudio_id'] ?>">
+                                <button type="button" class="btn btn-danger p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['plan_estudio_id'] ?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-trash-alt"></i>
                                     </span>
@@ -78,7 +80,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <a href="/tesis/deleteCarrera/<?= $value['plan_estudio_id'] ?>" class="btn btn-danger">Eliminar</a>
+                                    <a href="/tesis/deletePlan/<?= $value['plan_estudio_id'] ?>" class="btn btn-danger <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>">Eliminar</a>
                                 </div>
                                 </div>
                             </div>

@@ -33,6 +33,10 @@
                     <?php require_once __DIR__ . '/../../components/formPlan/creador.php' ?>
                     <?php require_once __DIR__ . '/../../components/formPlan/generalidades.php' ?>
                     <?php require_once __DIR__ . '/../../components/formPlan/proposito.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formPlan/competenciasGenerales.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formPlan/competenciasBasicas.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formPlan/competenciasEspecialidad.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formPlan/areas.php' ?>
                 </div>
             </div>
         </div>

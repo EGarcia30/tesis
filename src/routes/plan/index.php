@@ -8,6 +8,10 @@ use Penad\Tesis\models\GeneralidadesCarrera;
 use Penad\Tesis\models\PlanEstudioGeneralidadesCarrera;
 use Penad\Tesis\models\PropositoCarrera;
 use Penad\Tesis\models\PlanEstudioPropositoCarrera;
+use Penad\Tesis\models\PlanEstudioCompetenciaGeneral;
+use Penad\Tesis\models\PlanEstudioCompetenciaBasica;
+use Penad\Tesis\models\PlanEstudioCompetenciaEspecialidad;
+use Penad\Tesis\models\Areas;
 
 //vista de todos los planes de estudio vigentes
 $router->get('/planes/{pagina}', function($page){
@@ -23,6 +27,7 @@ $router->get('/planes/{pagina}', function($page){
 //vista al crear un plan de estudio
 $router->get('/plan/create/{id}', function($id){
     notAuth();
+    IsUser();
     $controller = new CurricularDesign;
     $user = $_SESSION['user'];
     $plan = StudyPlan::getPlan($id);
@@ -32,6 +37,10 @@ $router->get('/plan/create/{id}', function($id){
     $generalidad = GeneralidadesCarrera::getGeneralidad($generalidades == NULL ? 0 : $generalidades[0]['Id']);
     $proId = PlanEstudioPropositoCarrera::getPlanPropositoId($id);
     $proposito = PropositoCarrera::getProposito($proId == NULL ? 0 : $proId[0]['Id']);
+    $comGeneral = PlanEstudioCompetenciaGeneral::getPlanComGenerales($id);
+    $comBasica = PlanEstudioCompetenciaBasica::getPlanComBasicas($id);
+    $comEspecialidad = PlanEstudioCompetenciaEspecialidad::getPlanComEspecialidades($id);
+    $areas = Areas::getAreasPlan($id);
     $data = [
         'title' => 'Editor Plan Estudio',
         'user' => $user,
@@ -40,6 +49,10 @@ $router->get('/plan/create/{id}', function($id){
         'creador' => $creador,
         'generalidad' => $generalidad,
         'proposito' => $proposito,
+        'comGeneral' => $comGeneral,
+        'comBasica' => $comBasica,
+        'comEspecialidad' => $comEspecialidad,
+        'areas' => $areas,
         'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
         'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
     ];
@@ -56,12 +69,22 @@ $router->get('/word/{id}', function($id){
 //Crear plan
 $router->post('/planes', function(){
     notAuth();
+    IsUser();
     $controller = new CurricularDesign;
     $controller->createPlan();
 });
 
 $router->post('/plan/create/{id}', function($id){
     notAuth();
+    IsUser();
     $controller = new CurricularDesign;
     $controller->savePlan($id);
+});
+
+//eliminar plan de estudio o desactivar
+$router->get('/deletePlan/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->deletePlan($id);
 });

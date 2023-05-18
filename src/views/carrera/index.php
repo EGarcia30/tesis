@@ -4,7 +4,7 @@
         <div class="d-flex flex-column gap-3 container mx-auto p-3">
             <div class="d-flex flex-wrap gap-2 text-center">
                 <a href="/tesis/<?= $_GET['regresar']?>" class="btn btn-utec">Regresar</a>
-                <a href="/tesis/createCarreras" class="btn btn-primary">Crear nueva Carrera</a>
+                <a href="/tesis/createCarreras" class="btn btn-primary <?= $this->d['user']->getRol() == "Usuario" ? 'disabled' : ''?>">Crear nueva Carrera</a>
                 <form action="/tesis/carreras/1" method="post" class="w-75 d-flex">
                     <input type="text" name="buscar" class="form-control">
                     <div>
@@ -54,7 +54,7 @@
                             </td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['carrera_id'] ?>">
+                                <button type="button" class="btn btn-danger p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['carrera_id'] ?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-trash-alt"></i>
                                     </span>

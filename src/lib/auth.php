@@ -13,3 +13,17 @@ function Auth(){
         exit();
     }
 }
+
+function IsAdmin(){
+    if($_SESSION['user']->getRol() == "Administrador"){
+        header('location: /tesis/home');
+        exit();
+    }
+}
+
+function IsUser(){
+    if($_SESSION['user']->getRol() == "Usuario"){
+        header('location: /tesis/home');
+        exit();
+    }
+}

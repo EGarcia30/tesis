@@ -190,4 +190,11 @@ class CarreraController extends Controller{
         $_SESSION['message'] = 'Se cambiaron los datos de carrera con Exito.';
         header("location: /tesis/updateCarrera/$id");
     }
+
+    public function deleteCarrera($id){
+
+        $res = CarreraModel::deleteCarrera($id);
+
+        $this->getCarreras(1);
+    }
 }

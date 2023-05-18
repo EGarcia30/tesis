@@ -127,7 +127,7 @@
   font-size: 1em;
 }
 
-::-webkit-scrollbar {
+scrollbar ::-webkit-scrollbar {
   width: 0.5rem;
 }
 

@@ -7,10 +7,18 @@ function saveInformation(){
     const getCreador = document.getElementsByName('opcionCreador[]');
     const getGeneralidad  = document.getElementsByName('opcionGeneralidad[]');
     const getProposito = document.getElementsByName('opcionProposito[]');
+    const getComGeneral = document.getElementsByName('opcionCompetencia[]');
+    const getComBasica = document.getElementsByName('opcionBasica[]');
+    const getComEspecialidad = document.getElementsByName('opcionEspecialidad[]');
+    const getAreas = document.getElementsByName('opcionAreas[]');
 
     const valCreador = [];
     const valGeneralidad = [];
-    const valProposito = []
+    const valProposito = [];
+    const valComGeneral = [];
+    const valComBasica = [];
+    const valComEspecialidad = [];
+    const valAreas = [];
 
     for(let i = 0; i < getCreador.length; i++){
         valCreador.push(getCreador[i].value);
@@ -24,9 +32,29 @@ function saveInformation(){
         valProposito.push(getProposito[i].value);
     }
 
+    for(let i = 0; i < getComGeneral.length; i++){
+        valComGeneral.push(getComGeneral[i].value);
+    }
+
+    for(let i = 0; i < getComBasica.length; i++){
+        valComBasica.push(getComBasica[i].value);
+    }
+
+    for(let i = 0; i < getComEspecialidad.length; i++){
+        valComEspecialidad.push(getComEspecialidad[i].value);
+    }
+
+    for(let i = 0; i < getAreas.length; i++){
+        valAreas.push(getAreas[i].value);
+    }
+
     const objCreador = JSON.stringify(valCreador);
     const objGeneralidad = JSON.stringify(valGeneralidad);
     const objProposito = JSON.stringify(valProposito);
+    const objComGeneral = JSON.stringify(valComGeneral);
+    const objComBasica = JSON.stringify(valComBasica);
+    const objComEspecialidad = JSON.stringify(valComEspecialidad);
+    const objAreas = JSON.stringify(valAreas);
 
     localStorage.setItem('idPlan', getIdPlan);
     localStorage.setItem('vigenciaInicio', getInicio);
@@ -36,6 +64,10 @@ function saveInformation(){
     localStorage.setItem('creador', objCreador);
     localStorage.setItem('generalidad', objGeneralidad);
     localStorage.setItem('proposito', objProposito);
+    localStorage.setItem('comGeneral', objComGeneral);
+    localStorage.setItem('comBasica', objComBasica);
+    localStorage.setItem('comEspecialidad', objComEspecialidad);
+    localStorage.setItem('areas', objAreas);
 }
 
 function emptyInformation(){
@@ -46,7 +78,11 @@ function emptyInformation(){
     localStorage.setItem('fundamentos', '');
     localStorage.setItem('creador', '');
     localStorage.setItem('generalidad', '');
-    localStorage.setItem('proposito', '')
+    localStorage.setItem('proposito', '');
+    localStorage.setItem('comGeneral', '');
+    localStorage.setItem('comBasica', '');
+    localStorage.setItem('comEspecialidad', '');
+    localStorage.setItem('areas', '');
 }
 
 $(function(){
@@ -59,6 +95,10 @@ $(function(){
         const creador = JSON.parse(localStorage.getItem('creador'));
         const generalidad = JSON.parse(localStorage.getItem('generalidad'));
         const proposito = JSON.parse(localStorage.getItem('proposito'));
+        const comGeneral = JSON.parse(localStorage.getItem('comGeneral'));
+        const comBasica = JSON.parse(localStorage.getItem('comBasica'));
+        const comEspecialidad = JSON.parse(localStorage.getItem('comEspecialidad'));
+        const areas = JSON.parse(localStorage.getItem('areas'));
 
         $.post({
             type: "POST",
@@ -70,7 +110,11 @@ $(function(){
                 fundamento: fundamento,
                 creador: creador,
                 generalidad: generalidad,
-                proposito: proposito
+                proposito: proposito,
+                comGeneral: comGeneral,
+                comBasica: comBasica,
+                comEspecialidad: comEspecialidad,
+                areas: areas
             }
         })  
     });

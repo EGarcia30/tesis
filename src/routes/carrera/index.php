@@ -40,6 +40,7 @@ $router->get('/carrera/{pagina}', function($page){
 //vista create Carrera
 $router->get('/createCarreras', function(){
     notAuth();
+    IsUser();
     $controller = new CarreraController;
     $facultades = FacultadModel::getFacultades();
     $user = $_SESSION['user'];
@@ -57,6 +58,7 @@ $router->get('/createCarreras', function(){
 //vista update Carrera
 $router->get('/updateCarrera/{id}', function($id){
     notAuth();
+    IsUser();
     $controller = new CarreraController;
     $facultades = FacultadModel::getFacultades();
     $carrera = CarreraModel::getCarrera($id);
@@ -77,6 +79,7 @@ $router->get('/updateCarrera/{id}', function($id){
 //Crear carrera
 $router->post('/createCarreras', function(){
     notAuth();
+    IsUser();
     $controller = new CarreraController;
     $controller->createCarrera();
 });
@@ -85,4 +88,12 @@ $router->post('/updateCarrera/{id}', function($id){
     notAuth();
     $controller = new CarreraController;
     $controller->updateCarrera($id);
+});
+
+//eliminar carreras
+$router->get('/deleteCarreras/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CarreraController;
+    $controller->deleteCarrera($id);
 });

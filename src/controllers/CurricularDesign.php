@@ -14,6 +14,13 @@ use Penad\Tesis\models\GeneralidadesCarrera;
 use Penad\Tesis\models\PlanEstudioGeneralidadesCarrera;
 use Penad\Tesis\models\PropositoCarrera;
 use Penad\Tesis\models\PlanEstudioPropositoCarrera;
+use Penad\Tesis\models\CompetenciaGeneral;
+use Penad\Tesis\models\PlanEstudioCompetenciaGeneral;
+use Penad\Tesis\models\CompetenciaBasica;
+use Penad\Tesis\models\PlanEstudioCompetenciaBasica;
+use Penad\Tesis\models\CompetenciaEspecialidad;
+use Penad\Tesis\models\PlanEstudioCompetenciaEspecialidad;
+use Penad\Tesis\models\Areas;
 
 class CurricularDesign extends Controller{
 
@@ -56,14 +63,19 @@ class CurricularDesign extends Controller{
         $creador = $this->post('creador');
         $generalidad = $this->post('generalidad');
         $proposito = $this->post('proposito');
+        $comGeneral = $this->post('comGeneral');
+        $comBasica = $this->post('comBasica');
+        $comEspecialidad = $this->post('comEspecialidad');
+        $areas = $this->post('areas');
         $user = $_SESSION['user'];
 
         //Pasando los id de string a int para la comprobacion en cada uno de sus objetos
         $idProposito = intval($proposito[0]);
         $val = intval($creador[0]);
         $idGeneralidad = intval($generalidad[0]);
-        $data = [$generalidad[1],$generalidad[2],$generalidad[3],$generalidad[4],
-        $generalidad[5],$generalidad[6],$generalidad[7],$generalidad[8]];
+        // $data = [$generalidad[1],$generalidad[2],$generalidad[3],$generalidad[4],
+        // $generalidad[5],$generalidad[6],$generalidad[7],$generalidad[8]];
+        array_shift($generalidad);
 
         //haciendo la relacion de plan de estudio con los creadores
         if(!empty($val)){
@@ -72,8 +84,8 @@ class CurricularDesign extends Controller{
         }
 
         //Creando nueva generalidad de la carrera en el plan de estudio
-        if(empty($idGeneralidad) && !empty($generalidad[1])){
-            $generalidadCarrera = new GeneralidadesCarrera($data);
+        if(empty($idGeneralidad) && !empty($generalidad[0])){
+            $generalidadCarrera = new GeneralidadesCarrera($generalidad);
             $idGenCarrera =  $generalidadCarrera->createGeneralidad();
 
             //Haciendo la relacion generdlidades de la carrera con el plan de estudio
@@ -83,7 +95,7 @@ class CurricularDesign extends Controller{
         }
         //actualizando la seccion de generalidades de la carrera en el plan de estudio
         if(!empty($idGeneralidad)){
-            $generalidadCarrera = new GeneralidadesCarrera($data);
+            $generalidadCarrera = new GeneralidadesCarrera($generalidad);
             $generalidadCarrera->setId($idGeneralidad);
             $generalidadCarrera->updateGeneralidad();
         }
@@ -100,10 +112,50 @@ class CurricularDesign extends Controller{
             $planProposito->createPlanProposito();
         }
 
+        //actualizando Proposito de Carrera en el plan de estudio
         if(!empty($idProposito)){
             $propositoCarrera = new PropositoCarrera($proposito[1]);
             $propositoCarrera->setId($idProposito);
             $propositoCarrera->updateProposito();
+        }
+
+        //Ingresando nueva competencia general al plan de estudio
+        if(!empty($comGeneral[0]) || !empty($comGeneral[1])){
+            $ids = [];
+            $competenciaGeneral = new CompetenciaGeneral($comGeneral);
+            $ids = $competenciaGeneral->createComGeneral();
+
+            $planCompetenciaGen = new PlanEstudioCompetenciaGeneral($idPlan, $ids);
+            $planCompetenciaGen->createPlanComGeneral();
+        }
+
+        //Ingresando nueva competencia basica al plan de estudio
+        if(!empty($comBasica[0]) || !empty($comBasica[1])){
+            $ids = [];
+            $competenciaBasica = new CompetenciaBasica($comBasica);
+            $ids = $competenciaBasica->createComBasica();
+
+            $planCompetenciaBas = new PlanEstudioCompetenciaBasica($idPlan, $ids);
+            $planCompetenciaBas->createPlanComBasica();
+        }
+
+        //Ingresando nueva competencia especialidad al plan de estudio
+        if(!empty($comEspecialidad[0]) || !empty($comEspecialidad[1])){
+            $ids = [];
+            $competenciaEspecialidad = new CompetenciaEspecialidad($comEspecialidad);
+            $ids = $competenciaEspecialidad->createComEspecialidad();
+
+            $planCompetenciaBas = new PlanEstudioCompetenciaEspecialidad($idPlan, $ids);
+            $planCompetenciaBas->createPlanComEspecialidad();
+        }
+
+        //ingresando areas de desempeño en el plan de estudio
+        if(!empty($areas[0]) ||
+        !empty($areas[1]) ||
+        !empty($areas[2]) ||
+        !empty($areas[3])){
+            $area_desempenio = new Areas($areas,$idPlan);
+            $area_desempenio->createAreas();
         }
 
         $data=[
@@ -135,6 +187,7 @@ class CurricularDesign extends Controller{
     public function createPlan(){
         $id_facultad = intval($this->post('opcion'));
         $id_carrera = intval($this->post('opcionCarrera'));
+        $id_status = intval($this->post('radio'));
         $facultad = [];
         $carrera = [];
 
@@ -167,7 +220,7 @@ class CurricularDesign extends Controller{
         }
 
         //instanciamos nuestro obj plan de estudio
-        $plan_estudio = new StudyPlan($id_facultad,$nameFacultad,$id_carrera,$nameCarrera,$modalityCarrera);
+        $plan_estudio = new StudyPlan($id_facultad,$nameFacultad,$id_carrera,$nameCarrera,$modalityCarrera,$id_status);
         $plan_estudio->setIdUser($_SESSION['user']->getId());
         $plan_estudio->setUser($_SESSION['user']->getName());
         $res = $plan_estudio->createPlan();
@@ -175,6 +228,13 @@ class CurricularDesign extends Controller{
 
         header("location:/tesis/plan/create/$id_plan");
 
+    }
+
+    public function deletePlan($id){
+
+        $res = StudyPlan::deletePlan($id);
+
+        $this->getPlans(1);
     }
 
     public function word(int $id){
@@ -194,6 +254,15 @@ class CurricularDesign extends Controller{
         //traemos Proposito de carrera
         $proId = PlanEstudioPropositoCarrera::getPlanPropositoId($id); 
         $pro = PropositoCarrera::getProposito($proId[0]['Id']);
+
+        //traemos nuestras competencias de bd relacionadas con el plan de estudio
+        $comGeneral = PlanEstudioCompetenciaGeneral::getPlanComGenerales($id);
+        $comBasica = PlanEstudioCompetenciaBasica::getPlanComBasicas($id);
+        $comEspecialidad = PlanEstudioCompetenciaEspecialidad::getPlanComEspecialidades($id);
+
+        //traemos las areas de desempeño del plkan de estudio
+        $areas = Areas::getAreasPlan($id);
+
 
         foreach($idCreadores as $key => $value){
             array_push($grado,CreadorGradoAcademico::getGradoCreador($value['id']));

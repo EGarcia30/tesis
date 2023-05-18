@@ -19,6 +19,7 @@ $router->get('/home', function(){
 //Vista Administración de usuarios
 $router->get('/users/{pagina}', function($page){
     notAuth();
+    IsUser();
     $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
     $_GET['nombrePagina'] = 'users';
@@ -29,12 +30,14 @@ $router->get('/users/{pagina}', function($page){
 //buscando un usuario especifico
 $router->post('/users', function(){
     notAuth();
+    IsUser();
     $controller = new Home;
     $controller->searchUser();
 });
 
 //vista perfil
 $router->get('/perfil', function(){
+    notAuth();
     $controller = new Home;
     $user = $_SESSION['user'];
     $data = [
@@ -54,6 +57,8 @@ $router->get('/perfil', function(){
 //Vista creacion de usuarios
 $router->get('/createUsers',function(){
     notAuth();
+    IsAdmin();
+    IsUser();
     $controller = new Home;
     $user = $_SESSION['user'];
     $data = [
@@ -69,6 +74,7 @@ $router->get('/createUsers',function(){
 //Vista update de usuarios
 $router->get('/updateUsers/{id}',function($id){
     notAuth();
+    IsUser();
     $controller = new Home;
     $req = User::getUser($id);
     $user = $_SESSION['user'];
@@ -86,21 +92,26 @@ $router->get('/updateUsers/{id}',function($id){
 //CRUD
 //ingresar nuevo usuario
 $router->post('/createUsers',function(){
+    notAuth();
+    IsAdmin();
+    IsUser();
     $controller = new Home;
     $controller->createUsers();
 });
 
-//modificar Usuario
+//modificar Usuarios generales
 $router->post('/updateUsers/{id}',function($id){
     notAuth();
+    IsUser();
     $controller = new Home;
     $controller->updateUsers($id);
 
 });
 
-//Modificar contraseña de usuario
+//Modificar contraseña de usuarios generales
 $router->post('/updatePassword/{id}',function($id){
     notAuth();
+    IsUser();
     $controller = new Home;
     $controller->updatePassword($id);
 
@@ -108,16 +119,19 @@ $router->post('/updatePassword/{id}',function($id){
 
 //Eliminar usuario(Cambio de estatus 0 significa eliminar)
 $router->get('/deleteUser/{id}', function($id){
+    notAuth();
+    IsUser();
     $controller = new Home;
     $controller->deleteUser($id);
 });
 
-
+//actualizar perfil
 $router->post('/updatePerfil/{id}', function($id){
     $controller = new Perfil;
     $controller->updatePerfil($id);
 });
 
+//actualizar contraseña del perfil
 $router->post('/updatePasswordPerfil/{id}', function($id){
     $controller = new Perfil;
     $controller->updatePasswordPerfil($id);

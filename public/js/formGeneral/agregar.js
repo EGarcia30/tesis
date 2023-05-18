@@ -22,3 +22,27 @@ function agregarCreador(){
     const select2 = select1.cloneNode(true);
     select1.parentNode.insertBefore(select2, select1.nextSibling);
 }
+
+function agregarComGeneral(){
+    const selectCom = document.getElementById('comGeneral');
+    const select2 = selectCom.cloneNode(true);
+    selectCom.parentNode.insertBefore(select2, selectCom.nextSibling);
+}
+
+function agregarComBasica(){
+    const selectBasica = document.getElementById('comBasica');
+    const select2 = selectBasica.cloneNode(true);
+    selectBasica.parentNode.insertBefore(select2, selectBasica.nextSibling);
+}
+
+function agregarComEspecialidad(){
+    const selectEspecialidad = document.getElementById('comEspecialidad');
+    const select2 = selectEspecialidad.cloneNode(true);
+    selectEspecialidad.parentNode.insertBefore(select2, selectEspecialidad.nextSibling);
+}
+
+function agregarAreas(){
+    const selectAreas = document.getElementById('areas');
+    const select2 = selectAreas.cloneNode(true);
+    selectAreas.parentNode.insertBefore(select2, selectAreas.nextSibling);
+}

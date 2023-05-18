@@ -39,7 +39,7 @@ class CreadorController extends Controller{
     public function createCreador(){
         $name = $this->post('nombre');
 
-        if(is_null($name)){
+        if(empty($name)){
             $_SESSION['color'] = 'warning';
             $_SESSION['message'] = 'Ingrese datos.';
             header('location: /tesis/creadores/1');
@@ -55,17 +55,16 @@ class CreadorController extends Controller{
     }
 
     public function createGrado($id){
-        $name = $this->post('gradoAcademico');
+        $ArrId = $this->post('gradoAcademico');
 
-        if(empty($name)){
+        if(empty($ArrId)){
             $_SESSION['color'] = 'warning';
             $_SESSION['message'] = 'Ingrese datos.';
             header("location: /tesis/creador/editor/$id");
             error_log('campos vacios');
             exit();
         }
-
-        $grado = new GradoAcademico($name);
+        $grado = new GradoAcademico($ArrId);
         $res = $grado->createGradoAcademico();
         $_SESSION['color'] = 'success';
         $_SESSION['message'] = 'Se creo correctamente el grado academico.';
