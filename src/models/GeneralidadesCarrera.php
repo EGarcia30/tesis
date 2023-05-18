@@ -58,8 +58,14 @@ class GeneralidadesCarrera extends Model{
                 return null;
                 exit();
             }
-            $data =[$res[0]['ingreso'],$res[0]['anios'],$res[0]['ciclos'],$res[0]['asignaturas'],
-            $res[0]['valorativas'],$res[0]['sede'],$res[0]['responsable'],$res[0]['inicio']];
+            $data =[$res[0]['ingreso'] == null ? '': $res[0]['ingreso'],
+            $res[0]['anios']== null ? 0 : $res[0]['anios'],
+            $res[0]['ciclos']== null ? 0 :$res[0]['ciclos'],
+            $res[0]['asignaturas']== null ? 0 :$res[0]['asignaturas'],
+            $res[0]['valorativas']== null ? 0 :$res[0]['valorativas'],
+            $res[0]['sede']== null ? '' :$res[0]['sede'],
+            $res[0]['responsable']== null ? '' :$res[0]['responsable'],
+            $res[0]['inicio']== null ? 0 :$res[0]['inicio']];
             $Generalidad = new GeneralidadesCarrera($data);
             $Generalidad->setId($res[0]['Id'] == null ? 0 : $res[0]['Id']);
             return $Generalidad;

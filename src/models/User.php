@@ -76,8 +76,9 @@ class User extends Model{
 
     public static function getUser($value){
         try{
+            $id = intval($value);
             $_db = new Database();
-            $sql = "SELECT * FROM usuarios WHERE usuario_id=$value OR usuario=$value";
+            $sql = "SELECT * FROM usuarios WHERE usuario_id=$id OR usuario='$value' ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             
@@ -98,7 +99,7 @@ class User extends Model{
     public static function existsUser(string $user){
         try{
             $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario=$user";
+            $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario='$user' ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;

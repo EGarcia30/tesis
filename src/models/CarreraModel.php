@@ -181,6 +181,21 @@ class CarreraModel extends Model{
         }
     }
 
+    public static function deleteCarrera($id){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE carrera SET status=? WHERE carrera_id=?";
+            $query = $_db->connect()->prepare($sql);
+            $data = [0,$id];
+            $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
+        }
+    }
+
     public function getId(){
         return $this->_id;
     }

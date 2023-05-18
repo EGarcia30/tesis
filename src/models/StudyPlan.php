@@ -22,17 +22,19 @@ class StudyPlan extends Model{
     private string $_fundamentacion;
     private int $_idUser;
     private string $_user;
+    private int $_status;
 
 
 
 
-    public function __construct(int $idFac, string $nameFac, int $idCar, string $nameCar, string $modalityCar){
+    public function __construct(int $idFac, string $nameFac, int $idCar, string $nameCar, string $modalityCar, int $status){
         parent::__construct();
         $this->_idFac = $idFac;
         $this->_nameFac = $nameFac;
         $this->_idCar  =$idCar;
         $this->_nameCar = $nameCar;
         $this->_modalityCar = $modalityCar;
+        $this->_status = $status;
     }
 
     //Search
@@ -94,7 +96,7 @@ class StudyPlan extends Model{
                 return null;
                 exit();
             }
-            $StudyPlan = new StudyPlan($res['facultad_id'], $res['nombre_facultad'], $res['carrera_id'], $res['nombre_carrera'], $res['modalidad_carrera']);
+            $StudyPlan = new StudyPlan($res['facultad_id'], $res['nombre_facultad'], $res['carrera_id'], $res['nombre_carrera'], $res['modalidad_carrera'], $res['status']);
             $StudyPlan->setId($res['plan_estudio_id']);
             $StudyPlan->setStartValidity($res['vigencia_inicio'] == null ? '' : $res['vigencia_inicio']);
             $StudyPlan->setEndValidity($res['vigencia_final'] == null ? '' : $res['vigencia_final']);
@@ -127,10 +129,10 @@ class StudyPlan extends Model{
     //CRUD
     public function createPlan(){
         try{
-            $sql = "CALL createPlan(?,?,?,?,?,?,?)";
+            $sql = "CALL createPlan(?,?,?,?,?,?,?,?)";
             $query = $this->prepare($sql);
             $data = [$this->_idFac, $this->_nameFac, $this->_idCar, $this->_nameCar,
-            $this->_modalityCar, $this->_idUser, $this->_user];
+            $this->_modalityCar, $this->_idUser, $this->_user,$this->_status];
             $query->execute($data);
             $res = $this->getLastId();
             return $res;
@@ -180,16 +182,18 @@ class StudyPlan extends Model{
         }
     }
 
-    public function deletePlan(){
+    public static function deletePlan($id){
         try{
-            $sql = "DELETE FROM datos WHERE documento_id=?";
-            $query = $this->prepare($sql);
-            $data = [$this->_id];
+            $_db = new Database();
+            $sql = "UPDATE plan_estudio SET status=? WHERE plan_estudio_id=?";
+            $query = $_db->connect()->prepare($sql);
+            $data = [0,$id];
             $res = $query->execute($data);
             return $res;
         }
-        catch(Exception $e){
-            return $e->getMessage();
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return NULL;
         }
     }
 
@@ -296,5 +300,13 @@ class StudyPlan extends Model{
 
     public function setUser(string $value){
         return $this->_user = $value;
+    }
+
+    public function getStatus(){
+        return $this->_status;
+    }
+
+    public function setStatus(string $value){
+        return $this->_status = $value;
     }
 }
