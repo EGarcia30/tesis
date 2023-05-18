@@ -16,13 +16,18 @@
                             <?php endforeach;?>
                         </select>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <select name="opcionCarrera" class="form-select" aria-label="Default select example">
                             <option selected>Seleccionar Carrera:</option>
                             <?php foreach($this->d['carreras'] as $key => $value) :?>
                                 <option value="<?= $value['carrera_id']?>"><?=$value['nombre_carrera']?></option>
                             <?php endforeach;?>
                         </select>
+                    </div>
+
+                    <div class="mb-3 text-start">
+                        <input class="form-check-input" type="radio" name="radio" id="inlineRadio2" value="1">
+                        <label class="form-check-label" for="inlineRadio2">Activo</label>
                     </div>
 
                     <div class="mb-3 text-start">

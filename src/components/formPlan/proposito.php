@@ -14,7 +14,7 @@
                 <i class="fas fa-angle-double-left"></i>
             </span>
         </button>
-        <button type="button" class="btn btn-outline-utec nav_link p-0 px-2" data-bs-target="formCreador">
+        <button type="button" class="btn btn-outline-utec nav_link p-0 px-2" data-bs-target="formComGeneral">
             <span class="icon profile-icon">
                 <i class="fas fa-angle-double-right"></i>
             </span>

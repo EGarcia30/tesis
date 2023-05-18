@@ -43,7 +43,7 @@
                         <ul class="dropdown-menu">
                             <li class="dropdown-item font-custom pointer-event"><?= $this->d['user']->getRol()?></li>
                             <li><a class="dropdown-item font-custom" href="/tesis/perfil">Perfil</a></li>
-                            <li><a class="dropdown-item font-custom" href="/tesis/users/1">Administrar Usuarios</a></li>
+                            <li class="<?= $this->d['user']->getRol() == "Usuario" ? 'd-none' : '' ?>"><a class="dropdown-item font-custom" href="/tesis/users/1">Administrar Usuarios</a></li>
                             <li><a class="dropdown-item font-custom" href="/tesis/signout">Cerrar Sesión</a></li>
                         </ul>
                     </div>
@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-    <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
+    <div id="vertical-menu" class="position-absolute bg-white vh-custom hide overflow-y-scroll">
         <div class="container pt-3 pe-3 d-flex flex-column gap-3 text-decoration-none">
             <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link active font-custom" data-bs-target="formInicio">
                 Portada
@@ -74,6 +74,22 @@
             <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formProposito">
                 Propósito de<br/>
                 la Carrera
+            </a >
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formComGeneral">
+                Competencias<br/>
+                Generales
+            </a >
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formComBasico">
+                Competencias<br/>
+                Básicas
+            </a >
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formComEspecialidad">
+                Competencias de<br/>
+                Especialidad
+            </a >
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formAreas">
+                Areas de<br/>
+                Desempeño
             </a >
         </div>
     </div>

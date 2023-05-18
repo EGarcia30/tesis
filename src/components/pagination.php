@@ -6,22 +6,30 @@ $pages = ceil($pages);
 ?>
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end">
-        <li class="page-item">
-            <a class="page-link bg-dark <?= $_GET['pagina']<=1? 'disabled': ''?>" href="/tesis/<?= $_GET['nombrePagina'] ?>/<?= $_GET['pagina']-1?>" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
+
+        <li class="page-item <?= $_GET['pagina']==1 ? 'disabled' : '' ?>">
+            <a class="page-link bg-dark" href="/tesis/<?= $_GET['nombrePagina'] ?>/<?=1?>">
+                <i class="fas fa-angle-double-left"></i>
             </a>
         </li>
 
-        <?php for($i=0;$i<$pages;$i++) : ?>
-            <li class="page-item <?= $_GET['pagina']==$i+1 ? 'active' : '' ?>">
-                <a class="page-link bg-dark" href="/tesis/<?= $_GET['nombrePagina'] ?>/<?= $i+1?>"><?= $i+1?></a>
-            </li>
-        <?php endfor; ?>
+        <li class="page-item">
+            <a class="page-link bg-dark <?= $_GET['pagina']<=1? 'disabled': ''?>" href="/tesis/<?= $_GET['nombrePagina'] ?>/<?= $_GET['pagina']-1?>" aria-label="Previous">
+                <i class="fas fa-angle-left"></i>
+            </a>
+        </li>
+        <li class="page-item">
+            <button type="button" class="page-link bg-dark"><?=$_GET['pagina']?>/<?=$pages?></button>
+        </li>
 
         <li class="page-item">
             <a class="page-link <?= $_GET['pagina']>=$pages ? 'disabled':'' ?> bg-dark" href="/tesis/<?= $_GET['nombrePagina'] ?>/<?= $_GET['pagina']+1?>" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
+                <i class="fas fa-angle-right"></i>
             </a>
+        </li>
+
+        <li class="page-item <?= $_GET['pagina']>=$pages ? 'disabled' : '' ?>">
+            <a class="page-link bg-dark" href="/tesis/<?= $_GET['nombrePagina'] ?>/<?= $pages?>"><i class="fas fa-angle-double-right"></i></a>
         </li>
     </ul>
 </nav>

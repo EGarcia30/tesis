@@ -43,7 +43,7 @@
                         <ul class="dropdown-menu">
                             <li class="dropdown-item font-custom pointer-event"><?= $this->d['user']->getRol()?></li>
                             <li><a class="dropdown-item font-custom" href="/tesis/perfil">Perfil</a></li>
-                            <li><a class="dropdown-item font-custom" href="/tesis/users/1">Administrar Usuarios</a></li>
+                            <li class="<?= $this->d['user']->getRol() == "Usuario" ? 'd-none' : '' ?>"><a class="dropdown-item font-custom" href="/tesis/users/1">Administrar Usuarios</a></li>
                             <li><a class="dropdown-item font-custom" href="/tesis/signout">Cerrar Sesión</a></li>
                         </ul>
                     </div>
