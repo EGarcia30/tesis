@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-                                    <a href="/tesis/deleteCarrera/<?= $value['creador_id'] ?>" class="btn btn-danger">Eliminar</a>
+                                    <a href="/tesis/deleteCreador/<?= $value['creador_id'] ?>" class="btn btn-danger">Eliminar</a>
                                 </div>
                                 </div>
                             </div>

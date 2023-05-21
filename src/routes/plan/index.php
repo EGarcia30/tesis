@@ -88,3 +88,10 @@ $router->get('/deletePlan/{id}', function($id){
     $controller = new CurricularDesign;
     $controller->deletePlan($id);
 });
+
+//PLAN-CREADOR
+$router->get('/creador/plan/{idCreador}/{idPlan}', function($idCreador,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->deletePlanCreador($idCreador,$idPlan);
+});

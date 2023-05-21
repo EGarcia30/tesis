@@ -21,7 +21,7 @@ class Participacion extends Model{
     public static function getParticipaciones(){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM participacion ORDER BY participacion_id DESC";
+            $sql = "SELECT * FROM participacion WHERE status=1 ORDER BY participacion_id DESC";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
@@ -35,7 +35,7 @@ class Participacion extends Model{
     public static function existsParticipacion(string $data){
         try{
             $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM participacion WHERE descripcion=$data";
+            $sql = "SELECT COUNT(*) as num FROM participacion WHERE descripcion=$data AND status=1";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
@@ -68,5 +68,59 @@ class Participacion extends Model{
             error_log($e->getMessage());
             return false;
         }
+    }
+
+    //actualizar participacion
+    public function updateParticipacion(){
+        try{
+            $sql = "UPDATE participacion SET descripcion=? WHERE participacion_id=?";
+            $query = $this->prepare($sql);
+            $data = [$this->_name,$this->_id];
+            $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //eliminar participacion
+    public static function deleteParticipacion($id){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE participacion SET status=0 WHERE participacion_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+    
+    public function getId(){
+        return $this->_id;
+    }
+
+    public function setId(int $value){
+        return $this->_id = $value;
+    }
+
+    public function getName(){
+        return $this->_name;
+    }
+
+    public function setName(string $value){
+        return $this->_name = $value;
+    }
+
+    public function getStatus(){
+        return $this->_status;
+    }
+
+    public function setStatus(int $value){
+        return $this->_status = $value;
     }
 }

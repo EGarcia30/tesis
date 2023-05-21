@@ -52,7 +52,8 @@ class Areas extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -67,7 +68,8 @@ class Areas extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 }

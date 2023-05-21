@@ -33,27 +33,28 @@
         <div class="mb-3 mb-sm-0">
             <h3 class="header-font-custom text-utec mt-2">Asignados:</h3>
             <table class="table table-bordered">
-                <?php foreach($this->d['comEspecialidad'] as $key => $value) :?>
-                    <tr>
-                        <td class="font-custom m-0"><?= $value['descripcion']?></td>
-                        <td class="font-custom m-0">Ciclo: <?= $value['ciclo']?></td>
-                        <td>
-                            <a href="#" class="btn btn-success p-0 px-2">
-                                <span class="icon profile-icon">
-                                    <i class="fas fa-edit"></i>
-                                </span>
-                            </a>
-                        </td>
-                        <td>
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-danger p-0 px-2">
-                                <span class="icon profile-icon">
-                                    <i class="fas fa-trash-alt"></i>
-                                </span>
-                            </button>
-                        </td>
-                    </tr>
-                <?php endforeach;?>
+                <tbody class="align-middle">
+                    <?php foreach($this->d['comEspecialidad'] as $key => $value) :?>
+                        <tr>
+                            <td class="font-custom m-0"><?= $value['descripcion']?></td>
+                            <td class="font-custom m-0">Ciclo: <?= $value['ciclo']?></td>
+                            <td>
+                                <a href="#" class="btn btn-success p-0 px-2">
+                                    <span class="icon profile-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                </a>
+                            </td>
+                            <td>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger p-0 px-2">
+                                    <span class="icon profile-icon">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
                 </tbody>
             </table>
         </div>

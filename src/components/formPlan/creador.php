@@ -1,24 +1,26 @@
-<form action="" method="post" class="position-relative form-container" id="formCreador">
+<div class="position-relative form-container" id="formCreador">
     <h2 class="text-utec text-center header-font-custom">Especialistas/Creadores</h2>
     <div class="d-flex flex-wrap-reverse justify-content-around w-75 mx-auto mt-3 mt-sm-5">
         <div>
             <div class="mb-3">
                 <label for="" class="form-label">Asignar Especialistas:</label>
-                <div class="d-flex flex-wrap">
-                    <div id="selectsCreador" class="d-block w-100 mb-2">
-                        <select class="form-select form-select-lg" name="opcionCreador[]" id="opcionCreador">
-                            <option>seleccionar</option>
-                            <?php foreach($this->d['creadores'] as $key => $value) :?>
-                                <option value="<?= $value['creador_id']?>"><?= $value['nombre_creador']?></option>
-                            <?php endforeach; ?>
-                        </select>
+                <form action="" method="post" >
+                    <div class="d-flex flex-wrap">    
+                        <div id="selectsCreador" class="d-block w-100 mb-2">
+                            <select class="form-select form-select-lg" name="opcionCreador[]" id="opcionCreador">
+                                <option>seleccionar</option>
+                                <?php foreach($this->d['creadores'] as $key => $value) :?>
+                                    <option value="<?= $value['creador_id']?>"><?= $value['nombre_creador']?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary p-0 px-2" onclick="agregarCreador()" >
+                            <span class="icon profile-icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                        </button>
                     </div>
-                    <button type="button" class="btn btn-outline-primary p-0 px-2" onclick="agregarCreador()" >
-                        <span class="icon profile-icon">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                    </button>
-                </div>
+                </form>
             </div>
             <div>
                 <small class="font-custom">No existe el especialista/creador que quieres elegir? 
@@ -42,12 +44,12 @@
         <div class="mb-3 mb-sm-0">
             <h3 class="header-font-custom text-utec mt-2">Asignados:</h3>
             <table class="table table-bordered">
-                <tbody>
+                <tbody class="align-middle">
                     <?php foreach($this->d['creador'] as $key => $value) :?>
                         <tr>
                             <td class="font-custom m-0"><?= $value['Creador']?></td>
                             <td>
-                                <a href="#" class="btn btn-success p-0 px-2">
+                                <a href="/tesis/creador/editor/<?= $value['creador_id']?>" class="btn btn-success p-0 px-2">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-edit"></i>
                                     </span>
@@ -55,11 +57,12 @@
                             </td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2">
+                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#deleteCreadorPlan<?= $value['creador_id']?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-trash-alt"></i>
                                     </span>
                                 </button>
+                                <?php require __DIR__ . '/../../components/modalPlan/modalDeleteCreador.php' ?>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -67,4 +70,4 @@
             </table>
         </div>
     </div>
-</form>
+</div>

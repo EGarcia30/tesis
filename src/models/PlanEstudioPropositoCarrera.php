@@ -30,7 +30,8 @@ class PlanEstudioPropositoCarrera extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 

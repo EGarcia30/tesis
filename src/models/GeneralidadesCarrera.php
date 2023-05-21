@@ -40,7 +40,8 @@ class GeneralidadesCarrera extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -55,7 +56,7 @@ class GeneralidadesCarrera extends Model{
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             if(!$res){
-                return null;
+                return false;
                 exit();
             }
             $data =[$res[0]['ingreso'] == null ? '': $res[0]['ingreso'],
@@ -71,7 +72,8 @@ class GeneralidadesCarrera extends Model{
             return $Generalidad;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -104,7 +106,8 @@ class GeneralidadesCarrera extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 

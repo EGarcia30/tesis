@@ -10,7 +10,7 @@ $router->get('/home', function(){
     $controller = new Home;
     $user = $_SESSION['user'];
     $data = [
-        'title' => 'Home',
+        'title' => 'Inicio',
         'user' => $user
     ];
     $controller->render('home/index', $data);

@@ -33,7 +33,8 @@ class CarreraModel extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -54,7 +55,8 @@ class CarreraModel extends Model{
             return $carreraModel; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -69,7 +71,7 @@ class CarreraModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -85,13 +87,14 @@ class CarreraModel extends Model{
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
             if(!$res){
-                return null;
+                return false;
                 exit();
             }
             return $res; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -111,7 +114,7 @@ class CarreraModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -124,7 +127,8 @@ class CarreraModel extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -177,7 +181,7 @@ class CarreraModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -192,7 +196,7 @@ class CarreraModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 

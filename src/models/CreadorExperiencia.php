@@ -21,15 +21,17 @@ class CreadorExperiencia extends Model{
     public static function getExperienciaCreador($id){
         try{
             $_db = new Database();
-            $sql = "SELECT e.descripcion as Experiencia FROM experiencia_profesional e
+            $sql = "SELECT e.experiencia_id, e.descripcion as Experiencia FROM experiencia_profesional e
             INNER JOIN creador_experiencia_profesional ce ON e.experiencia_id = ce.experiencia_id
-            INNER JOIN creador c ON c.creador_id = $id and c.creador_id = ce.creador_id";
+            INNER JOIN creador c ON c.creador_id = $id and c.creador_id = ce.creador_id
+            WHERE e.status=1";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 

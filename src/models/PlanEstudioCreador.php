@@ -21,15 +21,17 @@ class PlanEstudioCreador extends Model{
     public static function getCreadorPlan($id){
         try{
             $_db = new Database();
-            $sql = "SELECT c.nombre_creador as Creador FROM creador c
+            $sql = "SELECT c.creador_id, c.nombre_creador as Creador FROM creador c
             INNER JOIN plan_estudio_creador pc ON c.creador_id = pc.creador_id
-            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = $id and pe.plan_estudio_id = pc.plan_estudio_id";
+            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = $id and pe.plan_estudio_id = pc.plan_estudio_id
+            WHERE c.status=1";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -38,16 +40,20 @@ class PlanEstudioCreador extends Model{
             $_db = new Database();
             $sql = "SELECT c.creador_id as id FROM creador c
             INNER JOIN plan_estudio_creador pc ON c.creador_id = pc.creador_id
-            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = $id and pe.plan_estudio_id = pc.plan_estudio_id";
+            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = $id and pe.plan_estudio_id = pc.plan_estudio_id
+            WHERE c.status=1";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
+    //CRUD
+    //ingresar
     public function createPlanCreador(){
         try{
             foreach($this->_idCreador as $key => $value){
@@ -57,6 +63,21 @@ class PlanEstudioCreador extends Model{
                 $data = [$this->_idPlan,$idCreador];
                 $res = $query->execute($data);
             }            
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //eliminar o desvincular
+    public static function deletePlanCreador($idCreador,$idPlan){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM plan_estudio_creador WHERE creador_id=$idCreador AND plan_estudio_id=$idPlan";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

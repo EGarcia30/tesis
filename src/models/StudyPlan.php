@@ -48,7 +48,8 @@ class StudyPlan extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -66,7 +67,8 @@ class StudyPlan extends Model{
             return $res; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -81,7 +83,7 @@ class StudyPlan extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -108,7 +110,8 @@ class StudyPlan extends Model{
             return $StudyPlan; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -122,7 +125,8 @@ class StudyPlan extends Model{
             return $res; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -138,7 +142,8 @@ class StudyPlan extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -150,7 +155,8 @@ class StudyPlan extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -165,7 +171,8 @@ class StudyPlan extends Model{
             return $res; 
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -178,7 +185,8 @@ class StudyPlan extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -193,7 +201,7 @@ class StudyPlan extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 

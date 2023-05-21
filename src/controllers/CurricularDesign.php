@@ -237,6 +237,24 @@ class CurricularDesign extends Controller{
         $this->getPlans(1);
     }
 
+    //VINCULACIONES CON EL PLAN DE ESTUDIO
+
+    //CREADOR-PLAN DE ESTUDIO
+    public function deletePlanCreador($idCreador,$idPlan){
+        $delete = PlanEstudioCreador::deletePlanCreador($idCreador,$idPlan);
+
+        if(!$delete){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: desvinculación del creador.';
+            header("location:/tesis/plan/create/$idPlan");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se desvinculo el creador.';
+        header("location:/tesis/plan/create/$idPlan");
+    }
+
     public function word(int $id){
         $idCreadores = [];
         $creadores = [];

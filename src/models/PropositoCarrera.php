@@ -24,7 +24,7 @@ class PropositoCarrera extends Model{
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             if(!$res){
-                return null;
+                return false;
                 exit();
             }
             $proposito = new PropositoCarrera($res[0]['descripcion'] == null ? '' : $res[0]['descripcion'] );
@@ -32,7 +32,8 @@ class PropositoCarrera extends Model{
             return $proposito;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -49,8 +50,8 @@ class PropositoCarrera extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return null;
             error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -62,7 +63,8 @@ class PropositoCarrera extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
 
     }
@@ -78,8 +80,8 @@ class PropositoCarrera extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return null;
             error_log($e->getMessage());
+            return false;
         }
     }
 

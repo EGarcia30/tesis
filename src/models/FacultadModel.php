@@ -29,7 +29,8 @@ class FacultadModel extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -42,7 +43,8 @@ class FacultadModel extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -57,7 +59,7 @@ class FacultadModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -69,13 +71,14 @@ class FacultadModel extends Model{
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
             if(!$res){
-                return null;
+                return false;
                 exit();
             }
             return $res; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -87,7 +90,7 @@ class FacultadModel extends Model{
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             if(!$res){
-                return null;
+                return false;
                 exit();
             }
             $facultadModel = new FacultadModel($res['nombre_facultad'], $res['acronimo_facultad']);
@@ -96,7 +99,8 @@ class FacultadModel extends Model{
             return $facultadModel; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -150,7 +154,7 @@ class FacultadModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -165,7 +169,7 @@ class FacultadModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 

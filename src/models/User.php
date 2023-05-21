@@ -35,7 +35,7 @@ class User extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -50,7 +50,7 @@ class User extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -70,7 +70,7 @@ class User extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -91,7 +91,7 @@ class User extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -147,7 +147,7 @@ class User extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -162,7 +162,7 @@ class User extends Model{
         }
         catch(PDOexception $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
 
     }
@@ -178,7 +178,7 @@ class User extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 

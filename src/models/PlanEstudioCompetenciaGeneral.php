@@ -30,7 +30,8 @@ class PlanEstudioCompetenciaGeneral extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -45,7 +46,8 @@ class PlanEstudioCompetenciaGeneral extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 }

@@ -54,7 +54,11 @@
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
         <div class="container pt-3 pe-3 d-flex flex-column gap-3 text-decoration-none">
-            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link active font-custom" data-bs-target="formInicio">
+        <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link active font-custom" data-bs-target="formInicio">
+                Nombre <br>
+                Creador
+            </a>
+            <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formGrado">
                 Grado Academico
             </a>
             <a type="button" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom" data-bs-target="formExperiencia">

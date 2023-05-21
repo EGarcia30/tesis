@@ -21,13 +21,14 @@ class CreadorModel extends Model{
     public static function getCreadores($start, $end){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM creador ORDER BY creador_id DESC LIMIT $start, $end";
+            $sql = "SELECT * FROM creador WHERE status=1 ORDER BY creador_id DESC LIMIT $start, $end";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -40,7 +41,8 @@ class CreadorModel extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -55,7 +57,7 @@ class CreadorModel extends Model{
         }
         catch(PDOException $e){
             error_log($e->getMessage());
-            return NULL;
+            return false;
         }
     }
 
@@ -76,7 +78,8 @@ class CreadorModel extends Model{
             return $creador; 
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -96,7 +99,7 @@ class CreadorModel extends Model{
     }
 
     //CRUD
-    //insertar carrera
+    //insertar creador
     public function createCreador(){
         try{
             //TODO: validar si existe creador
@@ -128,7 +131,42 @@ class CreadorModel extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //actualizar creador
+    public function updateCreador(){
+        try{
+            $sql = 'UPDATE creador 
+            SET nombre_creador=? WHERE creador_id=?';
+            $query = $this->prepare($sql);
+            $data = [$this->_name,$this->_id];
+            $res = $query->execute($data);
+            return $res;           
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //eliminar Creador
+    public static function deleteCreador($id){
+        try{
+            $id = intval($id);
+            $_db = new Database();
+            $sql = "UPDATE creador
+            SET status=? WHERE creador_id=?";
+            $query = $_db->connect()->prepare($sql);
+            $data = [0,$id];
+            $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
         }
     }
 

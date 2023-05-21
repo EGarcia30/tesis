@@ -38,7 +38,8 @@ class CompetenciaGeneral extends Model{
             return $arrRes;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -50,7 +51,8 @@ class CompetenciaGeneral extends Model{
             return $res;
         }
         catch(PDOException $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 }

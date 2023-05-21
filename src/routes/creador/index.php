@@ -49,37 +49,118 @@ $router->get('/creador/editor/{id}', function($id){
 //CRUD
 //Ingresar Usuario
 $router->post('/creador', function(){
+    notAuth();
     $controller = new CreadorController;
     $controller->createCreador();
 });
 
+//  actualizar nombre usuario
+$router->post('/creador/nombre/{id}', function($id){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->updateCreador($id);
+});
+
+//eliminar creador
+$router->get('/deleteCreador/{id}', function($id){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->deleteCreador($id);
+});
+
+//GRADO
 //Ingresar Grado
 $router->post('/grado/{id}', function($id){
+    notAuth();
     $controller = new CreadorController;
     $controller->createGrado($id);
 });
 
-//Ingresar participacion
-$router->post('/participacion/{id}', function($id){
+//actualizar Grado
+$router->post('/updateGrado/{idGrado}/{idCreador}', function($idGrado, $idCreador){
+    notAuth();
     $controller = new CreadorController;
-    $controller->createParticipacion($id);
+    $controller->updateGrado($idGrado, $idCreador);
 });
 
-//RELACIONAR
+//eliminar Grado
+$router->get('/deleteGrado/{idGrado}/{idCreador}', function($idGrado,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->deleteGrado($idGrado, $idCreador);
+});
+
 //CREADOR-GRADO
+//crear vinculación
 $router->post('/creador/grado/{id}', function($id){
+    notAuth();
     $controller = new CreadorController;
     $controller->creadorGrado($id);
 });
 
+//eliminar vinculacion de Grado/Creador
+$router->get('/deleteGradoCreador/{idGrado}/{idCreador}', function($idGrado,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->deleteGradoCreador($idGrado, $idCreador);
+});
+
+
 //CREADOR-EXPERIENCIA
+//ingresar y vincular
 $router->post('/creador/experiencia/{id}', function($id){
+    notAuth();
     $controller = new CreadorController;
     $controller->creadorExperiencia($id);
 });
 
+//actualizar la información de experiencia
+$router->post('/updateExperiencia/{idExperiencia}/{idCreador}', function($idExperiencia,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->updateExperiencia($idExperiencia,$idCreador);
+});
+
+//eliminar Experiencia profesional
+$router->get('/deleteExperiencia/{idExperiencia}/{idCreador}', function($idExperiencia,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->deleteExperiencia($idExperiencia,$idCreador);
+});
+
+//PARTICIPACION
+//Ingresar participacion
+$router->post('/participacion/{id}', function($id){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->createParticipacion($id);
+});
+
+//actualizar participación
+$router->post('/updateParticipacion/{idParticipacion}/{idCreador}', function($idParticipacion,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->updateParticipacion($idParticipacion,$idCreador);
+});
+
+//eliminar participación
+$router->get('/deleteParticipacion/{idParticipacion}/{idCreador}', function($idParticipacion,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->deleteParticipacion($idParticipacion,$idCreador);
+});
+
 //CREADOR-PARTICIPACION
+//vincular participacion con el creador
 $router->post('/creador/participacion/{id}', function($id){
+    notAuth();
     $controller = new CreadorController;
     $controller->creadorParticipacion($id);
+});
+
+//desvincular participacion con el creador
+$router->get('/creador/participacion/{idParticipacion}/{idCreador}', function($idParticipacion,$idCreador){
+    notAuth();
+    $controller = new CreadorController;
+    $controller->deleteParticipacionCreador($idParticipacion,$idCreador);
 });

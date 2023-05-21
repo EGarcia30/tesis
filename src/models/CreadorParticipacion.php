@@ -21,7 +21,7 @@ class CreadorParticipacion extends Model{
     public static function getParticipacionCreador($id){
         try{
             $_db = new Database();
-            $sql = "SELECT p.descripcion as Participacion FROM participacion p
+            $sql = "SELECT p.participacion_id, p.descripcion as Participacion FROM participacion p
             INNER JOIN creador_participacion cp ON p.participacion_id = cp.participacion_id
             INNER JOIN creador c ON c.creador_id = $id and c.creador_id = cp.creador_id";
             $query = $_db->connect()->query($sql);
@@ -29,7 +29,8 @@ class CreadorParticipacion extends Model{
             return $res;
         }
         catch(Exception $e){
-            return $e->getMessage();
+            error_log($e->getMessage());
+            return false;
         }
     }
 
@@ -42,6 +43,20 @@ class CreadorParticipacion extends Model{
                 $data = [$this->_idCreador,$idParticipacion];
                 $res = $query->execute($data);
             }            
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteCreadorParticipacion($idParticipacion,$idCreador){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM creador_participacion WHERE creador_id=$idCreador AND participacion_id=$idParticipacion";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

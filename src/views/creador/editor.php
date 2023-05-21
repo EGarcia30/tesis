@@ -15,6 +15,7 @@
                     <h1 class="text-utec text-center header-font-custom mt-4">Especialista/Creador</h1>
                     <h2 class="text-utec text-center header-font-custom mt-4"><?= $this->d['creador']->getName()?></h2>
                     <hr class="w-75 mx-auto"/>
+                    <?php require_once __DIR__ . '/../../components/formCreador/nombre.php' ?>
                     <?php require_once __DIR__ . '/../../components/formCreador/gradoAcademico.php' ?>
                     <?php require_once __DIR__ . '/../../components/formCreador/createGradoAcademico.php' ?>
                     <?php require_once __DIR__ . '/../../components/formCreador/experiencia.php' ?>

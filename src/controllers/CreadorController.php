@@ -17,6 +17,7 @@ class CreadorController extends Controller{
         parent::__construct();
     }
 
+    //vista todos los creadores
     public function getCreadores($page){
         $user = $_SESSION['user'];
         $totalItems = CreadorModel::rowCreadores();
@@ -36,6 +37,7 @@ class CreadorController extends Controller{
         $this->render('creador/index', $data);
     }
 
+    //creando un creador
     public function createCreador(){
         $name = $this->post('nombre');
 
@@ -54,6 +56,51 @@ class CreadorController extends Controller{
         header("location: /tesis/creador/editor/$id_creador");
     }
 
+    //actualizando un creador
+    public function updateCreador($id){
+        $name = $this->post('nombre');
+
+        if(empty($name)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingrese datos.';
+            header("location: /tesis/creador/editor/$id");
+            error_log('campos vacios');
+            exit();
+        }
+
+        $creador = new CreadorModel($name);
+        $creador->setId($id);
+        $res = $creador->updateCreador();
+
+        if(!$res){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$id");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'se cambio el nombre del creador.';
+        header("location: /tesis/creador/editor/$id");
+    }
+
+    //eliminando un creador
+    public function deleteCreador($id){
+        $creador = CreadorModel::deleteCreador($id);
+
+        if(!$creador){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se realizo la eliminación.';
+            header("location: /tesis/creadores/1");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = "Se elimino el creador.";
+        header("location: /tesis/creadores/1");
+    }
+
+    //creacion grado
     public function createGrado($id){
         $ArrId = $this->post('gradoAcademico');
 
@@ -71,6 +118,171 @@ class CreadorController extends Controller{
         header("location: /tesis/creador/editor/$id");
     }
 
+    //actualizacion grado
+    public function updateGrado($idGrado, $idCreador){
+        $grado = $this->post('grado');
+
+        if(empty($grado)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingrese datos.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $updateGrado = new GradoAcademico($grado);
+        $updateGrado->setId($idGrado);
+        $updateGrado->updateGradoAcademico();
+
+        if(!$updateGrado){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se cambio el Grado Academico.';
+        header("location: /tesis/creador/editor/$idCreador");
+
+    }
+
+    //eliminar Grado
+    public function deleteGrado($idGrado, $idCreador){
+        $deleteGrado = GradoAcademico::deleteGradoAcademico($idGrado);
+
+        if(!$deleteGrado){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se elimino el Grado Academico.';
+        header("location: /tesis/creador/editor/$idCreador");
+
+    }
+
+    //CREADOR-GRADO
+    //ingresar/crear vinculación
+    public function creadorGrado($id){
+        $grados = $this->post('opcionGrado');
+
+        $idCreador = intval($id);
+        $validity = intval($grados[0]);
+
+        if(empty($validity)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No se selecciono ningun Grado Academico.';
+            header("location: /tesis/creador/editor/$id");
+            exit();
+        }
+
+        $creadorGrado = new CreadorGradoAcademico($idCreador,$grados);
+        $creadorGrado->createCreadorGrado();
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se Asocio el Grado Academico con el Creador.';
+        header("location: /tesis/creador/editor/$id");
+
+    }
+
+    //desvinculación grado/Creador
+    public function deleteGradoCreador($idGrado, $idCreador){
+        $deleteGradoCreador = CreadorGradoAcademico::deleteGradoCreador($idGrado,$idCreador);
+
+        if(!$deleteGradoCreador){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se desvinculó el Grado Academico.';
+        header("location: /tesis/creador/editor/$idCreador");
+
+    }
+
+    //CREADOR-EXPERIENCIA
+    //ingresar y vincular
+    public function creadorExperiencia($id){
+        $experiencia = $this->post('experiencia');
+        $idCreador = intval($id);
+        $res = [];
+
+        if(empty($experiencia[0])){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Datos Vacios.';
+            header("location: /tesis/creador/editor/$id");
+            exit();
+        }
+
+        foreach($experiencia as $key => $value){
+            $exp = new Experiencia($value);
+            array_push($res, $exp->createExperiencia());
+        }
+
+        $creadorExp = new CreadorExperiencia($idCreador,$res);
+        $resExp = $creadorExp->createCreadorExperiencia();
+
+        if(!$resExp){
+            $_SESSION['color'] = 'success';
+            $_SESSION['message'] = 'Error al asociar Experiencia con el Creador.';
+            header("location: /tesis/creador/editor/$id");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se Asocio la experiencia con el Creador.';
+        header("location: /tesis/creador/editor/$id");
+    }
+
+    //actualizar la experiencia profesional
+    public function updateExperiencia($idExperiencia, $idCreador){
+        $experiencia = $this->post('experiencia');
+
+        if(empty($experiencia)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingresar Datos.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $updateExp = new Experiencia($experiencia);
+        $updateExp->setId($idExperiencia);
+        $res = $updateExp->updateExperiencia();
+
+        if(!$res){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Cambios realizados.';
+        header("location: /tesis/creador/editor/$idCreador");
+    }
+
+    //eliminar experiencia profesional
+    public function deleteExperiencia($idExperiencia, $idCreador){
+        $deleteExperiencia = Experiencia::deleteExperiencia($idExperiencia);
+
+        if(!$deleteExperiencia){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se realizaron los cambios.';
+        header("location: /tesis/creador/editor/$idCreador");
+    }
+
+    //PARTICIPACION
+    //ingresar participacion
     public function createParticipacion($id){
         $name = $this->post('participacion');
 
@@ -96,60 +308,49 @@ class CreadorController extends Controller{
         header("location: /tesis/creador/editor/$id");
     }
 
-    public function creadorGrado($id){
-        $grados = $this->post('opcionGrado');
+    //actualizar participacion
+    public function updateParticipacion($idParticipacion,$idCreador){
+        $participacion = $this->post('participacion');
 
-        $idCreador = intval($id);
-        $validity = intval($grados[0]);
-
-        if(empty($validity)){
+        if(empty($participacion)){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se selecciono ningun Grado Academico.';
-            header("location: /tesis/creador/editor/$id");
+            $_SESSION['message'] = 'Ingresar Datos.';
+            header("location: /tesis/creador/editor/$idCreador");
             exit();
         }
 
-        $creadorGrado = new CreadorGradoAcademico($idCreador,$grados);
-        $creadorGrado->createCreadorGrado();
+        $updatePar = new Participacion($participacion);
+        $updatePar->setId($idParticipacion);
+        $res = $updatePar->updateParticipacion();
+
+        if(!$res){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'Ocurrio un error inesperado.';
+            header("location: /tesis/creador/editor/$idCreador");
+        }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se Asocio el Grado Academico con el Creador.';
-        header("location: /tesis/creador/editor/$id");
-
+        $_SESSION['message'] = 'Se realizaron los cambios.';
+        header("location: /tesis/creador/editor/$idCreador");
     }
 
-    public function creadorExperiencia($id){
-        $experiencia = $this->post('experiencia');
-        $idCreador = intval($id);
-        $res = [];
+    //eliminar participacion
+    public function deleteParticipacion($idParticipacion,$idCreador){
+        $deleteParticipacion = Participacion::deleteParticipacion($idParticipacion);
 
-        if(empty($experiencia[0])){
+        if(!$deleteParticipacion){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Datos Vacios.';
-            header("location: /tesis/creador/editor/$id");
-            exit();
-        }
-
-        foreach($experiencia as $key => $value){
-            $exp = new Experiencia($value);
-            array_push($res, $exp->createExperiencia());
-        }
-
-        $creadorExp = new CreadorExperiencia($idCreador,$res);
-        $resExp = $creadorExp->createCreadorExperiencia();
-
-        if(!$resExp){
-            $_SESSION['color'] = 'success';
-            $_SESSION['message'] = 'Se Asocio La experiencia con el Creador.';
-            header("location: /tesis/creador/editor/$id");
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se Asocio la experiencia con el Creador.';
-        header("location: /tesis/creador/editor/$id");
+        $_SESSION['message'] = 'Se realizaron los cambios.';
+        header("location: /tesis/creador/editor/$idCreador");
     }
 
+    //vincular participacion con creador
     public function creadorParticipacion($id){
         $participacion = $this->post('opcionParticipacion');
 
@@ -171,4 +372,21 @@ class CreadorController extends Controller{
         header("location: /tesis/creador/editor/$id");
 
     }
+
+    //desvincular participacion con el creador
+    public function deleteParticipacionCreador($idParticipacion,$idCreador){
+        $delete = CreadorParticipacion::deleteCreadorParticipacion($idParticipacion,$idCreador);
+
+        if(!$delete){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No se realizaron los cambios.';
+            header("location: /tesis/creador/editor/$idCreador");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se realizaron los cambios.';
+        header("location: /tesis/creador/editor/$idCreador");
+    }
+
 }
