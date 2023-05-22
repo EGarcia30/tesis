@@ -87,7 +87,7 @@ class CreadorModel extends Model{
     public static function existsCreador(string $data){
         try{
             $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM creador WHERE nombre_creador=$data";
+            $sql = "SELECT COUNT(*) as num FROM creador WHERE nombre_creador='$data' ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
@@ -105,8 +105,8 @@ class CreadorModel extends Model{
             //TODO: validar si existe creador
             $data = $this->existsCreador($this->_name);
             $validation = intval($data['num']);
-            if(!empty($data['num'])){
-                $message = array('Creador ya existente.');
+            if(!empty($validation)){
+                $message = array(0 => 'Creador ya existente.');
                 return $message;
                 exit();
             }

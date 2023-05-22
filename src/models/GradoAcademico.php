@@ -36,7 +36,7 @@ class GradoAcademico extends Model{
     public static function existsGrado(string $data){
         try{
             $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM grado_academico WHERE nombre_grado=$data";
+            $sql = "SELECT COUNT(*) as num FROM grado_academico WHERE nombre_grado='$data' ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
@@ -54,8 +54,8 @@ class GradoAcademico extends Model{
             //TODO: validar si existe grado
             $data = $this->existsGrado($this->_name);
             $validation = intval($data['num']);
-            if(!empty($data['num'])){
-                $message = array('Grado ya existente.');
+            if(!empty($validation)){
+                $message = array(0 => 'Grado ya existente.');
                 return $message;
                 exit();
             }

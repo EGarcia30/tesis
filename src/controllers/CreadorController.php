@@ -51,8 +51,21 @@ class CreadorController extends Controller{
 
         $creador = new CreadorModel($name);
         $res = $creador->createCreador();
-        $id_creador = $res["id_creador"];
 
+        if(is_array($res)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = $res[0];
+            header('location: /tesis/creadores/1');
+            exit();
+        }
+
+        if(!$res){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: No se creo el usuario';
+            header('location: /tesis/creadores/1');
+            exit();
+        }
+        $id_creador = $res["id_creador"];
         header("location: /tesis/creador/editor/$id_creador");
     }
 
@@ -74,13 +87,13 @@ class CreadorController extends Controller{
 
         if(!$res){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se realizaron los cambios.';
+            $_SESSION['message'] = 'ERROR: No se cambió el nombre.';
             header("location: /tesis/creador/editor/$id");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'se cambio el nombre del creador.';
+        $_SESSION['message'] = 'Cambios en el nombre.';
         header("location: /tesis/creador/editor/$id");
     }
 
@@ -90,13 +103,13 @@ class CreadorController extends Controller{
 
         if(!$creador){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se realizo la eliminación.';
+            $_SESSION['message'] = 'ERROR: No se realizó la eliminación.';
             header("location: /tesis/creadores/1");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = "Se elimino el creador.";
+        $_SESSION['message'] = "Se eliminó el creador.";
         header("location: /tesis/creadores/1");
     }
 
@@ -113,8 +126,23 @@ class CreadorController extends Controller{
         }
         $grado = new GradoAcademico($ArrId);
         $res = $grado->createGradoAcademico();
+
+        if(is_array($res)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = $res[0];
+            header("location: /tesis/creador/editor/$id");
+            exit();
+        }
+
+        if(!$res){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: No se creó el grado académico';
+            header("location: /tesis/creador/editor/$id");
+            exit();
+        }
+
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se creo correctamente el grado academico.';
+        $_SESSION['message'] = 'Se creó correctamente el grado académico.';
         header("location: /tesis/creador/editor/$id");
     }
 
@@ -135,13 +163,13 @@ class CreadorController extends Controller{
 
         if(!$updateGrado){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se realizaron los cambios.';
+            $_SESSION['message'] = 'ERROR: No se realizaron los cambios.';
             header("location: /tesis/creador/editor/$idCreador");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se cambio el Grado Academico.';
+        $_SESSION['message'] = 'Se cambió el grado académico.';
         header("location: /tesis/creador/editor/$idCreador");
 
     }
@@ -152,13 +180,13 @@ class CreadorController extends Controller{
 
         if(!$deleteGrado){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se realizaron los cambios.';
+            $_SESSION['message'] = 'ERROR: No se realizaron los cambios.';
             header("location: /tesis/creador/editor/$idCreador");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se elimino el Grado Academico.';
+        $_SESSION['message'] = 'Se eliminó el grado académico.';
         header("location: /tesis/creador/editor/$idCreador");
 
     }
@@ -173,7 +201,7 @@ class CreadorController extends Controller{
 
         if(empty($validity)){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se selecciono ningun Grado Academico.';
+            $_SESSION['message'] = 'No se seleccionó ningún grado académico.';
             header("location: /tesis/creador/editor/$id");
             exit();
         }
@@ -182,7 +210,7 @@ class CreadorController extends Controller{
         $creadorGrado->createCreadorGrado();
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se Asocio el Grado Academico con el Creador.';
+        $_SESSION['message'] = 'Se asoció el grado académico con el creador.';
         header("location: /tesis/creador/editor/$id");
 
     }
@@ -193,13 +221,13 @@ class CreadorController extends Controller{
 
         if(!$deleteGradoCreador){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se realizaron los cambios.';
+            $_SESSION['message'] = 'ERROR: No se realizaron los cambios.';
             header("location: /tesis/creador/editor/$idCreador");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se desvinculó el Grado Academico.';
+        $_SESSION['message'] = 'Se desvinculó el grado académico.';
         header("location: /tesis/creador/editor/$idCreador");
 
     }
@@ -213,28 +241,36 @@ class CreadorController extends Controller{
 
         if(empty($experiencia[0])){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Datos Vacios.';
+            $_SESSION['message'] = 'Ingrese datos.';
             header("location: /tesis/creador/editor/$id");
             exit();
         }
 
         foreach($experiencia as $key => $value){
             $exp = new Experiencia($value);
-            array_push($res, $exp->createExperiencia());
+            $resExp = $exp->createExperiencia();
+
+            if(!$resExp){
+                $_SESSION['color'] = 'danger';
+                $_SESSION['message'] = 'ERROR: NO se creó la experiencia profesional.';
+                header("location: /tesis/creador/editor/$id");
+                exit();
+            }
+            array_push($res, $resExp);
         }
 
         $creadorExp = new CreadorExperiencia($idCreador,$res);
         $resExp = $creadorExp->createCreadorExperiencia();
 
         if(!$resExp){
-            $_SESSION['color'] = 'success';
-            $_SESSION['message'] = 'Error al asociar Experiencia con el Creador.';
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: Al asociar experiencia con el creador.';
             header("location: /tesis/creador/editor/$id");
             exit();
         }
 
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se Asocio la experiencia con el Creador.';
+        $_SESSION['message'] = 'Se asoció la experiencia con el creador.';
         header("location: /tesis/creador/editor/$id");
     }
 
@@ -255,7 +291,7 @@ class CreadorController extends Controller{
 
         if(!$res){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se realizaron los cambios.';
+            $_SESSION['message'] = 'ERROR: No se realizaron los cambios.';
             header("location: /tesis/creador/editor/$idCreador");
             exit();
         }
@@ -271,7 +307,7 @@ class CreadorController extends Controller{
 
         if(!$deleteExperiencia){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se realizaron los cambios.';
+            $_SESSION['message'] = 'ERROR: No se realizaron los cambios.';
             header("location: /tesis/creador/editor/$idCreador");
             exit();
         }

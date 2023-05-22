@@ -61,6 +61,9 @@
             <a href="/tesis/creadores/1" class="text-dark text-decoration-none">
                 <p class="font-custom">Especialistas/<br>Creadores</p>
             </a>
+            <a href="/tesis/creadores/1" class="text-dark text-decoration-none">
+                <p class="font-custom">Editor</p>
+            </a>
         </div>
     </div>
     <div id="back-menu"></div>
