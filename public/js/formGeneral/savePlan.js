@@ -85,8 +85,8 @@ function emptyInformation(){
     localStorage.setItem('areas', '');
 }
 
-$(function(){
-    $(enviar).click(function(){
+function setInformation(e){
+    $('#enviar').submit(function(e){
         const idPlan = localStorage.getItem('idPlan');
         const inicio = localStorage.getItem('vigenciaInicio');
         const final = localStorage.getItem('vigenciaFinal');
@@ -102,7 +102,7 @@ $(function(){
 
         $.post({
             type: "POST",
-            url: `/tesis/plan/create/${idPlan}`,
+            url: `/tesis/plan/editor/${idPlan}`,
             data: {
                 vigInicio: inicio,
                 vigFinal: final,
@@ -118,4 +118,4 @@ $(function(){
             }
         })  
     });
-});
+};

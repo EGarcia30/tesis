@@ -10,7 +10,7 @@
                 </button>
                 <!-- modal crear -->
                 <?php require_once __DIR__ . '/../../components/modalCreador/modalCreate.php' ?>
-                <form action="/tesis/planes/1" method="post" class="w-75 d-flex">
+                <form action="/tesis/creadores/1" method="post" class="w-75 d-flex">
                     <input type="text" name="buscar" class="form-control">
                     <div>
                         <button type="submit" class="btn btn-utec ms-0 ms-sm-2">

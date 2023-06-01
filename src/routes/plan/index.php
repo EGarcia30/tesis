@@ -24,8 +24,31 @@ $router->get('/planes/{pagina}', function($page){
     $controller->getPlans($page);
 });
 
+//vista de buscar planes de estudio vigentes
+$router->post('/planes/{pagina}', function($page){
+    notAuth();
+    $page == 0 ? 1 : $page;
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = 'searchPlan';
+    $_GET['regresar'] = 'planes/1';
+    $controller = new CurricularDesign;
+    $controller->getSearchPlan($page);
+});
+
+//vista de buscar planes de estudio vigentes en paginacion
+$router->get('/searchPlan/{pagina}', function($page){
+    notAuth();
+    $page == 0 ? 1 : $page;
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = 'searchPlan';
+    $_GET['regresar'] = 'planes/1';
+    $controller = new CurricularDesign;
+    $controller->getSearchPlans($page);
+});
+
+
 //vista al crear un plan de estudio
-$router->get('/plan/create/{id}', function($id){
+$router->get('/plan/editor/{id}', function($id){
     notAuth();
     IsUser();
     $controller = new CurricularDesign;
@@ -56,7 +79,24 @@ $router->get('/plan/create/{id}', function($id){
         'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
         'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
     ];
-    $controller->render('plan/create', $data);
+    $controller->render('plan/editor', $data);
+});
+
+//vista materias o 2da parte de un plan de estudio
+$router->get('/plan/materia/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $user = $_SESSION['user'];
+    $plan = StudyPlan::getPlan($id);
+    $data = [
+        'title' => 'Editor Plan Estudio',
+        'user' => $user,
+        'plan' => $plan,
+        'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
+        'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
+    ];
+    $controller->render('plan/materia', $data);
 });
 
 //Descargar documento en word
@@ -74,11 +114,18 @@ $router->post('/planes', function(){
     $controller->createPlan();
 });
 
-$router->post('/plan/create/{id}', function($id){
+$router->post('/plan/editor/{id}', function($id){
     notAuth();
     IsUser();
     $controller = new CurricularDesign;
     $controller->savePlan($id);
+});
+
+$router->post('/plan/materia/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->saveMateria($id);
 });
 
 //eliminar plan de estudio o desactivar
@@ -94,4 +141,18 @@ $router->get('/creador/plan/{idCreador}/{idPlan}', function($idCreador,$idPlan){
     notAuth();
     $controller = new CurricularDesign;
     $controller->deletePlanCreador($idCreador,$idPlan);
+});
+
+//PLAN-COMPETENCIA GENERAL
+//actualizar
+$router->post('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->updatePlanComGeneral($idComGeneral,$idPlan);
+});
+//eliminar
+$router->get('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->deletePlanComGeneral($idComGeneral,$idPlan);
 });

@@ -36,7 +36,7 @@
                             <td><?= $value['nombre_usuario'] ?></td>
                             <td><?= $value['usuario'] ?></td>
                             <td><?= $value['rol_usuario'] ?></td>
-                            <td><?= $value['status'] ?></td>
+                            <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
                             <td>
                                 <a href="/tesis/updateUsers/<?= $value['usuario_id'] ?>" class="btn btn-success p-0 px-2">
                                     <span class="icon profile-icon">

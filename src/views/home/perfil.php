@@ -70,7 +70,7 @@
                 <div class="mb-3">
                     <label for="clave" class="form-label">Nueva Contraseña:</label>
                     <input type="text"
-                    class="form-control" name="clave" id="clave" aria-describedby="helpId" placeholder="">
+                    class="form-control" name="clave" id="clave" aria-describedby="helpId" >
                     <small id="helpId" class="form-text text-muted">ejemplo:5678</small>
                 </div>
             </div>

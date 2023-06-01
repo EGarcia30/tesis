@@ -32,6 +32,24 @@ class CreadorModel extends Model{
         }
     }
 
+    public static function getSearchCreadores($data,$start,$end){
+        try{
+            $_db = new Database();
+            $int = intval($data);
+            $sql = "SELECT * FROM creador WHERE status=1 AND
+            (creador_id=$int
+            OR nombre_creador LIKE '%$data%')
+            ORDER BY creador_id DESC LIMIT $start, $end";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchall(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(Exception $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     public static function getCreadoresPlan(){
         try{
             $_db = new Database();
@@ -50,6 +68,25 @@ class CreadorModel extends Model{
         try{
             $_db = new Database();
             $sql = "SELECT * FROM creador WHERE status=1";
+            $query = $_db->connect()->prepare($sql);
+            $query->execute();
+            $rows = $query->rowCount();       
+            return $rows;            
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function rowSearchCreadores($data){
+        try{
+            $_db = new Database();
+            $int = intval($data);
+            $sql = "SELECT * FROM creador WHERE status=1 AND
+            (creador_id=$int
+            OR nombre_creador LIKE '%$data%')
+            ";
             $query = $_db->connect()->prepare($sql);
             $query->execute();
             $rows = $query->rowCount();       

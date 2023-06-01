@@ -19,7 +19,7 @@
 <body>
 <main class="w-100 bg-image">
     <div class="container mx-auto p-3 vh-100 d-flex justify-content-center align-items-center">
-        <div class="card p-2 p-lg-5 bg-white bg-opacity-75">
+        <div class="card p-2 p-lg-5 bg-body bg-opacity-75">
             <div class="row g-0">
                 <div class="col-md-5">
                     <img src="<?= URL_PATH ?>/img/utec_logo.png" class="img-fluid rounded-start h-100" alt="Card title">

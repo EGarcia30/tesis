@@ -70,13 +70,13 @@ class Home extends Controller{
 
         //validación de campos
         if(
-            is_null($name) ||
-            is_null($userName) ||
-            is_null($password) ||
-            is_null($user_role)
+            empty($name) ||
+            empty($userName) ||
+            empty($password) ||
+            empty($user_role)
         ){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Los campos no pueden estar vacios.';
+            $_SESSION['message'] = 'Ingresar Datos.';
             header('location: /tesis/createUsers');
             exit();
         }
@@ -96,14 +96,14 @@ class Home extends Controller{
         //si es false retorna error
         if(!$res){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'Error: en el ingreso de datos.';
+            $_SESSION['message'] = 'Error: usuario no creado.';
             header('location: /tesis/createUsers');
             exit();
         }
 
         //cumplio las condiciones y se ha realizado el ingreso
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Usuario creado con Exito.';
+        $_SESSION['message'] = 'Usuario creado.';
         header('location: /tesis/createUsers');
     }
 
@@ -116,13 +116,13 @@ class Home extends Controller{
 
         //validación de campos
         if(
-            is_null($name) ||
-            is_null($userName) ||
-            is_null($password) ||
-            is_null($user_role)
+            empty($name) ||
+            empty($userName) ||
+            empty($password) ||
+            empty($user_role)
         ){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Los campos no pueden estar vacios.';
+            $_SESSION['message'] = 'Ingresar datos.';
             header("location: /tesis/updateUsers/$id");
             exit();
         }
@@ -135,14 +135,14 @@ class Home extends Controller{
         //si es false retorna error
         if(!$res){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'Error: en la Modificación de datos.';
+            $_SESSION['message'] = 'Error: cambios no realizados.';
             header("location: /tesis/updateUsers/$id");
             exit();
         }
 
         //cumplio las condiciones y se ha realizado el ingreso
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Usuario modificado con Exito.';
+        $_SESSION['message'] = 'Cambios realizados.';
         header("location: /tesis/updateUsers/$id");
     }
 
@@ -153,9 +153,9 @@ class Home extends Controller{
         $user_role = $this->post('radio');
 
         //validación de campos
-        if(is_null($newPassword)){
+        if(empty($newPassword)){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Los campos no pueden estar vacios.';
+            $_SESSION['message'] = 'Ingresar datos.';
             header("location: /tesis/updateUsers/$id");
             exit();
         }
@@ -164,9 +164,16 @@ class Home extends Controller{
         $user->setId($id);
         $res = $user->updatePassword();
 
+        if(!$res){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'Error: cambios no realizados.';
+            header("location: /tesis/updateUsers/$id");
+            exit();
+        }
+
         //cumplio las condiciones y se ha realizado el ingreso
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Contraseña modificada con Exito.';
+        $_SESSION['message'] = 'Cambios realizados.';
         header("location: /tesis/updateUsers/$id");
 
     }
@@ -174,7 +181,6 @@ class Home extends Controller{
     public function deleteUser($id){
 
         $res = User::deleteUser($id);
-
-        $this->getUsers(1);
+        header('location:/tesis/users/1');
     }
 }

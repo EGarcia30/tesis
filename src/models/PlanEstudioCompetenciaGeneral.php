@@ -35,6 +35,7 @@ class PlanEstudioCompetenciaGeneral extends Model{
         }
     }
 
+    //vinculando plan de estudio con competencia general
     public function createPlanComGeneral(){
         try{
             foreach($this->_idComGeneral as $key => $value){
@@ -43,6 +44,21 @@ class PlanEstudioCompetenciaGeneral extends Model{
                 $data = [$this->_idPlan,$value['id_general']];
                 $res = $query->execute($data);
             }
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //desvinculando plan de estudio con competencia general
+    public static function deletePlanComGeneral($idComGeneral,$idPlan){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM plan_estudio_competencia_general WHERE plan_estudio_id=$idPlan AND general_id=$idComGeneral";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

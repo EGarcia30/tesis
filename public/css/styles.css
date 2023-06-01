@@ -127,17 +127,10 @@
   font-size: 1em;
 }
 
-::-webkit-scrollbar {
-  width: 0.5rem;
-}
-
-::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #6D1D3C;
-  border-radius: 5px;
+.guardar {
+  position: fixed;
+  top: 80%;
+  right: 10%;
 }
 
 .h-custom {
@@ -149,7 +142,7 @@
 }
 
 .card-height {
-  --bs-card-height: 35em !important;
+  --bs-card-height: 41em !important;
 }
 
 .card::after {
@@ -190,6 +183,18 @@
   }
   .header-font-custom {
     font-size: 23px;
+  }
+}
+@media screen and (max-width: 770px) {
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #6D1D3C;
+    border-radius: 5px;
   }
 }
 /*!

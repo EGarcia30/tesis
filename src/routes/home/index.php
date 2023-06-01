@@ -23,6 +23,7 @@ $router->get('/users/{pagina}', function($page){
     $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
     $_GET['nombrePagina'] = 'users';
+    $_GET['regresar'] = 'home';
     $controller = new Home;
     $controller->getUsers($page);
 });

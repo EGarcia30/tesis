@@ -30,6 +30,7 @@ class CurricularDesign extends Controller{
         parent::__construct();
     }
 
+    //vista general todos los planes
     public function getPlans($page){
         $user = $_SESSION['user'];
         $totalItems = StudyPlan::rowPlans();
@@ -53,6 +54,144 @@ class CurricularDesign extends Controller{
         $this->render('plan/index', $data);
     }
 
+    //buscar planes
+    public function getSearchPlan($page){
+        $buscar = $this->post('buscar');
+        $_SESSION['busquedad'] = $buscar;
+        $user = $_SESSION['user'];
+
+        if(empty($buscar)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingresar datos.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+        $totalItems = StudyPlan::rowSearchPlan($buscar);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$totalItems){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No existe ningún plan.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $plans = StudyPlan::getSearchPlan($buscar,$start,$itemShow);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$plans){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: vuelve a intentar.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+
+        $facultades = FacultadModel::getFacultades();
+        $carreras = CarreraModel::getAllCarreras();
+        $data = [
+            'title' => 'Planes de Estudio',
+            'user' => $user,
+            'studyPlan' => $plans,
+            'facultades' => $facultades,
+            'carreras' => $carreras,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow,
+            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+        ];
+
+        $this->render('plan/index', $data);
+    }
+
+    //buscar planes paginacion
+    public function getSearchPlans($page){
+        $user = $_SESSION['user'];
+
+        $totalItems = StudyPlan::rowSearchPlan($_SESSION['busquedad']);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$totalItems){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No existe ningún plan.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $plans = StudyPlan::getSearchPlan($_SESSION['busquedad'],$start,$itemShow);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$plans){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: vuelve a intentar.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+
+        $facultades = FacultadModel::getFacultades();
+        $carreras = CarreraModel::getAllCarreras();
+        $data = [
+            'title' => 'Planes de Estudio',
+            'user' => $user,
+            'studyPlan' => $plans,
+            'facultades' => $facultades,
+            'carreras' => $carreras,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow,
+            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+        ];
+
+        $this->render('plan/index', $data);
+    }
+
+     //creamos plan de estudio
+    public function createPlan(){
+        $id_facultad = intval($this->post('opcion'));
+        $id_carrera = intval($this->post('opcionCarrera'));
+        $id_status = intval($this->post('radio'));
+        $facultad = [];
+        $carrera = [];
+
+        // var_dump($id_facultad);
+        //validacion de campos
+        if(empty($id_facultad) || empty($id_carrera)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No se recibieron los Datos.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+
+        //asignando obj de facultad y carrera para poder usar en el plan de estudio
+        $facultad = FacultadModel::getFacultad($id_facultad);
+        $carrera = CarreraModel::getCarrera($id_carrera);
+        $nameFacultad = $facultad->getName();
+        $nameCarrera = $carrera->getName();
+        $modalityCarrera = $carrera->getModality();
+
+        //validación por si un obj viene vacio y arrojar un error
+        if( empty($facultad) || 
+            empty($carrera) || 
+            is_null($nameFacultad) || 
+            is_null($nameCarrera) || 
+            is_null($modalityCarrera)){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'No se encontro la facultad o carrera registrada.';
+            header('location:/tesis/planes/1');
+            exit();
+        }
+
+        //instanciamos nuestro obj plan de estudio
+        $plan_estudio = new StudyPlan($id_facultad,$nameFacultad,$id_carrera,$nameCarrera,$modalityCarrera,$id_status);
+        $plan_estudio->setIdUser($_SESSION['user']->getId());
+        $plan_estudio->setUser($_SESSION['user']->getName());
+        $res = $plan_estudio->createPlan();
+        $id_plan = $res["id_plan"];
+
+        header("location:/tesis/plan/editor/$id_plan");
+
+    }
+
+    //guardar informacion del editor del plan de estudio
     public function savePlan($id){
         // $id= $this->post('idPlan');
         $idPlan = intval($id);
@@ -70,11 +209,11 @@ class CurricularDesign extends Controller{
         $user = $_SESSION['user'];
 
         //Pasando los id de string a int para la comprobacion en cada uno de sus objetos
-        $idProposito = intval($proposito[0]);
         $val = intval($creador[0]);
         $idGeneralidad = intval($generalidad[0]);
-        // $data = [$generalidad[1],$generalidad[2],$generalidad[3],$generalidad[4],
-        // $generalidad[5],$generalidad[6],$generalidad[7],$generalidad[8]];
+        $idProposito = intval($proposito[0]);
+
+        //quitamos el primer elemento del array en generalidades
         array_shift($generalidad);
 
         //haciendo la relacion de plan de estudio con los creadores
@@ -173,68 +312,63 @@ class CurricularDesign extends Controller{
         // si no nos regresa el objeto regresamos a la vista inicial
         if(!$studyPlan){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se pudo Guardar los datos';
+            $_SESSION['message'] = 'ERROR: datos no guardados.';
             error_log('No se pudo guardar en bd');
-            header("location:/tesis/plan/create/$id");
+            header("location:/tesis/plan/editor/$id");
             exit();
         }
 
         $_SESSION['color'] = 'success';
         $_SESSION['message'] = 'Datos Guardados!.';
-        header("location:/tesis/plan/create/$id");
+        header("location:/tesis/plan/editor/$id");
     }
 
-    public function createPlan(){
-        $id_facultad = intval($this->post('opcion'));
-        $id_carrera = intval($this->post('opcionCarrera'));
-        $id_status = intval($this->post('radio'));
-        $facultad = [];
-        $carrera = [];
+    public function saveMateria($id){
+        $materia = $this->post('materia');
+        $prerrequisito = $this->post('prerrequisito');
+        $elemento = $this->post('elemento');
+        $valores = $this->post('valores');
+        $habilidades = $this->post('habilidades');
+        $conocimientos = $this->post('conocimientos');
+        $metodologia = $this->post('metodologia');
+        $criterioContenido = $this->post('criterioContenido');
+        $indicador = $this->post('indicador');
+        $criterio = $this->post('criterio');
+        $Spresencial = $this->post('Spresencial');
+        $SNopresencial = $this->post('SNopresencial');
+        $apoyo = $this->post('apoyo');
+        $recurso = $this->post('recurso');
+        $img = $this->post('img');
 
-        // var_dump($id_facultad);
-        //validacion de campos
-        if(empty($id_facultad) || empty($id_carrera)){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se recibieron los Datos.';
-            header('location:/tesis/planes/1');
+        // print_r($materia);
+        // print_r($prerrequisito);
+        // print_r($elemento);
+        // print_r($valores);
+        $x = 1; 
+        while(count($contenido = $this->post("contenido{$x}")) >= 1){
+            $contenido = $this->post("contenido{$x}");
+            print_r($contenido);
             exit();
+            $x++;
         }
-
-        //asignando obj de facultad y carrera para poder usar en el plan de estudio
-        $facultad = FacultadModel::getFacultad($id_facultad);
-        $carrera = CarreraModel::getCarrera($id_carrera);
-        $nameFacultad = $facultad->getName();
-        $nameCarrera = $carrera->getName();
-        $modalityCarrera = $carrera->getModality();
-
-        //validación por si un obj viene vacio y arrojar un error
-        if( empty($facultad) || 
-            empty($carrera) || 
-            is_null($nameFacultad) || 
-            is_null($nameCarrera) || 
-            is_null($modalityCarrera)){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'No se encontro la facultad o carrera registrada.';
-            header('location:/tesis/planes/1');
-            exit();
-        }
-
-        //instanciamos nuestro obj plan de estudio
-        $plan_estudio = new StudyPlan($id_facultad,$nameFacultad,$id_carrera,$nameCarrera,$modalityCarrera,$id_status);
-        $plan_estudio->setIdUser($_SESSION['user']->getId());
-        $plan_estudio->setUser($_SESSION['user']->getName());
-        $res = $plan_estudio->createPlan();
-        $id_plan = $res["id_plan"];
-
-        header("location:/tesis/plan/create/$id_plan");
-
+        // print_r($habilidades);
+        // print_r($conocimientos);
+        // print_r($metodologia);
+        // print_r($criterioContenido);
+        // print_r($indicador);
+        // print_r($criterio );
+        // print_r($Spresencial);
+        // print_r($SNopresencial);
+        // print_r($apoyo);
+        // print_r($recurso);
+        // print_r($img);    
     }
 
     public function deletePlan($id){
 
         $res = StudyPlan::deletePlan($id);
 
-        $this->getPlans(1);
+        header("location:/tesis/planes/1");
     }
 
     //VINCULACIONES CON EL PLAN DE ESTUDIO
@@ -246,15 +380,68 @@ class CurricularDesign extends Controller{
         if(!$delete){
             $_SESSION['color'] = 'danger';
             $_SESSION['message'] = 'ERROR: desvinculación del creador.';
-            header("location:/tesis/plan/create/$idPlan");
+            header("location:/tesis/plan/editor/$idPlan");
             exit();
         }
 
         $_SESSION['color'] = 'success';
         $_SESSION['message'] = 'Se desvinculo el creador.';
-        header("location:/tesis/plan/create/$idPlan");
+        header("location:/tesis/plan/editor/$idPlan");
     }
 
+    //Competencia General - Plan de estudio
+    public function updatePlanComGeneral($idComGeneral,$idPlan){
+        $descripcion = $this->post('descripcion');
+        $ciclo = $this->post('ciclo');
+
+        if(empty($descripcion) || empty($ciclo)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingrese datos.';
+            header("location:/tesis/plan/editor/$idPlan");
+            exit();
+        }
+
+        $updateComGeneral = CompetenciaGeneral::updateComGeneral($idComGeneral,$descripcion,$ciclo);
+
+        if(!$updateComGeneral){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: Al actualizar competencia general.';
+            header("location:/tesis/plan/editor/$idPlan");
+            exit();
+        }
+
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Cambios realizados.';
+        header("location:/tesis/plan/editor/$idPlan");
+
+    }
+    
+    public function deletePlanComGeneral($idComGeneral,$idPlan){
+        $deletePC = PlanEstudioCompetenciaGeneral::deletePlanComGeneral($idComGeneral,$idPlan);
+
+        if(!$deletePC){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: Al eliminar competencia general.';
+            header("location:/tesis/plan/editor/$idPlan");
+            exit();
+        }
+
+        $delete = CompetenciaGeneral::deleteComGeneral($idComGeneral);
+
+        if(!$delete){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: Al eliminar competencia general.';
+            header("location:/tesis/plan/editor/$idPlan");
+            exit();
+        }
+
+        error_log('funciona');
+        $_SESSION['color'] = 'success';
+        $_SESSION['message'] = 'Se eliminó la competencia general.';
+        header("location:/tesis/plan/editor/$idPlan");
+    }
+
+    //descargar documento de word
     public function word(int $id){
         $idCreadores = [];
         $creadores = [];

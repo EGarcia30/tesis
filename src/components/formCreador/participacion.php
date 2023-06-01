@@ -19,9 +19,14 @@
                                 <i class="fas fa-save"></i>
                             </span>
                         </button>
-                        <button type="button" class="btn btn-outline-primary p-0 px-2" onclick="agregarParticipacion()" >
+                        <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarParticipacion()" >
                             <span class="icon profile-icon">
                                 <i class="fas fa-plus"></i>
+                            </span>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger p-0 px-2 rounded-5" onclick="eliminarParticipacion()" >
+                            <span class="icon profile-icon">
+                                <i class="fas fa-minus"></i>
                             </span>
                         </button>
                     </div>

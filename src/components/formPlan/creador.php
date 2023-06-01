@@ -6,7 +6,7 @@
                 <label for="" class="form-label">Asignar Especialistas:</label>
                 <form action="" method="post" >
                     <div class="d-flex flex-wrap">    
-                        <div id="selectsCreador" class="d-block w-100 mb-2">
+                        <div id="selectsCreador" class="w-100 mb-2">
                             <select class="form-select form-select-lg" name="opcionCreador[]" id="opcionCreador">
                                 <option>seleccionar</option>
                                 <?php foreach($this->d['creadores'] as $key => $value) :?>
@@ -14,9 +14,14 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-outline-primary p-0 px-2" onclick="agregarCreador()" >
+                        <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarCreador()" >
                             <span class="icon profile-icon">
                                 <i class="fas fa-plus"></i>
+                            </span>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger p-0 px-2 rounded-5" onclick="eliminarCreador()" >
+                            <span class="icon profile-icon">
+                                <i class="fas fa-minus"></i>
                             </span>
                         </button>
                     </div>

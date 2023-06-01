@@ -79,11 +79,12 @@ class CarreraModel extends Model{
         try{
             $_db = new Database();
             $int = intval($data);
-            $sql = "SELECT * FROM carrera WHERE carrera_id=$int 
-            OR nombre_carrera LIKE '%".$data."%' 
-            OR modalidad_carrera LIKE '%".$data."%'
-            OR acronimo_facultad LIKE '%".$data."%' 
-            AND status=1 LIMIT $start, $end";
+            $sql = "SELECT * FROM carrera WHERE status=1 AND 
+            (carrera_id=$int 
+            OR nombre_carrera LIKE '%$data%' 
+            OR modalidad_carrera LIKE '%$data%'
+            OR acronimo_facultad LIKE '%$data%') 
+            LIMIT $start, $end";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
             if(!$res){

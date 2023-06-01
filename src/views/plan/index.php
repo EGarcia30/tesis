@@ -33,6 +33,7 @@
                             <th scope="col">Titulo</th>
                             <th scope="col">Vigencia</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Ps.Estudio<br>(Historial)</th>
                             <th scope="col">Descargar</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
@@ -45,6 +46,13 @@
                             <td><?= $value['nombre_carrera'] ?></td>
                             <td><?= $value['vigencia_inicio'].' - '.$value['vigencia_final'] ?></td>
                             <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
+                            <td>
+                                <a href="/tesis/<?= $value['nombre_carrera'] = str_replace(' ','-',$value['nombre_carrera'])?>/planes/1" class="btn btn-primary p-0 px-2">
+                                    <span class="icon profile-icon">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </a>
+                            </td>
                             <td><a href="/tesis/word/<?= $value['plan_estudio_id'] ?>" class="btn btn-utec p-0 px-2">
                                     <span class="icon profile-icon">
                                         <img src="<?= URL_PATH ?>/img/word.png" class="img-fluid img-word" alt="">
@@ -52,7 +60,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/tesis/plan/create/<?= $value['plan_estudio_id'] ?>" class="btn btn-success p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>">
+                                <a href="/tesis/plan/editor/<?= $value['plan_estudio_id'] ?>" class="btn btn-success p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-edit"></i>
                                     </span>

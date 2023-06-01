@@ -3,7 +3,7 @@
     <div class="w-75 mx-auto mb-3">
         <input type="hidden" name="opcionProposito[]" value="<?= $this->d['proposito'] == NULL ? 0 : $this->d['proposito']->getId()?>">
         <label for="" class="text-utec font-custom">Escribir el proposito de la carrera:</label>
-        <textarea class="form-control" name="opcionProposito[]" id="txtProposito" rows="6"><?= $this->d['proposito'] == NULL ? '' : $this->d['proposito']->getDescripcion()?></textarea>
+        <textarea class="form-control" name="opcionProposito[]" id="txtProposito" rows="12"><?= $this->d['proposito'] == NULL ? '' : $this->d['proposito']->getDescripcion()?></textarea>
         <p class="font-custom m-1 ms-0">
             (Los estilos requeridos se aplican al documento de word.)
         </p>

@@ -5,6 +5,7 @@ namespace Penad\Tesis\controllers;
 use Penad\Tesis\lib\Controller;
 use Penad\Tesis\models\CarreraModel;
 use Penad\Tesis\models\FacultadModel;
+use Penad\Tesis\models\PlanCarrera;
 
 class CarreraController extends Controller{
 
@@ -35,9 +36,10 @@ class CarreraController extends Controller{
 
         $_SESSION['busquedad'] = $search;
         //validar campo
-        if(is_null($search)){
-            error_log('No recibio el input buscar');
-            header("location:/tesis/carreras/1");
+        if(empty($search)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingresar datos.';
+            header("location: /tesis/carreras/1");
             exit();
         }
 
@@ -48,9 +50,10 @@ class CarreraController extends Controller{
         $carreras = CarreraModel::searchCarreras($search, $start, $itemShow);
 
         //si no nos regresa el objeto regresamos a la vista inicial
-        if(is_null($carreras)){
-            error_log('No se pudo buscar en bd');
-            header("location:/tesis/carreras/1");
+        if(!$carreras){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Sin Carreras.';
+            header("location: /tesis/carreras/1");
             exit();
         }
 
@@ -66,6 +69,7 @@ class CarreraController extends Controller{
         $this->render('carrera/search', $data);
     }
 
+    //buscar carrera
     public function getSearchCarreras($page){
         $user = $_SESSION['user'];
 
@@ -76,9 +80,10 @@ class CarreraController extends Controller{
         $carreras = CarreraModel::searchCarreras($_SESSION['busquedad'], $start, $itemShow);
 
         //si no nos regresa el objeto regresamos a la vista inicial
-        if(is_null($carreras)){
-            error_log('No se pudo buscar en bd');
-            header("location:/tesis/carreras/1");
+        if(!$carreras){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Sin Carreras.';
+            header("location: /tesis/carreras/1");
             exit();
         }
 
@@ -94,6 +99,7 @@ class CarreraController extends Controller{
         $this->render('carrera/search', $data);
     }
 
+    //crear carrera
     public function createCarrera(){
         $id = $this->post('id');
         $name = $this->post('nombre');
@@ -102,13 +108,13 @@ class CarreraController extends Controller{
 
         //validación de campos
         if(
-            is_null($id) ||
-            is_null($name) ||
-            is_null($modality) ||
-            is_null($facultad_id)
+            empty($id) ||
+            empty($name) ||
+            empty($modality) ||
+            empty($facultad_id)
         ){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Los campos no pueden estar vacios.';
+            $_SESSION['message'] = 'Ingresar datos.';
             header("location: /tesis/createCarreras");
             exit();
         }
@@ -116,9 +122,9 @@ class CarreraController extends Controller{
         $facultad = FacultadModel::getFacultad($facultad_id);
 
         //validar objeto facultad
-        if(is_null($facultad)){
+        if(empty($facultad)){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se pudo encontrar el acronimo de la facultad seleccionada.';
+            $_SESSION['message'] = '.';
             header("location: /tesis/createCarreras");
             exit();
         }
@@ -143,6 +149,7 @@ class CarreraController extends Controller{
         header("location: /tesis/createCarreras");
     }
 
+    //actualizar carrera
     public function updateCarrera($id){
 
         $name = $this->post('nombre');
@@ -151,12 +158,12 @@ class CarreraController extends Controller{
 
         //validación de campos
         if(
-            is_null($name) ||
-            is_null($modality) ||
-            is_null($facultad_id)
+            empty($name) ||
+            empty($modality) ||
+            empty($facultad_id)
         ){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Los campos no pueden estar vacios.';
+            $_SESSION['message'] = 'Ingresar Datos.';
             header("location: /tesis/updateCarrera/$id");
             exit();
         }
@@ -164,9 +171,9 @@ class CarreraController extends Controller{
         $facultad = FacultadModel::getFacultad($facultad_id);
 
         //validar objeto facultad
-        if(is_null($facultad)){
+        if(!$facultad){
             $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'No se pudo encontrar el acronimo de la facultad seleccionada.';
+            $_SESSION['message'] = 'ERROR: acrónimo de facultad no encontrado.';
             header("location: /tesis/updateCarrera/$id");
             exit();
         }
@@ -180,21 +187,41 @@ class CarreraController extends Controller{
         //si es false retorna error
         if(!$res){
             $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'Error: En la edición de los datos.';
+            $_SESSION['message'] = 'Error: cambios no realizados.';
             header("location: /tesis/updateCarrera/$id");
             exit();
         }
 
         //cumplio las condiciones y se ha realizado el ingreso
         $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se cambiaron los datos de carrera con Exito.';
+        $_SESSION['message'] = 'Cambios realizados.';
         header("location: /tesis/updateCarrera/$id");
     }
 
+    //eliminar carrera
     public function deleteCarrera($id){
 
         $res = CarreraModel::deleteCarrera($id);
 
-        $this->getCarreras(1);
+        header('location:/tesis/carreras/1');
+    }
+
+    public function getCarreraPlanes($carrera,$page){
+        $user = $_SESSION['user'];
+        $carrera = str_replace('-', ' ',$carrera);
+        $totalItems = PlanCarrera::rowCarreraPlanes($carrera);
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $studyPlan = PlanCarrera::getCarreraPlanes($carrera,$start,$itemShow);
+        $data = [
+            'title' => 'historial planes de estudio de '. $carrera,
+            'studyPlan' => $studyPlan,
+            'user' => $user,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow,
+            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+        ];
+        $this->render('carreraPlanes/index', $data);
     }
 }

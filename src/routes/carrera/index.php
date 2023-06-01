@@ -4,7 +4,7 @@ use Penad\Tesis\controllers\CarreraController;
 use Penad\Tesis\models\CarreraModel;
 use Penad\Tesis\models\FacultadModel;
 
-//vista principal facultades
+//vista principal carreras
 $router->get('/carreras/{pagina}', function($page){
     notAuth();
     $page == 0 ? 1 : $page;
@@ -22,11 +22,11 @@ $router->post('/carreras/{page}', function($page){
     $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
     $_GET['nombrePagina'] = 'carrera';
-    $_GET['regresar'] = $_GET['nombrePagina'].'/1';
+    $_GET['regresar'] = 'carreras/1';
     $controller->searchCarreras($page);
 });
 
-//vista buscar paginacion
+//vista buscar carrera en paginacion
 $router->get('/carrera/{pagina}', function($page){
     notAuth();
     $controller = new CarreraController;
@@ -91,9 +91,20 @@ $router->post('/updateCarrera/{id}', function($id){
 });
 
 //eliminar carreras
-$router->get('/deleteCarreras/{id}', function($id){
+$router->get('/deleteCarrera/{id}', function($id){
     notAuth();
     IsUser();
     $controller = new CarreraController;
     $controller->deleteCarrera($id);
+});
+
+//VER PLANES DE ESTUDIO DE LA CARRERA
+$router->get('/{carrera}/planes/{pagina}', function($carrera,$page){
+    notAuth();
+    $controller = new CarreraController;
+    $page == 0 ? 1 : $page;
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = $carrera.'planes';
+    $_GET['regresar'] = 'planes/1';
+    $controller->getCarreraPlanes($carrera,$page);
 });

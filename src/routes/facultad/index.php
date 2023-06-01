@@ -20,6 +20,21 @@ $router->post('/facultades', function(){
     $controller->searchFacultades();
 });
 
+//vista create
+$router->get('/createFacultad', function(){
+    notAuth();
+    IsUser();
+    $controller = new FacultadController;
+    $user = $_SESSION['user'];
+    $data = [
+        'title' => 'Crear Facultad',
+        'user' => $user,
+        'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+        'message' => $_SESSION['message'] == '' ? null : $_SESSION['message'],
+    ];
+    $controller->render('facultad/create', $data);
+});
+
 //vista update facultad
 $router->get('/updateFacultad/{id}', function($id){
     notAuth();
@@ -38,6 +53,13 @@ $router->get('/updateFacultad/{id}', function($id){
 });
 
 //CRUD
+//CREAR
+$router->post('/createFacultad', function(){
+    notAuth();
+    IsUser();
+    $controller = new FacultadController;
+    $controller->createFacultad();
+});
 //UPDATE
 $router->post('/updateFacultad/{id}',function($id){
     notAuth();

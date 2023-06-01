@@ -67,7 +67,10 @@ class FacultadModel extends Model{
         try{
             $_db = new Database();
             $int = intval($data);
-            $sql = "SELECT * FROM facultad WHERE facultad_id=$int OR nombre_facultad LIKE '%".$data."%' OR acronimo_facultad LIKE '%".$data."%' AND status=1";
+            $sql = "SELECT * FROM facultad WHERE status=1 AND 
+            (facultad_id=$int 
+            OR nombre_facultad LIKE '$data%' 
+            OR acronimo_facultad LIKE '%$data%') ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
             if(!$res){
@@ -108,7 +111,7 @@ class FacultadModel extends Model{
     public static function existsFacultad(string $data){
         try{
             $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM facultad WHERE nombre_facultad=$data";
+            $sql = "SELECT COUNT(*) as num FROM facultad WHERE nombre_facultad='$data' ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
@@ -120,18 +123,17 @@ class FacultadModel extends Model{
     }
 
     //CRUD
-    //insertar usuarios
+    //insertar facultad
     public function createFacultad(){
         try{
             //TODO: validar si existe facultad
-            $data = $this->existsUser($this->_name);
+            $data = $this->existsFacultad($this->_name);
             $validation = intval($data['num']);
-            if(!empty($data['num'])){
+            if(!empty($validation)){
                 $message = array('Facultad ya existente.');
                 return $message;
                 exit();
             }
-
             $sql = 'INSERT INTO facultad (nombre_facultad, acronimo_facultad, status) VALUES(?, ?, ?)';
             $query = $this->prepare($sql);
             $data = [$this->_name,$this->_acronym,1];

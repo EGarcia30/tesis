@@ -32,20 +32,20 @@
                             <label class="form-check-label" for="inlineRadio1">Presencial</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio2" value="Semi-Presencial" <?=strpos($this->d['carrera']->getModality(), 'Semi-Presencial') !== false ? 'checked' : false ?>>
-                            <label class="form-check-label" for="inlineRadio2">Semi-Presencial</label>
+                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio2" value="Semi Presencial" <?=strpos($this->d['carrera']->getModality(), 'Semi Presencial') !== false ? 'checked' : false ?>>
+                            <label class="form-check-label" for="inlineRadio2">Semi Presencial</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio3" value="Virtual" <?=strpos($this->d['carrera']->getModality(), 'Virtual') !== false ? 'checked' : false ?>>
-                            <label class="form-check-label" for="inlineRadio3">Virtual</label>
+                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio3" value="No Presencial" <?=strpos($this->d['carrera']->getModality(), 'No Presencial') !== false ? 'checked' : false ?>>
+                            <label class="form-check-label" for="inlineRadio3">No Presencial</label>
                         </div>
                     </div>
 
                     <div class="mt-4">
-                        <select name="opcion" class="form-select" aria-label="Default select example">
+                        <select name="opcion" class="form-select">
                             <option>Facultad que te pertenece:</option>
                             <?php foreach($this->d['facultades'] as $key => $value) :?>
-                                <option <?= $this->d['carrera']->getId() === $value['facultad_id'] ? selected : false ?> value="<?=$value['facultad_id']?>"><?=$value['nombre_facultad']?></option>
+                                <option <?= $this->d['carrera']->getFacultadId() == $value['facultad_id'] ? 'selected' : false ?> value="<?=$value['facultad_id']?>"><?=$value['nombre_facultad']?></option>
                             <?php endforeach; ?>
                         </select>                        
                     </div>

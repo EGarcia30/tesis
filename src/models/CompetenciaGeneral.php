@@ -55,4 +55,32 @@ class CompetenciaGeneral extends Model{
             return false;
         }
     }
+
+    public static function updateComGeneral($id,$des,$ciclo){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE competencia_general SET descripcion='$des', ciclo=$ciclo WHERE general_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteComGeneral($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM competencia_general WHERE general_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }

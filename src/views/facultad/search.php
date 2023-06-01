@@ -24,7 +24,6 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Acronimo</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Carreras</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
                         </tr>
@@ -35,14 +34,7 @@
                             <td scope="row"><?= $value['facultad_id'] ?></td>
                             <td><?= $value['nombre_facultad'] ?></td>
                             <td><?= $value['acronimo_facultad'] ?></td>
-                            <td><?= $value['status'] ?></td>
-                            <td>
-                                <a href="/tesis/verFacultad/<?= $value['facultad_id'] ?>" class="btn btn-primary p-0 px-2">
-                                    <span class="icon profile-icon">
-                                        <i class="fas fa-eye"></i>
-                                    </span>
-                                </a>
-                            </td>
+                            <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
                             <td>
                                 <a href="/tesis/updateFacultad/<?= $value['facultad_id'] ?>" class="btn btn-success p-0 px-2">
                                     <span class="icon profile-icon">

@@ -59,10 +59,10 @@ class User extends Model{
 
             $_db = new Database();
             $int = intval($data);
-            $sql = "SELECT * FROM usuarios WHERE status=1 AND usuario_id=$int 
-            OR nombre_usuario LIKE '%".$data."%' 
-            OR usuario LIKE '%".$data."%' 
-            OR rol_usuario LIKE '%".$data."%'";
+            $sql = "SELECT * FROM usuarios WHERE status=1 AND (usuario_id=$int 
+            OR nombre_usuario LIKE '%$data%' 
+            OR usuario LIKE '%$data%' 
+            OR rol_usuario LIKE '%$data%') ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);         
             return $res;   
@@ -99,7 +99,7 @@ class User extends Model{
     public static function existsUser(string $user){
         try{
             $_db = new Database();
-            $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario='$user' ";
+            $sql = "SELECT COUNT(*) as num FROM usuarios WHERE usuario='$user' AND status=1 ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
@@ -118,12 +118,11 @@ class User extends Model{
             //TODO: validar si existe usuario
             $data = $this->existsUser($this->_username);
             $validation = intval($data['num']);
-            if(!empty($data['num'])){
+            if(!empty($validation)){
                 $message = array('Usuario ya existente.');
                 return $message;
                 exit();
             }
-
             $hash = $this->getHashedPassword($this->_password);
             $sql = 'INSERT INTO usuarios (nombre_usuario, usuario, clave, rol_usuario, status) VALUES(?, ?, ?, ?, ?)';
             $query = $this->prepare($sql);

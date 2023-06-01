@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap-reverse justify-content-around w-75 mx-auto mt-3 mt-sm-5">
         <div class="w-100">
             <div class="mb-3">
-                <div id="areas">
+                <div id="areas" class="mb-2">
 
                     <hr class="mt-2">
 
@@ -20,9 +20,14 @@
                     <input type="text" name="opcionAreas[]" class="form-control">
 
                 </div>
-                <button type="button" class="btn btn-outline-primary p-0 px-2 mt-2" onclick="agregarAreas()" >
+                <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarAreas()" >
                     <span class="icon profile-icon">
                         <i class="fas fa-plus"></i>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-outline-danger p-0 px-2 rounded-5" onclick="eliminarAreas()" >
+                    <span class="icon profile-icon">
+                        <i class="fas fa-minus"></i>
                     </span>
                 </button>
             </div>
@@ -32,11 +37,11 @@
                         <i class="fas fa-angle-double-left"></i>
                     </span>
                 </button>
-                <button type="button" class="btn btn-outline-utec nav_link p-0 px-2" data-bs-target="formComEspecialidad">
+                <a href="/tesis/plan/materia/<?=$this->d['plan']->getId()?>" type="button" class="btn btn-outline-utec nav_link p-0 px-2" onclick="saveInformation()">
                     <span class="icon profile-icon">
                         <i class="fas fa-angle-double-right"></i>
                     </span>
-                </button>
+                </a>
             </div>
         </div>
         <div class="m-0 mb-3 mb-sm-0 w-custom">

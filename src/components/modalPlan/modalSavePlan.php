@@ -14,7 +14,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-                    <button type="submit" class="btn btn-success" onclick="saveInformation()">Guardar Plan</button>
+                    <button type="submit" class="btn btn-success" onclick="setInformation()">Guardar Plan</button>
                 </div>
             </form>
         </div>

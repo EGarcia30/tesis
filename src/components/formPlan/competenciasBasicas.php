@@ -11,9 +11,14 @@
                     <input type="number" name="opcionBasica[]" step="1" class="form-control">
                     <p class="text-utec font-custom">Los números pasarán a romanos en el documento de Word.</p>
                 </div>
-                <button type="button" class="btn btn-outline-primary p-0 px-2" onclick="agregarComBasica()" >
+                <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarComBasica()" >
                     <span class="icon profile-icon">
                         <i class="fas fa-plus"></i>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-outline-danger p-0 px-2 rounded-5" onclick="eliminarComBasica()" >
+                    <span class="icon profile-icon">
+                        <i class="fas fa-minus"></i>
                     </span>
                 </button>
             </div>

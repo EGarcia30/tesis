@@ -37,6 +37,86 @@ class CreadorController extends Controller{
         $this->render('creador/index', $data);
     }
 
+    //buscar creadores
+    public function getSearchCreador($page){
+        $buscar = $this->post('buscar');
+        $_SESSION['busquedad'] = $buscar;
+        $user = $_SESSION['user'];
+
+        if(empty($buscar)){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'Ingresar datos.';
+            header('location:/tesis/creadores/1');
+            exit();
+        }
+        $totalItems = CreadorModel::rowSearchCreadores($buscar);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$totalItems){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No existe ningún creador.';
+            header('location:/tesis/creadores/1');
+            exit();
+        }
+
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $creador = CreadorModel::getSearchCreadores($buscar,$start,$itemShow);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$creador){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: vuelve a intentar.';
+            header('location:/tesis/creadores/1');
+            exit();
+        }
+        $data = [
+            'title' => 'Especialistas de los Planes de estudio',
+            'user' => $user,
+            'creador' => $creador,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow,
+            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+        ];
+
+        $this->render('creador/index', $data);
+    }
+
+    //buscar creadores paginacion
+    public function getSearchCreadores($page){
+        $user = $_SESSION['user'];
+
+        $totalItems = CreadorModel::rowSearchCreadores($_SESSION['busquedad']);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$totalItems){
+            $_SESSION['color'] = 'warning';
+            $_SESSION['message'] = 'No existe ningún creador.';
+            header('location:/tesis/creadores/1');
+            exit();
+        }
+
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $creador = CreadorModel::getSearchCreadores($_SESSION['busquedad'],$start,$itemShow);
+        //si no nos regresa el objeto regresamos a la vista inicial
+        if(!$creador){
+            $_SESSION['color'] = 'danger';
+            $_SESSION['message'] = 'ERROR: vuelve a intentar.';
+            header('location:/tesis/creadores/1');
+            exit();
+        }
+        $data = [
+            'title' => 'Especialistas de los Planes de estudio',
+            'user' => $user,
+            'creador' => $creador,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow,
+            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
+            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+        ];
+
+        $this->render('creador/index', $data);
+    }
+
     //creando un creador
     public function createCreador(){
         $name = $this->post('nombre');

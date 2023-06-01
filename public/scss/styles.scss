@@ -7,20 +7,6 @@
 @import"navbarCrud";
 @import "plan";
 
-//scrollbar
-::-webkit-scrollbar{
-    width: 0.5rem;
-}
-
-::-webkit-scrollbar-track{
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-::-webkit-scrollbar-thumb{
-    background-color: #6D1D3C;
-    border-radius: 5px;
-}
-
 //altura customizada en general
 .h-custom{
     height: calc(100vh - 90px);
@@ -32,7 +18,7 @@
 }
 
 .card-height{
-    --bs-card-height: 35em !important;
+    --bs-card-height: 41em !important;
 }
 
 .card::after{
@@ -76,6 +62,22 @@
     
     .header-font-custom{
         font-size: 23px;
+    }
+}
+
+@media screen and (max-width:770px){
+    //scrollbar
+    ::-webkit-scrollbar{
+        width: 0.5rem;
+    }
+
+    ::-webkit-scrollbar-track{
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb{
+        background-color: #6D1D3C;
+        border-radius: 5px;
     }
 }
 

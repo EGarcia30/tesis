@@ -20,6 +20,28 @@ $router->get('/creadores/{pagina}', function($page){
     $controller->getCreadores($page);
 });
 
+//vista buscar creador
+$router->post('/creadores/{pagina}', function($page){
+    notAuth();
+    $controller = new CreadorController;
+    $page == 0 ? 1 : $page;
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = 'creador';
+    $_GET['regresar'] = 'creadores/1';
+    $controller->getSearchCreador($page);
+});
+
+//vista buscar creador paginacion
+$router->get('/resultado/creador/{pagina}', function($page){
+    notAuth();
+    $controller = new CreadorController;
+    $page == 0 ? 1 : $page;
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = '/resultado/creador';
+    $_GET['regresar'] = 'creadores/1';
+    $controller->getSearchCreadores($page);
+});
+
 //vista editor Creador 
 $router->get('/creador/editor/{id}', function($id){
     notAuth();

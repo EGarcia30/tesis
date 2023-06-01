@@ -24,9 +24,6 @@ class StudyPlan extends Model{
     private string $_user;
     private int $_status;
 
-
-
-
     public function __construct(int $idFac, string $nameFac, int $idCar, string $nameCar, string $modalityCar, int $status){
         parent::__construct();
         $this->_idFac = $idFac;
@@ -37,12 +34,11 @@ class StudyPlan extends Model{
         $this->_status = $status;
     }
 
-    //Search
-
+    //obtener todos los planes con limite de 6 x pagina
     public static function getPlans($start, $end){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM plan_estudio ORDER BY plan_estudio_id DESC LIMIT $start, $end";
+            $sql = "SELECT * FROM plan_estudio WHERE status=1 ORDER BY plan_estudio_id DESC LIMIT $start, $end";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
@@ -53,17 +49,17 @@ class StudyPlan extends Model{
         }
     }
 
-    public static function searchPlan($data){
+    //obtener planes que cumplan con la variable $data
+    public static function getSearchPlan($data,$start,$end){
         try{
             $_db = new Database();
             $int = intval($data);
-            $sql = "SELECT * FROM datos WHERE documento_id=$int OR titulo LIKE '%".$data."%' OR contenido LIKE '%".$data."%'";
+            $sql = "SELECT p.* 
+            FROM plan_estudio p 
+            WHERE p.status = 1 AND (p.plan_estudio_id=$int OR p.nombre_facultad LIKE '%$data%' OR p.nombre_carrera LIKE '%$data%' OR p.vigencia_inicio LIKE '%$data%' OR p.vigencia_final LIKE '%$data%') 
+            LIMIT $start, $end ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
-            if(!$res){
-                return null;
-                exit();
-            }
             return $res; 
         }
         catch(Exception $e){
@@ -72,6 +68,7 @@ class StudyPlan extends Model{
         }
     }
 
+    //obtener numero de filas de planes de estudio en general
     public static function rowPlans(){
         try{
             $_db = new Database();
@@ -87,6 +84,30 @@ class StudyPlan extends Model{
         }
     }
 
+    //obtener planes que cumplan con la variable $data
+    public static function rowSearchPlan($data){
+        try{
+            $_db = new Database();
+            $int = intval($data);
+            $sql = "SELECT p.* 
+            FROM plan_estudio p 
+            WHERE p.status = 1 AND (p.plan_estudio_id=$int OR p.nombre_facultad LIKE '%$data%' OR p.nombre_carrera LIKE '%$data%' OR p.vigencia_inicio LIKE '%$data%' OR p.vigencia_final LIKE '%$data%')";
+            $query = $_db->connect()->prepare($sql);
+            $query->execute();
+            $res = $query->rowCount();
+            if(!$res){
+                return false;
+                exit();
+            }
+            return $res; 
+        }
+        catch(Exception $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //obtener un plan en especifico
     public static function getPlan(int $data){
         try{
             $_db = new Database();
@@ -115,22 +136,24 @@ class StudyPlan extends Model{
         }
     }
 
-    public static function existsPlan($data = []){
-        try{
-            $_db = new Database();
-            $sql = "SELECT COUNT(*) FROM datos WHERE documento_id=? or titulo=? or content=?";
-            $query = $_db->connect()->query($sql);
-            $query-execute($data);
-            $res = $query->fetch(PDO::FETCH_ASSOC);
-            return $res; 
-        }
-        catch(Exception $e){
-            error_log($e->getMessage());
-            return false;
-        }
-    }
+    //comprobar si nuestro plan existe ya en nuestro proyecto
+    // public static function existsPlan($data = []){
+    //     try{
+    //         $_db = new Database();
+    //         $sql = "SELECT COUNT(*) FROM datos WHERE documento_id=? or titulo=? or content=?";
+    //         $query = $_db->connect()->query($sql);
+    //         $query-execute($data);
+    //         $res = $query->fetch(PDO::FETCH_ASSOC);
+    //         return $res; 
+    //     }
+    //     catch(Exception $e){
+    //         error_log($e->getMessage());
+    //         return false;
+    //     }
+    // }
 
     //CRUD
+    //crear plan de estudio
     public function createPlan(){
         try{
             $sql = "CALL createPlan(?,?,?,?,?,?,?,?)";
@@ -147,9 +170,10 @@ class StudyPlan extends Model{
         }
     }
 
+    //obtener el id del ultimo plan creado
     public function getLastId(){
         try{
-            $sql = "SELECT LAST_INSERT_ID(plan_estudio_id) as id_plan from plan_estudio Where status=1 ORDER BY plan_estudio_id DESC";
+            $sql = "SELECT LAST_INSERT_ID(plan_estudio_id) as id_plan from plan_estudio ORDER BY plan_estudio_id DESC";
             $query = $this->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
@@ -160,6 +184,7 @@ class StudyPlan extends Model{
         }
     }
 
+    //guardar las unicas secciones dentro de la tabla plan de estudio que contiene el editor
     public static function savePlan(array $data){
         try{
             $_db = new Database();
@@ -167,7 +192,6 @@ class StudyPlan extends Model{
             $query = $_db->connect()->prepare($sql);
             $info = [$data['id'],$data['inicio'],$data['final'],$data['review'],$data['fundamento'],$data['user']];
             $res = $query->execute($info);
-            error_log($res);
             return $res; 
         }
         catch(PDOException $e){
@@ -176,20 +200,7 @@ class StudyPlan extends Model{
         }
     }
 
-    public function updatePlan(){
-        try{
-            $sql = "UPDATE datos SET titulo=?, contenido=? WHERE documento_id=?";
-            $query = $this->prepare($sql);
-            $data = [$this->_title, $this->_content,$this->_id];
-            $res = $query->execute($data);
-            return $res;
-        }
-        catch(Exception $e){
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
+    //eliminar plan de estudio
     public static function deletePlan($id){
         try{
             $_db = new Database();

@@ -28,7 +28,7 @@ class PropositoCarrera extends Model{
                 exit();
             }
             $proposito = new PropositoCarrera($res[0]['descripcion'] == null ? '' : $res[0]['descripcion'] );
-            $proposito->setId($res[0]['proposito_id'] ? 0 : $res[0]['proposito_id']);
+            $proposito->setId($res[0]['proposito_id'] == null ? 0 : $res[0]['proposito_id']);
             return $proposito;
         }
         catch(Exception $e){

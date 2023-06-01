@@ -25,7 +25,7 @@
                             <th scope="col">Modalidad</th>
                             <th scope="col">Facultad</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Ps. Estudio</th>
+                            <th scope="col">Ps. Estudio<br>(Historial)</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
                         </tr>
@@ -39,7 +39,7 @@
                             <td><?= $value['acronimo_facultad'] ?></td>
                             <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
                             <td>
-                                <a href="/tesis/verCarrera/<?= $value['carrera_id'] ?>" class="btn btn-primary p-0 px-2">
+                                <a href="/tesis/<?= $value['nombre_carrera'] = str_replace(' ','-',$value['nombre_carrera'])?>/planes/1" class="btn btn-primary p-0 px-2">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-eye"></i>
                                     </span>
