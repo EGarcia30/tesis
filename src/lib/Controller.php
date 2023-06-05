@@ -29,4 +29,11 @@ class Controller{
         }
         return $_POST[$param];
     }
+
+    protected function files(string $param){
+        if(!isset($_FILES[$param])){
+            return NULL;
+        }
+        return $_FILES[$param];
+    }
 }

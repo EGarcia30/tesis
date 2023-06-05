@@ -83,9 +83,10 @@ function emptyInformation(){
     localStorage.setItem('comBasica', '');
     localStorage.setItem('comEspecialidad', '');
     localStorage.setItem('areas', '');
+    localStorage.setItem('ejecutar', "false")
 }
 
-function setInformation(e){
+function setInformation(){
     $('#enviar').submit(function(e){
         const idPlan = localStorage.getItem('idPlan');
         const inicio = localStorage.getItem('vigenciaInicio');

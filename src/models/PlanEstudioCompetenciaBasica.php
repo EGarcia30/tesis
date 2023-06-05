@@ -50,4 +50,19 @@ class PlanEstudioCompetenciaBasica extends Model{
             return false;
         }
     }
+
+    //desvinculando plan de estudio con competencia general
+    public static function deletePlanComBasica($idComBasica,$idPlan){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM plan_estudio_competencia_basica WHERE plan_estudio_id=$idPlan AND basico_id=$idComBasica";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }

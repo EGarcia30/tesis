@@ -12,6 +12,8 @@ use Penad\Tesis\models\PlanEstudioCompetenciaGeneral;
 use Penad\Tesis\models\PlanEstudioCompetenciaBasica;
 use Penad\Tesis\models\PlanEstudioCompetenciaEspecialidad;
 use Penad\Tesis\models\Areas;
+use Penad\Tesis\models\ValorInstitucional;
+use Penad\Tesis\models\PlanEstudioMateria;
 
 //vista de todos los planes de estudio vigentes
 $router->get('/planes/{pagina}', function($page){
@@ -89,14 +91,39 @@ $router->get('/plan/materia/{id}', function($id){
     $controller = new CurricularDesign;
     $user = $_SESSION['user'];
     $plan = StudyPlan::getPlan($id);
+    $valores = ValorInstitucional::getValores();
+    $materias = PlanEstudioMateria::getPlanMaterias($id);
     $data = [
         'title' => 'Editor Plan Estudio',
         'user' => $user,
         'plan' => $plan,
+        'valores' => $valores,
+        'materias' => $materias,
         'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
         'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
     ];
     $controller->render('plan/materia', $data);
+});
+
+//vista update materia
+$router->get('/plan/updateMateria/{idPlan}/{idMateria}', function($idPlan,$idMateria){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $user = $_SESSION['user'];
+    $plan = StudyPlan::getPlan($id);
+    $valores = ValorInstitucional::getValores();
+    $materias = PlanEstudioMateria::getPlanMaterias($id);
+    $data = [
+        'title' => 'Editor Plan Estudio',
+        'user' => $user,
+        'plan' => $plan,
+        'valores' => $valores,
+        'materias' => $materias,
+        'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
+        'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
+    ];
+    $controller->render('plan/updateMateria', $data);
 });
 
 //Descargar documento en word
@@ -155,4 +182,40 @@ $router->get('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$id
     notAuth();
     $controller = new CurricularDesign;
     $controller->deletePlanComGeneral($idComGeneral,$idPlan);
+});
+
+$router->post('/basica/plan/{idComBasica}/{idPlan}', function($idComBasica,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->updatePlanComBasica($idComBasica,$idPlan);
+});
+//eliminar
+$router->get('/basica/plan/{idComBasica}/{idPlan}', function($idComBasica,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->deletePlanComBasica($idComBasica,$idPlan);
+});
+
+$router->post('/especialidad/plan/{idComEspecialidad}/{idPlan}', function($idComEspecialidad,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->updatePlanComEspecialidad($idComEspecialidad,$idPlan);
+});
+//eliminar
+$router->get('/especialidad/plan/{idComEspecialidad}/{idPlan}', function($idComEspecialidad,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->deletePlanComEspecialidad($idComEspecialidad,$idPlan);
+});
+
+$router->post('/area/plan/{idAreas}/{idPlan}', function($idAreas,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->updatePlanAreas($idAreas,$idPlan);
+});
+//eliminar
+$router->get('/area/plan/{idAreas}/{idPlan}', function($idAreas,$idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->deletePlanAreas($idAreas,$idPlan);
 });

@@ -39,7 +39,7 @@ class Areas extends Model{
                 }
             }
         }
-        $this->_idPlan = $idPlan;
+        $this->_idPlan = intval($idPlan);
     }
 
     public static function getAreasPlan($id){
@@ -65,6 +65,34 @@ class Areas extends Model{
                 $data = [$this->_area[$i],$this->_puesto[$i],$this->_funciones[$i],$this->_tipo[$i],$this->_idPlan];
                 $res = $query->execute($data);
             }
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function updateAreas($id,$area,$puesto,$funcion,$tipo){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE area_desempenio SET area='$area', puesto='$puesto', funciones_puesto='$funcion', tipo_organizacion='$tipo' WHERE area_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteAreas($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM area_desempenio WHERE area_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

@@ -1,16 +1,18 @@
-<form action="" method="post" class="position-relative form-container" id="formComBasico">
+<div class="position-relative form-container" id="formComBasico">
     <h2 class="text-utec text-center header-font-custom">Competencias Básicas</h2>
     <div class="d-flex flex-wrap-reverse justify-content-around w-75 mx-auto mt-3 mt-sm-5">
         <div>
             <div class="mb-3">
-                <div id="comBasica">
-                    <label for="" class="text-utec font-custom">Ingrese Competencia Básica:</label>
-                    <input type="text" name="opcionBasica[]" class="form-control">
+                <form action="" method="post">
+                    <div id="comBasica">
+                        <label for="" class="text-utec font-custom">Ingrese Competencia Básica:</label>
+                        <input type="text" name="opcionBasica[]" class="form-control">
 
-                    <label for="" class="text-utec font-custom">Ingrese en que ciclo se cumple:</label>
-                    <input type="number" name="opcionBasica[]" step="1" class="form-control">
-                    <p class="text-utec font-custom">Los números pasarán a romanos en el documento de Word.</p>
-                </div>
+                        <label for="" class="text-utec font-custom">Ingrese en que ciclo se cumple:</label>
+                        <input type="number" name="opcionBasica[]" step="1" class="form-control">
+                        <p class="text-utec font-custom">Los números pasarán a romanos en el documento de Word.</p>
+                    </div>
+                </form>
                 <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarComBasica()" >
                     <span class="icon profile-icon">
                         <i class="fas fa-plus"></i>
@@ -44,19 +46,22 @@
                             <td class="font-custom m-0"><?= $value['descripcion']?></td>
                             <td class="font-custom m-0">Ciclo: <?= $value['ciclo']?></td>
                             <td>
-                                <a href="#" class="btn btn-success p-0 px-2">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-success p-0 px-2" data-bs-toggle="modal" data-bs-target="#updateComBasica<?= $value['basico_id']?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-edit"></i>
                                     </span>
-                                </a>
+                                </button>
+                                <?php require __DIR__ . '/../../components/modalPlan/modalUpdateComBasica.php' ?>
                             </td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2">
+                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#deleteComBasica<?= $value['basico_id']?>">
                                     <span class="icon profile-icon">
                                         <i class="fas fa-trash-alt"></i>
                                     </span>
                                 </button>
+                                <?php require __DIR__ . '/../../components/modalPlan/modalDeleteComBasica.php' ?>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -64,4 +69,4 @@
             </table>
         </div>
     </div>
-</form>
+</div>

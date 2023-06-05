@@ -55,4 +55,32 @@ class CompetenciaEspecialidad extends Model{
             return false;
         }
     }
+
+    public static function updateComEspecialidad($id,$des,$ciclo){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE competencia_especialidad SET descripcion='$des', ciclo=$ciclo WHERE especialidad_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteComEspecialidad($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM competencia_especialidad WHERE especialidad_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }

@@ -159,7 +159,7 @@ function agregarAreas(){
     var inputsToClear = select2.querySelectorAll("input");
     // Clear the values of the inputs in the cloned areas container
     inputsToClear.forEach(function(input) {
-        input.value = "";
+        input.type == "checkbox" ? input.checked = false : input.value = ""
     });
     var textareaToClear = select2.querySelectorAll("textarea");
     // Clear the values of the inputs in the cloned areas container
@@ -349,26 +349,26 @@ function eliminarCriterioC(valor){
     }
 }
 
-function agregarCriterioE(){
+function agregarCriterioE(valor){
     // create input element
     var input = document.createElement("input");
 
     // set input type and name attributes
     input.setAttribute("type", "text");
     input.setAttribute("class","form-control mt-2");
-    input.setAttribute("name", "criterio[]");
+    input.setAttribute("name", `criterio${valor}[]`);
 
     // find existing input element
-    var existingInput = document.querySelector('input[name="criterio[]"]:last-of-type');
+    var existingInput = document.querySelector(`input[name="criterio${valor}[]"]:last-of-type`);
 
     // insert new input element after existing input element
     existingInput.insertAdjacentElement("afterend", input);
 }
 
-function eliminarCriterioE(){
-    var validationInput = document.querySelectorAll('input[name="criterio[]"]');
+function eliminarCriterioE(valor){
+    var validationInput = document.querySelectorAll(`input[name="criterio${valor}[]"]`);
     // find existing input element
-    var existingInput = document.querySelectorAll('input[name="criterio[]"]:last-of-type');
+    var existingInput = document.querySelectorAll(`input[name="criterio${valor}[]"]:last-of-type`);
 
     if(validationInput.length !== 1){
         existingInput.forEach(e => {
@@ -377,26 +377,26 @@ function eliminarCriterioE(){
     }
 }
 
-function agregarSpresencial(){
+function agregarSpresencial(valor){
     // create input element
     var input = document.createElement("input");
 
     // set input type and name attributes
     input.setAttribute("type", "text");
     input.setAttribute("class","form-control mt-2");
-    input.setAttribute("name", "Spresencial[]");
+    input.setAttribute("name", `Spresencial${valor}[]`);
 
     // find existing input element
-    var existingInput = document.querySelector('input[name="Spresencial[]"]:last-of-type');
+    var existingInput = document.querySelector(`input[name="Spresencial${valor}[]"]:last-of-type`);
 
     // insert new input element after existing input element
     existingInput.insertAdjacentElement("afterend", input);
 }
 
-function eliminarSpresencial(){
-    var validationInput = document.querySelectorAll('input[name="Spresencial[]"]');
+function eliminarSpresencial(valor){
+    var validationInput = document.querySelectorAll(`input[name="Spresencial${valor}[]"]`);
     // find existing input element
-    var existingInput = document.querySelectorAll('input[name="Spresencial[]"]:last-of-type');
+    var existingInput = document.querySelectorAll(`input[name="Spresencial${valor}[]"]:last-of-type`);
 
     if(validationInput.length !== 1){
         existingInput.forEach(e => {
@@ -405,26 +405,26 @@ function eliminarSpresencial(){
     }
 }
 
-function agregarSNopresencial(){
+function agregarSNopresencial(valor){
     // create input element
     var input = document.createElement("input");
 
     // set input type and name attributes
     input.setAttribute("type", "text");
     input.setAttribute("class","form-control mt-2");
-    input.setAttribute("name", "SNopresencial[]");
+    input.setAttribute("name", `SNopresencial${valor}[]`);
 
     // find existing input element
-    var existingInput = document.querySelector('input[name="SNopresencial[]"]:last-of-type');
+    var existingInput = document.querySelector(`input[name="SNopresencial${valor}[]"]:last-of-type`);
 
     // insert new input element after existing input element
     existingInput.insertAdjacentElement("afterend", input);
 }
 
-function eliminarSNopresencial(){
-    var validationInput = document.querySelectorAll('input[name="SNopresencial[]"]');
+function eliminarSNopresencial(valor){
+    var validationInput = document.querySelectorAll(`input[name="SNopresencial${valor}[]"]`);
     // find existing input element
-    var existingInput = document.querySelectorAll('input[name="SNopresencial[]"]:last-of-type');
+    var existingInput = document.querySelectorAll(`input[name="SNopresencial${valor}[]"]:last-of-type`);
 
     if(validationInput.length !== 1){
         existingInput.forEach(e => {
@@ -539,5 +539,58 @@ function eliminarContenidoAsignatura(){
             e.remove()
         });
         contador--;
+    }
+}
+
+var x = 1;
+
+function agregarCriterioEvaluacion(){
+    const selectCriterioEvaluacion = document.querySelector('#criterio_evaluacion:last-of-type');
+    const select2 = selectCriterioEvaluacion.cloneNode(true);
+    let inputIndicador = select2.querySelectorAll(`input[name="indicador${x}[]"]`);
+    let inputCriterio = select2.querySelectorAll(`input[name="criterio${x}[]"]`);
+    let inputSpresencial = select2.querySelectorAll(`input[name="Spresencial${x}[]"]`);
+    let inputSNopresencial = select2.querySelectorAll(`input[name="SNopresencial${x}[]"]`);
+
+    x++
+    select2.querySelector('#agregarCE').setAttribute("onclick", `agregarCriterioE(${x})`);
+    select2.querySelector('#eliminarCE').setAttribute("onclick", `eliminarCriterioE(${x})`);
+    select2.querySelector('#agregarSP').setAttribute("onclick", `agregarSpresencial(${x})`);
+    select2.querySelector('#eliminarSP').setAttribute("onclick", `eliminarSpresencial(${x})`);
+    select2.querySelector('#agregarSNP').setAttribute("onclick", `agregarSNopresencial(${x})`);
+    select2.querySelector('#eliminarSNP').setAttribute("onclick", `eliminarSNopresencial(${x})`);
+
+    inputIndicador.forEach(input => {
+        input.setAttribute("name", `indicador${x}[]`);
+    })
+    inputCriterio.forEach(input => {
+        input.setAttribute("name", `criterio${x}[]`);
+    })
+    inputSpresencial.forEach(input => {
+        input.setAttribute("name", `Spresencial${x}[]`);
+    })
+    inputSNopresencial.forEach(input => {
+        input.setAttribute("name", `SNopresencial${x}[]`);
+    })
+    // Get the inputs to clear in the cloned areas container
+    var inputsToClear = select2.querySelectorAll("input");
+    // Clear the values of the inputs in the cloned areas container
+    inputsToClear.forEach(function(input) {
+        input.value = "";
+        
+    });
+    selectCriterioEvaluacion.parentNode.insertBefore(select2, selectCriterioEvaluacion.nextSibling);
+}
+
+function eliminarCriterioEvaluacion(){
+    var validationInput = document.querySelectorAll('#criterio_evaluacion');
+    // find existing input element
+    var existingInput = document.querySelectorAll('#criterio_evaluacion:last-of-type');
+
+    if(validationInput.length !== 1){
+        existingInput.forEach(e => {
+            e.remove()
+        });
+        x--;
     }
 }

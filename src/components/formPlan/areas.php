@@ -1,9 +1,10 @@
-<form action="" method="post" class="position-relative form-container" id="formAreas">
+<div class="position-relative form-container" id="formAreas">
     <h2 class="text-utec text-center header-font-custom">Áreas de Desempeño</h2>
     <div class="d-flex flex-wrap-reverse justify-content-around w-75 mx-auto mt-3 mt-sm-5">
         <div class="w-100">
             <div class="mb-3">
-                <div id="areas" class="mb-2">
+                <form action="" method="post">
+                    <div id="areas" class="mb-2">
 
                     <hr class="mt-2">
 
@@ -16,10 +17,19 @@
                     <label for="" class="text-utec font-custom">Ingrese funciones del puesto:</label>
                     <textarea class="form-control" name="opcionAreas[]" style="height: 100px"></textarea>
 
-                    <label for="" class="text-utec font-custom">Ingrese tipo de organización laboral:</label>
-                    <input type="text" name="opcionAreas[]" class="form-control">
+                    <label for="" class="text-utec font-custom mb-3">Ingrese tipo de organización laboral:</label>
+                    <br>
+                    <input class="form-check-input form-check-inline" name="opcionAreas[]" type="checkbox" value="empresa privada">
+                    <label class="form-check-label">
+                    Empresa Privada
+                    </label>
+                    <input class="form-check-input" name="opcionAreas[]" type="checkbox" value="empresa publica">
+                    <label class="form-check-label">
+                    Empresa publica
+                    </label>
 
-                </div>
+                    </div>
+                </form>
                 <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarAreas()" >
                     <span class="icon profile-icon">
                         <i class="fas fa-plus"></i>
@@ -56,19 +66,22 @@
                                 <td class="font-custom m-0"><?= $value['funciones_puesto']?></td>
                                 <td class="font-custom m-0"><?= $value['tipo_organizacion']?></td>
                                 <td>
-                                    <a href="#" class="btn btn-success p-0 px-2">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-success p-0 px-2" data-bs-toggle="modal" data-bs-target="#updateArea<?= $value['area_id']?>">
                                         <span class="icon profile-icon">
                                             <i class="fas fa-edit"></i>
                                         </span>
-                                    </a>
+                                    </button>
+                                    <?php require __DIR__ . '/../../components/modalPlan/modalUpdateArea.php' ?>
                                 </td>
                                 <td>
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-danger p-0 px-2">
+                                    <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#deleteArea<?= $value['area_id']?>">
                                         <span class="icon profile-icon">
                                             <i class="fas fa-trash-alt"></i>
                                         </span>
                                     </button>
+                                    <?php require __DIR__ . '/../../components/modalPlan/modalDeleteArea.php' ?>
                                 </td>
                             </tr>
                         <?php endforeach;?>
@@ -77,4 +90,4 @@
             </div>
         </div>
     </div>
-</form>
+</div>

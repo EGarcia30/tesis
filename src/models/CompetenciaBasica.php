@@ -55,4 +55,32 @@ class CompetenciaBasica extends Model{
             return false;
         }
     }
+
+    public static function updateComBasica($id,$des,$ciclo){
+        try{
+            $_db = new Database();
+            $sql = "UPDATE competencia_basica SET descripcion='$des', ciclo=$ciclo WHERE basico_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteComBasica($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM competencia_basica WHERE basico_id=$id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }

@@ -55,9 +55,6 @@
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide overflow-y-scroll">
         <div class="container pt-3 pe-3 d-flex flex-column gap-3 text-decoration-none">
-            <a href="/tesis/plan/editor/<?= $this->d['plan']->getId()?>" class="text-start text-decoration-none py-2 px-4 rounded-2 nav_link font-custom" data-bs-target="formInicio">
-                Regresar
-            </a>
             <a type="button" class="text-start text-decoration-none py-2 px-4 rounded-2 nav_link active font-custom" data-bs-target="formMaterias">
                 Materias
             </a >

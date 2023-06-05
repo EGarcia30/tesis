@@ -5,7 +5,7 @@
             <div class="d-flex flex-wrap gap-2">
                 <a href="/tesis/planes/1" class="btn btn-utec" onclick="emptyInformation()">Regresar</a>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success p-0 px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="saveInformation()">
+                <button type="button" class="btn btn-success guardar z-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="saveInformation()">
                     <span class="icon profile-icon">
                         <i class="fas fa-save"></i>
                     </span>

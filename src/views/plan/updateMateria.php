@@ -20,8 +20,7 @@
                     <h1 class="text-utec text-center header-font-custom mt-4">Plan de estudio</h1>
                     <h2 class="text-utec text-center header-font-custom mt-4"><?= $this->d['plan']->getNameCar()?></h2>
                     <hr class="w-75 mx-auto"/>
-                    <?php require_once __DIR__ . '/../../components/formPlan/materias.php' ?>
-                    <?php require_once __DIR__ . '/../../components/formMateria/materias.php' ?>
+                    <?php require_once __DIR__ . '/../../components/formMateria/update.php' ?>
                 </div>
             </div>
         </div>

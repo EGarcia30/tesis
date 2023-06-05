@@ -1,5 +1,4 @@
-<div class="position-relative" id="formMaterias">
-    <h2 class="text-utec text-center header-font-custom">Materias</h2>
+<h2 class="text-utec text-center header-font-custom">Materias</h2>
     <div class="d-flex flex-column w-75 mx-auto mt-3 mt-sm-5">
         <div class="d-flex justify-content-between flex-wrap">
             <!-- Button trigger modal -->
@@ -66,7 +65,7 @@
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" name="materia[]" value="AE">
+                            <input class="form-check-input" type="checkbox" name="materia[]" value="AE" id="flexCheck">
                             <label class="form-check-label" for="">
                                 Area de Especialidad
                             </label>
