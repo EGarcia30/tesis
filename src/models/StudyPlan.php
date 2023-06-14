@@ -35,6 +35,21 @@ class StudyPlan extends Model{
     }
 
     //obtener todos los planes con limite de 6 x pagina
+    public static function getPlanAnterior($final){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM plan_estudio WHERE status=0 AND vigencia_final LIKE '%$final%'";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchall(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(Exception $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //obtener todos los planes con limite de 6 x pagina
     public static function getPlans($start, $end){
         try{
             $_db = new Database();

@@ -1,4 +1,6 @@
 <?php
+use Penad\Tesis\models\StudyPlan;
+
 use Penad\Tesis\models\Materia;
 use Penad\Tesis\models\PlanEstudioMateria;
 use Penad\Tesis\models\Prerrequisito;
@@ -1084,8 +1086,6 @@ $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
     $cicloExtra = PlanCicloExtraordinario::getPlanCiclo($id);
 
-    // var_dump($cicloExtra);
-    // exit();
 
     $cExtra = 0;
     $arrActual = [];
@@ -1148,13 +1148,146 @@ $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
     $section->addText('El plan de estudio se regirá bajo las siguientes políticas de absorción:',$fontC,$pgTC);
 
+    $listStyle = array(
+        'listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_BULLET_FILLED,
+        'textIndent' => 0,
+        'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH,
+        'spaceAfter' => 240
+    );
+
+    $anioString = substr(($req == null ? '' : $req->getStartValidity()),-4);
+
+    // Crear un objeto DateTime con la fecha proporcionada
+    $fecha = DateTime::createFromFormat('Y', $anioString);
+
+    // Restar 5 años al objeto DateTime
+    $fecha->sub(new DateInterval('P1Y'));
+
+    // Obtener el año restado
+    $anioRestado = $fecha->format('Y');
+
+    $planAnterior = StudyPlan::getPlanAnterior($anioRestado);
+
+    $section->addListItem('El plan de estudio propuesto será única y exclusivamente para estudiantes de nuevo ingreso, a partir del '.($req == null ? '' : $req->getStartValidity()).'.', 0, $fontC, $listStyle);
+
+    $section->addListItem('Los estudiantes inscritos con el plan de estudio autorizado con vigencia del '.(empty($planAnterior) ? '' : $planAnterior[0]['vigencia_inicio']).' al '.(empty($planAnterior) ? '' : $planAnterior[0]['vigencia_final']).' finalizarán sus estudios con dicho plan. ', 0, $fontC, $listStyle);
+
+    $section->addListItem('En el caso de estudiantes que reingresen, se hará un análisis para su absorción; se aplicará el Plan vigente al momento de reingreso.', 0, $fontC, $listStyle);
+
+    $section->addListItem('La institución se compromete a desarrollar los dos planes de estudio, sin ningún costo adicional a los establecidos para los estudiantes, estos no tendrán dificultades en su proceso administrativo y registro académico, en cumplimiento a los artículos 21 y 27 del Reglamento de la Ley de Educación Superior.', 0, $fontC, $listStyle);
+
+    $section->addListItem('Los estudiantes activos que de manera voluntaria y debidamente informados y asesorados deseen incorporarse al presente Plan conociendo las implicaciones académicas y administrativas que dicha migración conlleva, podrán hacerlo conforme a los procedimientos establecidos y en función de las tablas de absorción definidas en este plan.', 0, $fontC, $listStyle);
+
+
+    $fontC = array('name' => 'Arial', 'size' => 12);
+    $pgTC = array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 'lineHeight' => 1.5, 'spaceAfter' => 240);
+    $section->addTitle('7.2 Tabla que describe la absorción',2);
+    $section->addText('En proceso...',$fontC,$pgTC);
+    $section->addTitle('7.3 Matriz de cambios significativos entre planes de estudio',2);
+    $section->addText('En proceso...',$fontC,$pgTC);
+
+    $section->addTitle('7.4 Otorgamiento de equivalencias de créditos académicos por unidades valorativas',2);
+    $section->addText('El otorgamiento de equivalencias se concederá, siempre y cuando:',$fontC,$pgTC);
+    $section->addListItem('Los contenidos programáticos coinciden, por lo menos, en un 80%.', 0, $fontC, $listStyle);
+    $section->addListItem('El número de horas de trabajo académico asistidas por un docente, por asignatura, es equivalente.', 0, $fontC, $listStyle);
+    $section->addText('Según el Art 6 de la Ley de Educación Superior, 1 Unidad Valorativa (UV) equivale   a 20 horas de trabajo académico asistidas por un docente, en un ciclo de dieciséis semanas.',$fontC,$pgTC);
+    $section->addText('El número de horas asistidas por créditos académicos (CA) se determinará con base en la normativa del lugar de procedencia de los estudios realizados por el solicitante.',$fontC,$pgTC);
+
 //PLAN DE ABSORCIÓN END
 
-// PROGRAMA X ASIGNATURA
+//CICLOS EXTRAORDINARIOS
 
-    // Agregar un párrafo al documento
     $section = $phpWord->addSection();
     margenes($section);
+
+    $fontC = array('name' => 'Arial', 'size' => 12);
+    $pgTC = array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 'lineHeight' => 1.5, 'spaceAfter' => 240);
+    $section->addTitle('8 Ciclos Extraordinarios',1);
+    $section->addText('Según Art. 13. Del Reglamento General de la Ley de Educación Superior, las instituciones de educación superior podrán impartir asignatura en un ciclo extraordinario, el cual deberá tener como equivalente el tiempo que se establece en el inciso 2° del Art. 6 de la Ley, con una carga académica máxima de 6 unidades valorativas por cada estudiante. Las asignaturas a impartirse en el ciclo extraordinario serán aquéllas que no requieran un período prolongado de actividad académica, las que deberán establecerse en el respectivo plan de estudios, cuya duración es de seis semanas (6 semanas).',$fontC,$pgTC);
+    $section->addText('Tabla 14 Ciclos Extraordinarios',$fontEncabezado,$paragraphEncabezado);
+
+    $fontT = array('name' => 'Arial', 'size' => 9, 'bold' => true);
+    $fontC = array('name' => 'Arial', 'size' => 9);
+    $pgTC = array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER, 'lineHeight' => 1.5, 'spaceAfter' => 0);
+
+
+    //tabla cicloextraordinario
+    $phpWord->addTableStyle('cicloExtra',$styleTable);
+    $table= $section->addTable('cicloExtra');
+    $table->addRow();
+    $table->addCell(1100,$cellStyle)->addText('Ciclo',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('No.',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('Código',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('AF',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('Asignatura',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('Prerrequisito',$fontT,$pgTC);
+    $cell = $table->addCell(1100,$cellStyle);
+        $subTable = $cell->addTable();
+        $subTable->addRow();
+        $subTable->addCell(1100,$cellStyle)->addText('HTS',$fontT,$pgTC);
+        $subTable->addRow();
+        $subTable->addCell(525,$cellStyle)->addText('P',$fontT,$pgTC);
+        $subTable->addCell(525,$cellStyle)->addText('NP',$fontT,$pgTC);
+    $cell = $table->addCell(1100,$cellStyle);
+        $subTable = $cell->addTable();
+        $subTable->addRow();
+        $subTable->addCell(1100,$cellStyle)->addText('HPS',$fontT,$pgTC);
+        $subTable->addRow();
+        $subTable->addCell(525,$cellStyle)->addText('P',$fontT,$pgTC);
+        $subTable->addCell(525,$cellStyle)->addText('NP',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('HTS',$fontT,$pgTC);
+    $table->addCell(1100,$cellStyle)->addText('UV',$fontT,$pgTC);
+
+    $cicloExtra = PlanCicloExtraordinario::getPlanCiclo($id);
+
+    foreach($cicloExtra as $llave => $valor){
+        $table->addRow();
+        $table->addCell(1100,$cellStyle)->addText(intToRoman($valor['ciclo']),$fontT,$pgTC);
+        $table->addCell(1100,$cellStyle)->addText($valor['no_orden'],$fontT,$pgTC);
+        $table->addCell(1100,$cellStyle)->addText($valor['codigo'],$fontT,$pgTC);
+        $table->addCell(1100,$cellStyle)->addText($valor['area_formacion'],$fontT,$pgTC);
+        $table->addCell(1100,$cellStyle)->addText($valor['nombre_asignatura'],$fontT,$pgTC);
+        $preCell = $table->addCell(1100,$cellStyle);
+        $prerrequisitos = PrerrequisitoCiclo::getPrerrequisitosCiclos(intval($valor['extra_id']));
+        foreach($prerrequisitos as $posicion => $orden){
+            $preCell->addText($orden['prerrequisito'],$fontC,$pgTC);
+        }
+        $cell = $table->addCell(1100,$cellStyle);
+            $subTable = $cell->addTable();
+            $subTable->addRow();
+            $subTable->addCell(525,$cellStyle)->addText($valor['horas_teoricas_presencial'],$fontT,$pgTC);
+            $subTable->addCell(525,$cellStyle)->addText($valor['horas_teoricas_nopresencial'],$fontT,$pgTC);
+        $cell = $table->addCell(1100,$cellStyle);
+            $subTable = $cell->addTable();
+            $subTable->addRow();
+            $subTable->addCell(525,$cellStyle)->addText($valor['horas_practicas_presencial'],$fontT,$pgTC);
+            $subTable->addCell(525,$cellStyle)->addText($valor['horas_practicas_nopresencial'],$fontT,$pgTC);
+        $table->addCell(1100,$cellStyle)->addText($valor['horas_ciclo'],$fontT,$pgTC);
+        $table->addCell(1100,$cellStyle)->addText($valor['unidades_valorativas'],$fontT,$pgTC);
+    }
+
+//CICLOS EXTRAORDINARIOS END
+
+// PERFIL Y FUNCIONES DEL PERSONAL ACADÉMICO
+//PERFIL Y FUNCIONES DEL PERSONAL ACADÉMICO END
+
+//ACTUALIZACION PLAN DE ESTUDIO
+    $section = $phpWord->addSection();
+    margenes($section);
+
+    $fontC = array('name' => 'Arial', 'size' => 12);
+    $pgTC = array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 'lineHeight' => 1.5, 'spaceAfter' => 240);
+    $section->addTitle('17. Plazo de actualización del plan de estudio',1);
+    $section->addTitle('17.1 Plazo de actualización del plan de estudio',2);
+    $section->addText('El plan de estudio actualizado tendrá una vigencia de cinco años como producto del perfil que se espera formar en el quinquenio 2023-2027. Según Ley de Educación Superior, Art. 37, literal b) Disponer de los planes de estudios adecuados, actualizados al menos una vez en el término de duración de la carrera y aprobados para los grados que se ofrezcan.',$fontC,$pgTC);
+
+    $section->addTitle('17.2 Responsables de la revisión y actualización',2);
+    $section->addText('El Directorio Ejecutivo ha determinado la creación de una estructura organizativa para los procesos de actualización a través de las siguientes instancias:
+    Una Comisión de Currículo General y Comisiones de Currículo por facultad y carrera las cuales organizan equipos de apoyo para que les colaboren en todo el proceso curricular.
+    ',$fontC,$pgTC);
+//ACTUALIZACION PLAN DE ESTUDIO END
+
+// PROGRAMA X ASIGNATURA
 
     $fontContent = array('name' => 'Arial', 'size' => 12);
     $pgContent = array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 'lineHeight' => 1.5, 'spaceAfter' => 240);
@@ -1433,6 +1566,7 @@ $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
         $section->addText('22.1 Criterios de evaluación',$fontTM,$pgTM);
 
+        $fontGen = array('name' => 'Arial', 'size' => 10);
         $listCri = array('listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_BULLET_FILLED, 'align' => 'start', 'spaceAfter' => 0);
         //tabla criterios de evauacion
         $phpWord->addTableStyle('indicador', $styleTable);

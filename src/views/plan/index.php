@@ -53,7 +53,7 @@
                                     </span>
                                 </a>
                             </td>
-                            <td><a href="/tesis/word/<?= $value['plan_estudio_id'] ?>" class="btn btn-utec p-0 px-2">
+                            <td><a href="/tesis/word/<?= $value['plan_estudio_id'] ?>" class="btn btn-utec p-0 px-2 <?= $value['vigencia_inicio'] == '' || $value['vigencia_final'] == '' ? 'disabled' : '' ?>">
                                     <span class="icon profile-icon">
                                         <img src="<?= URL_PATH ?>/img/word.png" class="img-fluid img-word" alt="">
                                     </span>
