@@ -1,5 +1,6 @@
 <div class="position-relative form-container" id="formComGeneral">
     <h2 class="text-utec text-center header-font-custom">Competencias Generales</h2>
+    <?php require __DIR__ . '/../informacion.php'; ?>
     <div class="d-flex flex-wrap-reverse justify-content-around w-75 mx-auto mt-3 mt-sm-5">
         <div>
             <div class="mb-3">

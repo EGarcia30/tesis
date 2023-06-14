@@ -182,25 +182,15 @@ function eliminarAreas(){
 }
 
 function agregarPrerrequisito(){
-    // create input element
-    var input = document.createElement("input");
-
-    // set input type and name attributes
-    input.setAttribute("type", "text");
-    input.setAttribute("class","form-control mt-2");
-    input.setAttribute("name", "prerrequisito[]");
-
-    // find existing input element
-    var existingInput = document.querySelector('input[name="prerrequisito[]"]:last-of-type');
-
-    // insert new input element after existing input element
-    existingInput.insertAdjacentElement("afterend", input);
+    const select1 = document.getElementById('selectsPrerrequisito');
+    const select2 = select1.cloneNode(true);
+    select1.parentNode.insertBefore(select2, select1.nextSibling);
 }
 
 function eliminarPrerrequisito(){
-    var validationInput = document.querySelectorAll('input[name="prerrequisito[]"]');
+    var validationInput = document.querySelectorAll('#selectsPrerrequisito');
     // find existing input element
-    var existingInput = document.querySelectorAll('input[name="prerrequisito[]"]:last-of-type');
+    let existingInput = document.querySelectorAll('#selectsPrerrequisito:last-of-type');
 
     if(validationInput.length !== 1){
         existingInput.forEach(e => {

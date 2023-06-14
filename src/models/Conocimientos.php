@@ -18,6 +18,20 @@ class Conocimientos extends Model{
         $this->_contenido_id = intval($contenido_id);
     }
 
+    public static function getConocimientos($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM conocimientos WHERE contenido_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //Crear
     public function createConocimientos(){
@@ -26,6 +40,20 @@ class Conocimientos extends Model{
             $query = $this->prepare($sql);
             $data = [$this->_conocimiento, $this->_contenido_id];
             $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteConocimientos($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM conocimientos WHERE contenido_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

@@ -46,6 +46,20 @@ class EvaluacionNoPresencial extends Model{
         }
     }
 
+    public static function deleteEvaluacionNoPresencial($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM evaluacion_nopresencial WHERE enopresencial_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     public function getId(){
         return $this->_id;
     }

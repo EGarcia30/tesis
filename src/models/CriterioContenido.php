@@ -18,6 +18,20 @@ class CriterioContenido extends Model{
         $this->_contenido_id = intval($contenido_id);
     }
 
+    public static function getCriterios($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM criterio_contenido WHERE contenido_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //Crear
     public function createCriterioContenido(){
@@ -26,6 +40,20 @@ class CriterioContenido extends Model{
             $query = $this->prepare($sql);
             $data = [$this->_criterioContenido, $this->_contenido_id];
             $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteCriterioContenido($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM criterio_contenido WHERE contenido_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

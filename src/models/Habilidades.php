@@ -18,6 +18,20 @@ class Habilidades extends Model{
         $this->_contenido_id = intval($contenido_id);
     }
 
+    public static function getHabilidades($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM habilidades WHERE contenido_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //Crear
     public function createHabilidades(){
@@ -26,6 +40,20 @@ class Habilidades extends Model{
             $query = $this->prepare($sql);
             $data = [$this->_habilidad, $this->_contenido_id];
             $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteHabilidades($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM habilidades WHERE contenido_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

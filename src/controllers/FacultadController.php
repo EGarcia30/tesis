@@ -83,7 +83,7 @@ class FacultadController extends Controller{
             exit();
         }
 
-        //instancia objeto user y su metodo createUser Para agregar nuevo usuario
+        //instancia objeto facultad y su metodo createFacultad Para agregar nueva facultad
         $user = new FacultadModel($name,$acronym);
         $res = $user->createFacultad();
 

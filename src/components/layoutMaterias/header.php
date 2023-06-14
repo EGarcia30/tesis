@@ -61,6 +61,14 @@
             <a type="button" class="text-start text-decoration-none py-2 px-4 rounded-2 nav_link font-custom" data-bs-target="formVerMaterias">
                 Ver Materias
             </a >
+            <a href="/tesis/plan/extraordinario/<?= $this->d['plan']->getId()?>" type="button" class="text-start text-decoration-none py-2 px-4 rounded-2 nav_link font-custom" data-bs-target="formMaterias">
+                Ciclo <br>
+                Extraordinario
+            </a >
+            <a href="/tesis/plan/extraordinario/<?= $this->d['plan']->getId()?>" type="button" class="text-start text-decoration-none py-2 px-4 rounded-2 nav_link font-custom" data-bs-target="formVerMaterias">
+                Ver Ciclo <br>
+                Extraordinario
+            </a >
         </div>
     </div>
     <div id="back-menu"></div>

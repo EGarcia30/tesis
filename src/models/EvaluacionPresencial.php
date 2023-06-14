@@ -46,6 +46,20 @@ class EvaluacionPresencial extends Model{
         }
     }
 
+    public static function deleteEvaluacionPresencial($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM evaluacion_presencial WHERE epresencial_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     public function getId(){
         return $this->_id;
     }

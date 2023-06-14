@@ -35,7 +35,7 @@
                             <th scope="col">Status</th>
                             <th scope="col">Ps.Estudio<br>(Historial)</th>
                             <th scope="col">Descargar</th>
-                            <th scope="col">Editar</th>
+                            <th scope="col">Editor</th>
                             <th scope="col">Eliminar</th>
                         </tr>
                     </thead>

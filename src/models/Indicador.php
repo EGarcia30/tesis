@@ -18,6 +18,20 @@ class Indicador extends Model{
         $this->_materia_id = intval($materia_id);
     }
 
+    public static function getIndicadores($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM indicador_logro WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //Crear
     public function createIndicador(){
@@ -40,6 +54,20 @@ class Indicador extends Model{
             $sql = "SELECT LAST_INSERT_ID(indicador_id) as indicador_id from indicador_logro ORDER BY indicador_id DESC";
             $query = $this->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteIndicador($idIndicador,$id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM indicador_logro WHERE indicador_id=$idIndicador AND materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

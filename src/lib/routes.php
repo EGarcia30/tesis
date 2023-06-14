@@ -20,6 +20,8 @@ require __DIR__.'/../routes/facultad/index.php';
 require __DIR__.'/../routes/carrera/index.php';
 require __DIR__.'/../routes/plan/index.php';
 require __DIR__.'/../routes/creador/index.php';
+require __DIR__.'/../routes/materias/index.php';
+require __DIR__.'/../routes/extraordinario/index.php';
 
 //manejador de error 404
 $router->set404(function() {

@@ -62,6 +62,20 @@ class Materia extends Model{
         $this->_estrategia = strval($data[17]);
     }
 
+    public static function getMateria($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM materia WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetch(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //crear
     public function createMateria(){
@@ -89,6 +103,20 @@ class Materia extends Model{
             $sql = "SELECT LAST_INSERT_ID(materia_id) as materia_id from materia ORDER BY materia_id DESC";
             $query = $this->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteMateria($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM materia WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

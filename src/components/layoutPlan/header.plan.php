@@ -51,15 +51,15 @@
         </div>
     </div>
     <div id="vertical-menu" class="position-absolute bg-white vh-custom hide">
-        <div class="container p-4 pt-5 d-flex flex-column text-start">
-            <a href="/tesis/home" class="text-dark text-decoration-none">
-                <p class="font-custom">Inicio</p>
+        <div class="container pt-3 pe-3 d-flex flex-column gap-3 text-decoration-none">
+            <a href="/tesis/home" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Inicio
             </a>
-            <a href="/tesis/planes/1" class="text-dark text-decoration-none">
-                <p class="font-custom">Plan de Estudio</p>
+            <a href="/tesis/planes/1" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Plan de Estudio
             </a>
-            <a href="/tesis/creadores/1" class="text-dark text-decoration-none">
-                <p class="font-custom">Especialistas/<br>Creadores</p>
+            <a href="/tesis/creadores/1" class="text-start text-decoration-none p-2 rounded-2 nav_link font-custom">
+                Especialistas/<br>Creadores
             </a>
         </div>
     </div>

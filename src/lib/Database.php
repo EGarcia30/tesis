@@ -18,8 +18,6 @@ class Database{
         $this->_user = $_ENV['USER'];
         $this->_password = $_ENV['PASSWORD'];
         $this->_charset = $_ENV['CHARSET'];
-
-        
     }
 
     public function connect():PDO{

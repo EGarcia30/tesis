@@ -18,6 +18,20 @@ class MaterialApoyo extends Model{
         $this->_materia_id = intval($materia_id);
     }
 
+    public static function getMateriales($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM material_apoyo WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //Crear
     public function createMaterialApoyo(){
@@ -26,6 +40,20 @@ class MaterialApoyo extends Model{
             $query = $this->prepare($sql);
             $data = [$this->_material, $this->_materia_id];
             $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteApoyo($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM material_apoyo WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

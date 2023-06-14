@@ -23,7 +23,44 @@ class PlanEstudioMateria extends Model{
             $_db = new Database();
             $sql = "SELECT m.* FROM materia m
             INNER JOIN plan_estudio_materia pm ON m.materia_id = pm.materia_id
-            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = {$id} AND pe.plan_estudio_id = pm.plan_estudio_id ";
+            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = {$id} AND pe.plan_estudio_id = pm.plan_estudio_id 
+            ORDER BY m.ciclo ASC";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function getMateriaFormacion($id,$formacion){
+        try{
+            $id = intval($id);
+            $_db = new Database();
+            $sql = "SELECT m.* FROM materia m
+            INNER JOIN plan_estudio_materia pm ON m.materia_id = pm.materia_id
+            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = {$id} AND pe.plan_estudio_id = pm.plan_estudio_id 
+            WHERE m.area_formacion ='{$formacion}' ORDER BY m.no_orden ASC";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function getMateriaCiclo($id,$ciclo){
+        try{
+            $id = intval($id);
+            $_db = new Database();
+            $sql = "SELECT m.* FROM materia m
+            INNER JOIN plan_estudio_materia pm ON m.materia_id = pm.materia_id
+            INNER JOIN plan_estudio pe ON pe.plan_estudio_id = {$id} AND pe.plan_estudio_id = pm.plan_estudio_id 
+            WHERE m.ciclo ={$ciclo} ORDER BY m.no_orden ASC";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
             return $res;
@@ -50,6 +87,19 @@ class PlanEstudioMateria extends Model{
         }
     }
 
+    public static function deletePlanMateria($idPlan,$idMateria){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM plan_estudio_materia WHERE plan_estudio_id={$idPlan} AND materia_id={$idMateria}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 
     public function getIdPlan(){
         return $this->_idPlan;

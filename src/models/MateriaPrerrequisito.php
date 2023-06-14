@@ -17,6 +17,22 @@ class MateriaPrerrequisito extends Model{
         $this->_idPrerrequisito = intval($idPrerrequisito);
     }
 
+    public static function getMateriaPrerrequisitos($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT p.* FROM prerrequisito p
+            INNER JOIN materia_prerrequisito mp ON p.prerrequisito_id = mp.prerrequisito_id
+            INNER JOIN materia m ON m.materia_id = {$id} AND m.materia_id = mp.materia_id";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //crear
     public function createMateriaPrerrequisito(){
@@ -26,6 +42,20 @@ class MateriaPrerrequisito extends Model{
             $data = [$this->_idMateria,$this->_idPrerrequisito];
             $res = $query->execute($data);
             return $res;           
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteMateriaPrerrequisito($idPrerrequisito,$idMateria){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM materia_prerrequisito WHERE materia_id={$idMateria} AND prerrequisito_id={$idPrerrequisito}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute($data);
+            return $res;
         }
         catch(PDOException $e){
             error_log($e->getMessage());

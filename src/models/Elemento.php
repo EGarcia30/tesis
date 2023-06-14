@@ -18,6 +18,20 @@ class Elemento extends Model{
         $this->_materia_id = intval($materia_id);
     }
 
+    public static function getElementos($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM elemento_competencia WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOExcepcion $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //CRUD
     //Crear
     public function createElemento(){
@@ -26,6 +40,20 @@ class Elemento extends Model{
             $query = $this->prepare($sql);
             $data = [$this->_elemento, $this->_materia_id];
             $res = $query->execute($data);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteElemento($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM elemento_competencia WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

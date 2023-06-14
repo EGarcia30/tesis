@@ -26,8 +26,10 @@
                     </div>
 
                     <div class="mb-3 text-start">
-                        <input class="form-check-input" type="radio" name="radio" id="inlineRadio2" value="1">
-                        <label class="form-check-label" for="inlineRadio2">Activo</label>
+                        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Activo
+                        </label>
                     </div>
 
                     <div class="mb-3 text-start">

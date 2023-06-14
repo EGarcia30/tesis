@@ -32,6 +32,21 @@ class ContenidoAsignatura extends Model{
         $this->_idMateria = intval($idMateria);
     }
 
+    public static function getContenidoAsignaturas($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM contenido_asignatura WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+
     //CRUD
     //crear
     public function createContenidoAsignatura(){
@@ -53,9 +68,23 @@ class ContenidoAsignatura extends Model{
 
     public function getLastId(){
         try{
-            $sql = "SELECT LAST_INSERT_ID(contenido_id) as contenido_id from contenido ORDER BY contenido_id DESC";
+            $sql = "SELECT LAST_INSERT_ID(contenido_id) as contenido_id from contenido_asignatura ORDER BY contenido_id DESC";
             $query = $this->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteContenidoAsignatura($idContenido,$idMateria){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM contenido_asignatura WHERE contenido_id={$idContenido} AND materia_id={$idMateria}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

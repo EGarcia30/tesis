@@ -26,6 +26,20 @@ class Recursos extends Model{
         $this->_materia_id = intval($materia_id);
     }
 
+    public static function getRecursos($id){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM recursos WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     public function createRecurso(){
         try{
             for($i = 0; $i < count($this->_titulo); $i++){
@@ -34,6 +48,20 @@ class Recursos extends Model{
                 $data = [$this->_titulo[$i],$this->_link[$i], $this->_materia_id];
                 $res = $query->execute($data);
             }
+            return $res;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function deleteRecursos($id){
+        try{
+            $_db = new Database();
+            $sql = "DELETE FROM recursos WHERE materia_id={$id}";
+            $query = $_db->connect()->query($sql);
+            $res = $query->execute();
             return $res;
         }
         catch(PDOException $e){

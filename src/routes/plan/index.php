@@ -84,48 +84,6 @@ $router->get('/plan/editor/{id}', function($id){
     $controller->render('plan/editor', $data);
 });
 
-//vista materias o 2da parte de un plan de estudio
-$router->get('/plan/materia/{id}', function($id){
-    notAuth();
-    IsUser();
-    $controller = new CurricularDesign;
-    $user = $_SESSION['user'];
-    $plan = StudyPlan::getPlan($id);
-    $valores = ValorInstitucional::getValores();
-    $materias = PlanEstudioMateria::getPlanMaterias($id);
-    $data = [
-        'title' => 'Editor Plan Estudio',
-        'user' => $user,
-        'plan' => $plan,
-        'valores' => $valores,
-        'materias' => $materias,
-        'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
-        'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
-    ];
-    $controller->render('plan/materia', $data);
-});
-
-//vista update materia
-$router->get('/plan/updateMateria/{idPlan}/{idMateria}', function($idPlan,$idMateria){
-    notAuth();
-    IsUser();
-    $controller = new CurricularDesign;
-    $user = $_SESSION['user'];
-    $plan = StudyPlan::getPlan($id);
-    $valores = ValorInstitucional::getValores();
-    $materias = PlanEstudioMateria::getPlanMaterias($id);
-    $data = [
-        'title' => 'Editor Plan Estudio',
-        'user' => $user,
-        'plan' => $plan,
-        'valores' => $valores,
-        'materias' => $materias,
-        'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
-        'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
-    ];
-    $controller->render('plan/updateMateria', $data);
-});
-
 //Descargar documento en word
 $router->get('/word/{id}', function($id){
     $controller = new CurricularDesign;
@@ -146,13 +104,6 @@ $router->post('/plan/editor/{id}', function($id){
     IsUser();
     $controller = new CurricularDesign;
     $controller->savePlan($id);
-});
-
-$router->post('/plan/materia/{id}', function($id){
-    notAuth();
-    IsUser();
-    $controller = new CurricularDesign;
-    $controller->saveMateria($id);
 });
 
 //eliminar plan de estudio o desactivar

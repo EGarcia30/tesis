@@ -16,7 +16,7 @@ class PlanCarrera extends Model{
     public static function getCarreraPlanes($name,$start,$end){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM plan_estudio WHERE nombre_carrera LIKE '%$name%' ORDER BY status DESC LIMIT $start, $end";
+            $sql = "SELECT * FROM plan_estudio WHERE nombre_carrera='$name' ORDER BY status DESC LIMIT $start, $end";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchall(PDO::FETCH_ASSOC);
             return $res;
@@ -30,7 +30,7 @@ class PlanCarrera extends Model{
     public static function rowCarreraPlanes($name){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM plan_estudio WHERE nombre_carrera LIKE '%$name%'";
+            $sql = "SELECT * FROM plan_estudio WHERE nombre_carrera='$name'";
             $query = $_db->connect()->prepare($sql);
             $query->execute();
             $rows = $query->rowCount();       

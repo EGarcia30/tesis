@@ -74,9 +74,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label text-utec font-custom">Prerrequisitos:</label>
-                        <input type="text"
-                        class="form-control" name="prerrequisito[]" id="" aria-describedby="helpId">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: Bachillerato</small>
+                        <div id="selectsPrerrequisito" class="mb-2">
+                            <select class="form-select form-select-lg" name="prerrequisito[]" id="">
+                                <option selected>Seleccionar</option>
+                                <option value="br">Bachiller</option>
+                                <?php foreach($this->d['materias'] as $key => $value) :?>
+                                <option value="<?= $value['materia_id']?>"><?= $value['nombre_asignatura']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
                         <button type="button" class="btn btn-outline-primary p-0 px-2 mt-2 rounded-5" onclick="agregarPrerrequisito()" >
                             <span class="icon profile-icon">
                                 <i class="fas fa-plus"></i>
