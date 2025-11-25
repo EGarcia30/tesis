@@ -24,6 +24,7 @@ class Login extends Controller{
             header('location: /tesis/');
             exit();
         }
+        //Validar campo de usuario
         $data = $username != null ? User::existsUser($username) : ['num' => '0'];
         //busar usuario en bd
         if(empty($data['num'])){
@@ -34,6 +35,7 @@ class Login extends Controller{
             header('location: /tesis/');
             exit();
         }
+        //Obtener usuario
         $user = User::getUser($username);
         //comparacion de contraseña
         if(!$user->comparePassword($password)){
@@ -44,6 +46,7 @@ class Login extends Controller{
             header('location: /tesis/');
             exit();
         }
+        //Asignar a variable de sesion el modelo user
         $_SESSION['user'] = $user;
         
         error_log('User loggedd in');

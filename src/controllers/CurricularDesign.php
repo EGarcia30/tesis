@@ -282,7 +282,7 @@ class CurricularDesign extends Controller{
         if(!empty($comEspecialidad[0]) || !empty($comEspecialidad[1])){
             $ids = [];
             $competenciaEspecialidad = new CompetenciaEspecialidad($comEspecialidad);
-            $ids = $competenciaEspecialidad->createAreas();
+            $ids = $competenciaEspecialidad->createComEspecialidad();
 
             $planCompetenciaBas = new PlanEstudioCompetenciaEspecialidad($idPlan, $ids);
             $planCompetenciaBas->createPlanComEspecialidad();

@@ -87,7 +87,9 @@ class PlanMateria extends Controller{
             //por cada valor en el array hacer el ingreso de datos y vinculacion a la materia
             foreach($prerrequisito as $key => $value){
 
-                if($value !== 'br'){
+                print_r($value);
+                exit();
+                if($value != 'br'){
                     $data = Materia::getMateria($value);
 
                     $prerrequisitoBD = new Prerrequisito($data['nombre_asignatura'],$data['no_orden']);
