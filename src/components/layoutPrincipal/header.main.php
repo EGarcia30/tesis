@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Bootstrap y css-->
     <link rel="stylesheet" href="<?= URL_PATH ?>/css/styles.css">
+    <link rel="stylesheet" href="<?= URL_PATH ?>/css/main.css">
     <!--ICONS-->
     <script src="https://kit.fontawesome.com/be9e926d45.js" crossorigin="anonymous"></script>
     <link rel="icon" href="<?= URL_PATH ?>/img/utec_favicon.png">

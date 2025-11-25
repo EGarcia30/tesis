@@ -41,6 +41,7 @@ $router->get('/perfil', function(){
     notAuth();
     $controller = new Home;
     $user = $_SESSION['user'];
+    
     $data = [
         'title' => 'Perfil',
         'user' => $user,

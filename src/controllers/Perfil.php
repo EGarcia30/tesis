@@ -11,7 +11,7 @@ class Perfil extends Controller{
         parent::__construct();
     }
 
-
+    //Actualizar perfil de la sesion
     public function updatePerfil($id){
 
         $name = $this->post('nombre');
@@ -36,7 +36,7 @@ class Perfil extends Controller{
         $user = new User($userName,$password,$user_role,$name);
         $user->setId($id);
         $res = $user->updateUser();
-
+        
         //si es false retorna error
         if(!$res){
             $_SESSION['color'] = 'danger';
@@ -44,8 +44,9 @@ class Perfil extends Controller{
             header("location: /tesis/perfil");
             exit();
         }
-
-        //cumplio las condiciones y se ha realizado el ingreso
+        
+        //cumplio las condiciones y se ha realizado el ingreso y se actualiza la sesion
+        $_SESSION['user'] = $user;
         $_SESSION['color'] = 'success';
         $_SESSION['message'] = 'Cambios realizados.';
         header("location: /tesis/perfil");
@@ -77,7 +78,8 @@ class Perfil extends Controller{
             exit();
         }
 
-        //cumplio las condiciones y se ha realizado el ingreso
+        //cumplio las condiciones y se ha realizado el ingreso y se actualiza la sesion
+        $_SESSION['user'] = $user;
         $_SESSION['color'] = 'success';
         $_SESSION['message'] = 'Cambios realizados.';
         header("location: /tesis/perfil");
