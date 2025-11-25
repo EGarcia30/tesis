@@ -1,71 +1,542 @@
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
-<main id="main-content" class="w-custom">
-    <div class="container mx-auto p-3 pt-5 h-custom d-flex flex-column justify-content-start justify-content-lg-center overflow-y-scroll">
-        <div class="card mx-sm-auto bg-white p-4 text-center">
-            <h1 class="text-utec header-font-custom">Bienvenido</h1>
-            <h2 class="text-utec header-font-custom"><b><?= $this->d['user']->getName() ?></b></h2>
-            <p class="font-custom">En este lugar podras consultar, crear modificar y eliminar planes de estudios del año actual o anteriores,<br/>
-            navega por el sistema para realizar las consultas que necesitas.    
+
+<style>
+    :root {
+        --primary-color: #6d1d3c;
+        --primary-dark: #541730;
+        --primary-light: #8a2449;
+        --primary-gradient: linear-gradient(135deg, #6d1d3c 0%, #8a2449 100%);
+        --secondary-gradient: linear-gradient(135deg, #8a2449 0%, #a32d56 100%);
+        --accent-gradient: linear-gradient(135deg, #541730 0%, #6d1d3c 100%);
+        --card-shadow: 0 10px 30px rgba(109, 29, 60, 0.1);
+        --hover-shadow: 0 15px 40px rgba(109, 29, 60, 0.2);
+    }
+    
+    .main-gradient {
+        background: linear-gradient(135deg, #fef5f8 0%, #f5e6ed 100%);
+        min-height: 100vh;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    .welcome-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(109, 29, 60, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .welcome-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--primary-gradient);
+    }
+    
+    .welcome-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .gradient-text {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
+    }
+    
+    .action-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.75rem;
+        box-shadow: 0 4px 20px rgba(109, 29, 60, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+        height: 100%;
+    }
+    
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--hover-shadow);
+        border-color: rgba(109, 29, 60, 0.2);
+    }
+    
+    .action-item {
+        padding: 1.1rem 1.3rem;
+        border-radius: 14px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 0.85rem;
+        background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    }
+    
+    .action-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .action-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(109, 29, 60, 0.08), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .action-item:hover::before {
+        left: 100%;
+    }
+    
+    .action-item:hover {
+        background: linear-gradient(135deg, rgba(109, 29, 60, 0.05) 0%, rgba(138, 36, 73, 0.05) 100%);
+        transform: translateX(10px);
+        box-shadow: 0 4px 15px rgba(109, 29, 60, 0.1);
+    }
+    
+    .icon-wrapper {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(109, 29, 60, 0.15);
+    }
+    
+    .icon-view {
+        background: var(--primary-gradient);
+        color: white;
+    }
+    
+    .icon-search {
+        background: var(--secondary-gradient);
+        color: white;
+    }
+    
+    .icon-plus {
+        background: var(--accent-gradient);
+        color: white;
+    }
+    
+    .action-item:hover .icon-wrapper {
+        transform: rotate(10deg) scale(1.15);
+        box-shadow: 0 6px 20px rgba(109, 29, 60, 0.25);
+    }
+    
+    .recent-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.75rem;
+        box-shadow: 0 4px 20px rgba(109, 29, 60, 0.08);
+        height: 100%;
+    }
+    
+    .recent-item {
+        background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+        border-radius: 14px;
+        padding: 1.1rem;
+        margin-bottom: 0.85rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    
+    .recent-item:last-child {
+        margin-bottom: 1rem;
+    }
+    
+    .recent-item:hover {
+        transform: translateX(10px);
+        border-left-color: var(--primary-color);
+        box-shadow: 0 5px 20px rgba(109, 29, 60, 0.15);
+        background: linear-gradient(135deg, rgba(109, 29, 60, 0.03) 0%, rgba(138, 36, 73, 0.03) 100%);
+    }
+    
+    .doc-icon {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+        background: var(--primary-gradient);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.3rem;
+        box-shadow: 0 4px 12px rgba(109, 29, 60, 0.2);
+    }
+    
+    .logo-container {
+        animation: float 3s ease-in-out infinite;
+        filter: drop-shadow(0 10px 25px rgba(109, 29, 60, 0.15));
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .logo-container img {
+        width: 100%;
+        height: auto;
+        max-width: 280px;
+        object-fit: contain;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-left: 1.2rem;
+    }
+    
+    .section-title::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 28px;
+        background: var(--primary-gradient);
+        border-radius: 3px;
+        box-shadow: 0 2px 8px rgba(109, 29, 60, 0.3);
+    }
+    
+    .view-all-link {
+        color: var(--primary-color);
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .view-all-link:hover {
+        color: var(--primary-light);
+        gap: 0.8rem;
+    }
+    
+    .view-all-link i {
+        transition: transform 0.3s ease;
+    }
+    
+    .view-all-link:hover i {
+        transform: translateX(4px);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .main-gradient {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        
+        .action-card, .recent-card {
+            margin-bottom: 1.5rem;
+            height: auto;
+        }
+        
+        .logo-container {
+            padding: 1.5rem;
+            max-width: 100%;
+        }
+        
+        .logo-container img {
+            max-width: 220px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .welcome-card {
+            border-radius: 20px;
+            padding: 2rem 1.5rem !important;
+        }
+        
+        .gradient-text {
+            font-size: 2rem !important;
+        }
+        
+        h2.fw-bold {
+            font-size: 1.5rem !important;
+        }
+        
+        .welcome-card p {
+            font-size: 1rem !important;
+        }
+        
+        .action-card, .recent-card {
+            padding: 1.5rem;
+        }
+        
+        .icon-wrapper {
+            width: 45px;
+            height: 45px;
+            min-width: 45px;
+        }
+        
+        .doc-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+        }
+        
+        .action-item, .recent-item {
+            padding: 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        .logo-container {
+            padding: 1rem;
+        }
+        
+        .logo-container img {
+            max-width: 180px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .main-gradient {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        
+        .container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        .welcome-card {
+            padding: 1.5rem 1rem !important;
+            border-radius: 18px;
+        }
+        
+        .gradient-text {
+            font-size: 1.75rem !important;
+        }
+        
+        h2.fw-bold {
+            font-size: 1.3rem !important;
+        }
+        
+        .welcome-card p {
+            font-size: 0.95rem !important;
+        }
+        
+        .action-card, .recent-card {
+            padding: .50rem;
+            border-radius: 16px;
+        }
+        
+        .action-item {
+            padding: 0.9rem;
+            margin-bottom: 0.7rem;
+        }
+        
+        .action-item .icon-wrapper {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            font-size: 1.1rem;
+        }
+        
+        .action-item p {
+            font-size: 0.9rem !important;
+        }
+        
+        .action-item small {
+            font-size: 0.75rem;
+        }
+        
+        .recent-item {
+            padding: 0.9rem;
+        }
+        
+        .doc-icon {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            font-size: 1.1rem;
+        }
+        
+        .recent-item p {
+            font-size: 0.85rem !important;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+        }
+        
+        .logo-container {
+            padding: 0.75rem;
+        }
+        
+        .logo-container img {
+            max-width: 150px;
+        }
+    }
+    
+    @media (max-width: 400px) {
+        .gradient-text {
+            font-size: 1.5rem !important;
+        }
+        
+        .welcome-card p br {
+            display: none;
+        }
+        
+        .logo-container img {
+            max-width: 130px;
+        }
+    }
+</style>
+
+<main id="main-content" class="main-gradient">
+    <div class="container mx-auto p-3">
+        <!-- Welcome Section -->
+        <div class="welcome-card mx-auto p-4 p-md-5 text-center mb-4 mb-md-5" style="max-width: 900px;">
+            <h1 class="gradient-text" style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+                ¡Bienvenido!
+            </h1>
+            <h2 class="text-dark fw-bold mb-3" style="font-size: 1.75rem;">
+                <?= $this->d['user']->getName() ?>
+            </h2>
+            <p class="text-muted" style="font-size: 1.1rem; line-height: 1.6; max-width: 700px; margin: 0 auto;">
+                Gestiona los planes de estudio de forma eficiente. Consulta, crea, modifica y elimina planes académicos con una interfaz moderna e intuitiva.
             </p>
         </div>
 
-        <div class="d-flex flex-column flex-md-row pt-5 justify-content-center">
-            <div class="">
-                <h3 class="font-custom pb-3 text-center m-0">¿Que te gustaría hacer?</h3>
-                <div class="card mx-auto bg-white p-3 ms-0 ms-md-2">
-                    <a href="/tesis/planes/1" class="text-dark text-decoration-none">
-                        <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                            <span class="icon profile-icon pe-2">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                            <p class="font-custom m-0">Ver todos los planes de estudio</p>
+        <!-- Main Content Grid -->
+        <div class="row g-3 g-md-4">
+            <!-- Actions Section -->
+            <div class="col-12 col-lg-4 order-1 order-lg-1 mb-4 mb-lg-0">
+                <h3 class="section-title">Acciones Rápidas</h3>
+                <div class="d-flex flex-column action-card gap-3">
+                    <a href="/tesis/planes/1" class="text-decoration-none">
+                        <div class="action-item">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-wrapper icon-view me-3">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-dark fw-semibold m-0" style="font-size: 1rem;">
+                                        Ver todos los planes
+                                    </p>
+                                    <small class="text-muted d-block">Explora el catálogo completo</small>
+                                </div>
+                            </div>
                         </div>
                     </a>
-                    <a href="/tesis/planes/1" class="text-dark text-decoration-none">
-                        <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                            <span class="icon profile-icon pe-2">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <p class="font-custom m-0">Buscar plan de estudio</p>
+                    
+                    <a href="/tesis/planes/1" class="text-decoration-none">
+                        <div class="action-item">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-wrapper icon-search me-3">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-dark fw-semibold m-0" style="font-size: 1rem;">
+                                        Buscar plan específico
+                                    </p>
+                                    <small class="text-muted d-block">Encuentra rápidamente</small>
+                                </div>
+                            </div>
                         </div>
                     </a>
-                    <a href="/tesis/planes/1" class="text-dark text-decoration-none">
-                        <div class="d-flex justify-content-center justify-content-md-start align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                            <span class="icon profile-icon pe-2">
-                                <i class="fas fa-plus"></i>
-                            </span>
-                            <p class="font-custom m-0">Crear nuevo plan de estudio</p>
+                    
+                    <a href="/tesis/planes/1" class="text-decoration-none">
+                        <div class="action-item">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-wrapper icon-plus me-3">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="text-dark fw-semibold m-0" style="font-size: 1rem;">
+                                        Crear nuevo plan
+                                    </p>
+                                    <small class="text-muted d-block">Diseña un plan de estudio</small>
+                                </div>
+                            </div>
                         </div>
                     </a>
                 </div>
             </div>
-            <div>
-                <div class="img-logo mt-0 mt-md-4 p-4 mx-auto">
-                    <img src="<?= URL_PATH ?>/img/logo_res_utec.png" class="img-fluid" alt="">
+
+            <!-- Logo Section -->
+            <div class="col-12 col-lg-4 order-3 order-lg-2 d-flex align-items-center justify-content-center mb-4 mb-lg-0">
+                <div class="logo-container">
+                    <img src="<?= URL_PATH ?>/img/logo_res_utec.png" class="img-fluid" alt="UTEC Logo">
                 </div>
             </div>
-            <div class="mb-4 mb-lg-0 rounded-4">
-                <h3 class="font-custom pb-3 text-center m-0">Ultimos planes de estudio:</h3>
-                <div class="card mx-auto bg-white p-3 p-md-4">
-                    <div class="d-flex justify-content-center align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                        <div class="img-word">
-                            <img src="<?= URL_PATH?>/img/word.png" class="img-fluid" alt="">
+
+            <!-- Recent Plans Section -->
+            <div class="col-12 col-lg-4 order-2 order-lg-3 mb-4 mb-lg-0">
+                <h3 class="section-title">Planes Recientes</h3>
+                <div class="recent-card">
+                    <div class="recent-item">
+                        <div class="d-flex align-items-center">
+                            <div class="doc-icon me-3">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-dark fw-semibold m-0" style="font-size: 0.95rem;">
+                                    Técnico en Software
+                                </p>
+                                <small class="text-muted d-block">Plan 2018</small>
+                            </div>
                         </div>
-                        <p class="font-custom m-0">Tecnico en Software Plan 2018</p>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center bg-secondary bg-opacity-10 p-2 mb-2 rounded-4">
-                        <div class="img-word">
-                            <img src="<?= URL_PATH?>/img/word.png" class="img-fluid" alt="">
+                    
+                    <div class="recent-item">
+                        <div class="d-flex align-items-center">
+                            <div class="doc-icon me-3">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="text-dark fw-semibold m-0" style="font-size: 0.95rem;">
+                                    Técnico en Software
+                                </p>
+                                <small class="text-muted d-block">Plan 2018</small>
+                            </div>
                         </div>
-                        <p class="font-custom m-0">Tecnico en Software Plan 2018</p>
                     </div>
-                    <div class="p-2">
-                        <a href="/tesis/home" class="font-custom">Ver Todos...</a>
+                    
+                    <div class="text-center mt-3 pt-2">
+                        <a href="/tesis/planes/1" class="view-all-link text-decoration-none">
+                            Ver todos los planes <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-        </div> 
-        
+        </div>
     </div>
 </main>
+
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>
