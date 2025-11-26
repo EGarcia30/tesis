@@ -1,7 +1,12 @@
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
 
 <main id="main-content" class="main-gradient">
-    <div class="container mx-auto p-3" style="max-width: 600px;">
+    <div class="w-100 position-relative p-3">
+        <div class="position-absolute end-0 top-0 mt-1">
+            <?php require __DIR__ . '/../../components/alerts.php'; ?>
+        </div>
+    </div>
+    <div class="container mx-auto p-3" style="max-width: 600px;">        
         <div class="welcome-card p-4 text-center mb-4">
             <h1 class="gradient-text header-font-custom mb-3">Mi Perfil</h1>
             <form action="/tesis/updatePerfil/<?= $this->d['user']->getId()?>" method="post" class="p-2">

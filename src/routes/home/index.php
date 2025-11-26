@@ -127,6 +127,8 @@ $router->get('/deleteUser/{id}', function($id){
     $controller->deleteUser($id);
 });
 
+//PERFIL
+
 //actualizar perfil
 $router->post('/updatePerfil/{id}', function($id){
     $controller = new Perfil;
