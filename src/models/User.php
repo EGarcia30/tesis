@@ -54,7 +54,7 @@ class User extends Model{
         }
     }
 
-    public static function searchUser($data){
+    public static function searchUser($data,int $start,int $end){
         try{
 
             $_db = new Database();
@@ -62,11 +62,30 @@ class User extends Model{
             $sql = "SELECT * FROM usuarios WHERE status=1 AND (usuario_id=$int 
             OR nombre_usuario LIKE '%$data%' 
             OR usuario LIKE '%$data%' 
-            OR rol_usuario LIKE '%$data%') ";
+            OR rol_usuario LIKE '%$data%')
+            ORDER BY usuario_id DESC
+            LIMIT $start, $end ";
             $query = $_db->connect()->query($sql);
-            $res = $query->fetchAll(PDO::FETCH_ASSOC);         
+            $res = $query->fetchAll(PDO::FETCH_ASSOC);      
             return $res;   
 
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    //contar resultados de busqueda
+    public static function rowSearchUsers($data){
+        try{
+            $_db = new Database();
+            $sql = "SELECT * FROM usuarios WHERE status=1 AND (nombre_usuario LIKE '%$data%' 
+            OR usuario LIKE '%$data%' OR rol_usuario LIKE '%$data%') ";
+            $query = $_db->connect()->prepare($sql);
+            $query->execute();
+            $rows = $query->rowCount();       
+            return $rows;            
         }
         catch(PDOException $e){
             error_log($e->getMessage());

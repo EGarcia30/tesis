@@ -29,20 +29,23 @@ class Home extends Controller{
         $this->render('home/users', $data);
     }
 
-    public function searchUser(){
-        $search = $this->post('buscar');
-        $user = $_SESSION['user'];
+    public function searchUser($page){
+        // Obtenemos el término a buscar desde GET (no POST)
+        $search = isset($_GET['busqueda']) ? $_GET['busqueda'] : null;
 
-        //validar campo
-        if(is_null($search)){
-            error_log('No recibio el input buscar');
-            header("location:/tesis/Users");
+        if(is_null($search) || $search === ''){
+            error_log('No recibió el input buscar');
+            header("Location: /tesis/Users");
             exit();
         }
+        $user = $_SESSION['user'];
+        
 
-        //traemos objeto User de bd con su funcion estatica
-        $userBD = User::searchUser($search);
-
+        //paginación para busqueda y obtención de datos
+        $totalItems = User::rowSearchUsers($search);
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $userBD = User::searchUser($search,$start,$itemShow);
         //si no nos regresa el objeto regresamos a la vista inicial
         if(is_null($userBD)){
             error_log('No se pudo buscar en bd');
@@ -53,8 +56,11 @@ class Home extends Controller{
         //pasamos los datos
         $data = [
             'title' => 'Usuario',
+            'busqueda' => $search,
             'user' => $user,
-            'users' => $userBD
+            'users' => $userBD,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow
         ];
         // renderizamos nueva vista con sus datos
         $this->render('home/search', $data);

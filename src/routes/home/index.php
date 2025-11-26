@@ -20,7 +20,6 @@ $router->get('/home', function(){
 $router->get('/users/{pagina}', function($page){
     notAuth();
     IsUser();
-    $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
     $_GET['nombrePagina'] = 'users';
     $_GET['regresar'] = 'home';
@@ -28,12 +27,16 @@ $router->get('/users/{pagina}', function($page){
     $controller->getUsers($page);
 });
 
-//buscando un usuario especifico
-$router->post('/users', function(){
+//buscando usuarios vía GET
+$router->get('/searchUsers/{busqueda}/{pagina}', function($busqueda,$page){
     notAuth();
     IsUser();
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = 'searchUsers/'. $busqueda;
+    $_GET['regresar'] = 'users';
+    $_GET['busqueda'] = $busqueda;
     $controller = new Home;
-    $controller->searchUser();
+    $controller->searchUser($page);
 });
 
 //vista perfil

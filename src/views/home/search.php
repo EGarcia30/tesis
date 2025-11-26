@@ -5,7 +5,7 @@
         <!-- Header Actions -->
         <div class="header-card">
             <div class="d-flex flex-column flex-md-row gap-3 align-items-stretch align-items-md-center">
-                <a href="/tesis/users/1" class="btn-modern btn-back">
+                <a href="/tesis/<?=isset($_GET['regresar']) ? $_GET['regresar'] : 'users' ?>/1" class="btn-modern btn-back">
                     <i class="fas fa-arrow-left"></i>
                     Regresar
                 </a>
@@ -13,9 +13,9 @@
                     <i class="fas fa-user-plus"></i>
                     Crear Usuario
                 </a>
-                <form action="/tesis/users" method="post" class="d-flex flex-grow-1 gap-2">
+                <form onsubmit="event.preventDefault(); buscarUsuario();" class="d-flex flex-grow-1 gap-2">
                     <div class="search-box flex-grow-1">
-                        <input type="text" name="buscar" class="form-control search-input" placeholder="Buscar usuario...">
+                        <input type="text" id="inputBusqueda" class="form-control search-input" placeholder="Buscar usuario..." value="<?= isset($_GET['busqueda']) ? $_GET['busqueda'] : '' ?>">
                     </div>
                     <button type="submit" class="btn-search">
                         <i class="fas fa-search"></i>
@@ -104,3 +104,17 @@
 </main>
 
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>
+
+<!-- Script para manejar la búsqueda de usuarios -->
+<script>
+    function buscarUsuario() {
+        const busqueda = encodeURIComponent(document.getElementById('inputBusqueda').value.trim());
+        if(busqueda === '') {
+            // Opcional: mostrar mensaje o no buscar vacío
+            window.location.href = '/tesis/users/1'; 
+            return;
+        }
+        // Construir URL con busqueda y pagina 1
+        window.location.href = `/tesis/searchUsers/${busqueda}/1`;
+    }
+</script>
