@@ -45,8 +45,8 @@ $router->get('/perfil', function(){
     $data = [
         'title' => 'Perfil',
         'user' => $user,
-        'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
-        'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+        'color' => isset($_SESSION['color']) ? $_SESSION['color'] : null,
+        'message' => isset($_SESSION['message']) ? $_SESSION['message'] : null
     ];
     $controller->render('home/perfil', $data);
 });
