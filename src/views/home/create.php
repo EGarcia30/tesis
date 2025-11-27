@@ -1,55 +1,111 @@
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
-<main id="main-content" class="w-custom">
-    <div class="w-100 position-relative">
-        <div class="d-flex flex-column gap-4 container mx-auto p-3">
-            <div class="d-flex flex-wrap gap-2 text-center">
-                <a href="/tesis/users/1" class="btn btn-utec">Regresar</a>
-            </div>
 
-            <div class="position-absolute end-0 top-0 mt-1">
-                <?php require __DIR__ . '/../../components/alerts.php'; ?>
-            </div>
+<main id="main-content" class="create-user-container">
+    <!-- Alerts -->
+    <div class="position-relative mb-3">
+        <div class="position-absolute end-0 top-0">
+            <?php require __DIR__ . '/../../components/alerts.php'; ?>
+        </div>
+    </div>
+    <div class="container mx-auto px-3">
+        <!-- Header Actions -->
+        <div class="header-actions">
+            <a href="/tesis/users/1" class="btn-back-modern">
+                <i class="fas fa-arrow-left"></i>
+                Regresar a Usuarios
+            </a>
+        </div>
+        <!-- Form Card -->
+        <div class="form-card" style="max-width: 800px; margin: 0 auto;">
+            <h1 class="form-title">Nuevo Usuario</h1>
+            
+            <form action="/tesis/createUsers" method="post">
+                <!-- Nombre -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-user"></i>
+                        Nombre Completo
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-user input-icon-custom"></i>
+                        <input type="text" class="form-control-custom" name="nombre" id="nombre" placeholder="Ingresa el nombre completo" required>
+                    </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Ejemplo: Salvador Sicilia
+                    </small>
+                </div>
 
-            <div class="card card-height container p-3 bg-white">
-                <h1 class="header-font-custom text-utec text-center">Crear un Nuevo Usuario</h1>
-                <form action="/tesis/createUsers" method="post" class="p-2">
-                    <div class="mb-3">
-                        <label for="" class="form-label text-utec">Nombre:</label>
-                        <input type="text"
-                        class="form-control" name="nombre" id="nombre" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: Salvador Sicilia</small>
+                <!-- Usuario -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-id-card"></i>
+                        Usuario
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-id-card input-icon-custom"></i>
+                        <input type="text" class="form-control-custom" name="usuario" id="usuario" placeholder="Ingresa el usuario" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label text-utec">Usuario:</label>
-                        <input type="text"
-                        class="form-control" name="usuario" id="usuario" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: 2735352021</small>
-                    </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label text-utec">Contraseña:</label>
-                        <input type="text"
-                        class="form-control" name="clave" id="clave" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: 123456</small>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio" id="inlineRadio1" value="Super Usuario">
-                        <label class="form-check-label" for="inlineRadio1">Super Usuario</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio" id="inlineRadio2" value="Administrador">
-                        <label class="form-check-label" for="inlineRadio2">Administrador</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radio" id="inlineRadio3" value="Usuario">
-                        <label class="form-check-label" for="inlineRadio3">Usuario</label>
-                    </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Ejemplo: 2735352021
+                    </small>
+                </div>
 
-                    <div class="mt-5">
-                        <input type="submit" class="btn btn-utec" value="Crear nuevo Usuario">
+                <!-- Contraseña -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-lock"></i>
+                        Contraseña
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-lock input-icon-custom"></i>
+                        <input type="password" class="form-control-custom" name="clave" id="clave" placeholder="Ingresa la contraseña" required>
                     </div>
-                </form>
-            </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Usa una contraseña segura
+                    </small>
+                </div>
+
+                <!-- Rol de Usuario -->
+                <div class="radio-section-custom">
+                    <div class="radio-title">
+                        <i class="fas fa-user-tag"></i>
+                        Selecciona el Rol de Usuario
+                    </div>
+                    <div>
+                        <div class="form-check-custom">
+                            <input class="form-check-input" type="radio" name="radio" id="superUsuario" value="Super Usuario" required>
+                            <label class="form-check-label" for="superUsuario">
+                                Super Usuario
+                            </label>
+                        </div>
+                        <div class="form-check-custom">
+                            <input class="form-check-input" type="radio" name="radio" id="administrador" value="Administrador">
+                            <label class="form-check-label" for="administrador">
+                                Administrador
+                            </label>
+                        </div>
+                        <div class="form-check-custom">
+                            <input class="form-check-input" type="radio" name="radio" id="usuario" value="Usuario">
+                            <label class="form-check-label" for="usuario">
+                                Usuario
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn-submit-custom">
+                        <i class="fas fa-user-plus"></i>
+                        Crear Usuario
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </main>
+
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>
