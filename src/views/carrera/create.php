@@ -1,61 +1,105 @@
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
-<main id="main-content" class="w-custom">
-    <div class="w-100 position-relative">
-        <div class="d-flex flex-column gap-4 container mx-auto p-3">
-            <div class="d-flex flex-wrap gap-2 text-center">
-                <a href="/tesis/carreras/1" class="btn btn-utec">Regresar</a>
-            </div>
 
-            <div class="position-absolute end-0 top-0 mt-1">
-                <?php require __DIR__ . '/../../components/alerts.php'; ?>
-            </div>
+<main id="main-content" class="create-user-container">\
+    <div class="position-relative mb-3">
+        <div class="position-absolute end-0 top-0">
+            <?php require __DIR__ . '/../../components/alerts.php'; ?>
+        </div>
+    </div>
+    <div class="container mx-auto px-3">
+        <div class="header-actions">
+            <a href="/tesis/carreras/1" class="btn-back-modern">
+                <i class="fas fa-arrow-left"></i>
+                Regresar a Carreras
+            </a>
+        </div>
 
-            <div class="card card-height container p-3 bg-white">
-                <h1 class="header-font-custom text-utec text-center">Crear nueva Carrera</h1>
-                <form action="/tesis/createCarreras" method="post" class="p-2 overflow-y-scroll">
-                    <div class="mb-3">
-                        <label for="id" class="form-label">Id:</label>
-                        <input type="number"
-                        class="form-control" name="id" id="id" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: 02</small>
+        <div class="form-card" style="max-width: 800px; margin: 0 auto;">
+            <h1 class="form-title">Crear Nueva Carrera</h1>
+            
+            <form action="/tesis/createCarreras" method="post">
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-hashtag"></i>
+                        Codigo de la Carrera
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-hashtag input-icon-custom"></i>
+                        <input type="text" class="form-control-custom" name="codigo" id="codigo" placeholder="Ingresa el Codigo de la carrera" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label text-utec">Nombre:</label>
-                        <input type="text"
-                        class="form-control" name="nombre" id="nombre" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: Tecníco en Ingenieria de Software.</small>
-                    </div>
-                    <div class="mt-5">
-                        <label class="d-block text-utec mb-3">Modalidad de la carrera:</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio1" value="Presencial">
-                            <label class="form-check-label" for="inlineRadio1">Presencial</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio2" value="Semi Presencial">
-                            <label class="form-check-label" for="inlineRadio2">Semi-Presencial</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio" id="inlineRadio3" value="No Presencial">
-                            <label class="form-check-label" for="inlineRadio3">No Presencial</label>
-                        </div>
-                    </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Ejemplo: 02
+                    </small>
+                </div>
 
-                    <div class="mt-4">
-                        <select name="opcion" class="form-select" aria-label="Default select example">
-                            <option selected>Facultad que te pertenece:</option>
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-graduation-cap"></i>
+                        Nombre de la Carrera
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-graduation-cap input-icon-custom"></i>
+                        <input type="text" class="form-control-custom" name="nombre" id="nombre" placeholder="Ingresa el nombre completo" required>
+                    </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Ejemplo: Técnico en Ingeniería de Software
+                    </small>
+                </div>
+
+                <div class="radio-section-custom">
+                    <div class="radio-title">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        Modalidad de la Carrera
+                    </div>
+                    <div>
+                        <div class="form-check-custom">
+                            <input class="form-check-input" type="radio" name="radio" id="presencial" value="Presencial" required>
+                            <label class="form-check-label" for="presencial">
+                                Presencial
+                            </label>
+                        </div>
+                        <div class="form-check-custom">
+                            <input class="form-check-input" type="radio" name="radio" id="semiPresencial" value="Semi Presencial">
+                            <label class="form-check-label" for="semiPresencial">
+                                Semi-Presencial
+                            </label>
+                        </div>
+                        <div class="form-check-custom">
+                            <input class="form-check-input" type="radio" name="radio" id="noPresencial" value="No Presencial">
+                            <label class="form-check-label" for="noPresencial">
+                                No Presencial
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-university"></i>
+                        Facultad a la que Pertenece
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-university input-icon-custom"></i>
+                        <select name="opcion" class="form-control-custom" required style="cursor: pointer;">
+                            <option value="" selected disabled>Selecciona una facultad</option>
                             <?php foreach($this->d['facultades'] as $key => $value) :?>
                                 <option value="<?=$value['facultad_id']?>"><?=$value['nombre_facultad']?></option>
                             <?php endforeach; ?>
-                        </select>                        
+                        </select>
                     </div>
+                </div>
 
-                    <div class="mt-5">
-                        <input type="submit" class="btn btn-utec" value="Crear nueva Carrera">
-                    </div>
-                </form>
-            </div>
+                <div class="text-center">
+                    <button type="submit" class="btn-submit-custom">
+                        <i class="fas fa-plus-circle"></i>
+                        Crear Carrera
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </main>
+
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

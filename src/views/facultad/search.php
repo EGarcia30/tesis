@@ -79,9 +79,9 @@
                     </tbody>
                 </table>
             </div>
-            <!-- paginacion -->
-            <?php require_once __DIR__ . '/../../components/pagination.php'?>
         </div>
+        <!-- paginacion -->
+            <?php require_once __DIR__ . '/../../components/pagination.php'?>
     </div>
 </main>
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

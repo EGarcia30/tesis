@@ -31,10 +31,16 @@ class CarreraController extends Controller{
     }
 
     public function searchCarreras($page){
-        $search = $this->post('buscar');
+        // Obtenemos el término a buscar desde GET (no POST)
+        $search = isset($_GET['busqueda']) ? $_GET['busqueda'] : null;
+
+        if(is_null($search) || $search === ''){
+            error_log('No recibió el input buscar');
+            header("Location: /tesis/carreras/1");
+            exit();
+        }
         $user = $_SESSION['user'];
 
-        $_SESSION['busquedad'] = $search;
         //validar campo
         if(empty($search)){
             $_SESSION['color'] = 'warning';
@@ -101,14 +107,14 @@ class CarreraController extends Controller{
 
     //crear carrera
     public function createCarrera(){
-        $id = $this->post('id');
+        $codigo = $this->post('codigo');
         $name = $this->post('nombre');
         $modality = $this->post('radio');
         $facultad_id = intval($this->post('opcion'));
 
         //validación de campos
         if(
-            empty($id) ||
+            empty($codigo) ||
             empty($name) ||
             empty($modality) ||
             empty($facultad_id)
@@ -131,8 +137,7 @@ class CarreraController extends Controller{
 
         $acronym = $facultad->getAcronym();
 
-        $carrera = new CarreraModel($name,$modality,$facultad_id,$acronym);
-        $carrera->setId($id);
+        $carrera = new CarreraModel($codigo,$name,$modality,$facultad_id,$acronym);
         $res = $carrera->createCarrera();
 
         //si es false retorna error
@@ -152,12 +157,14 @@ class CarreraController extends Controller{
     //actualizar carrera
     public function updateCarrera($id){
 
+        $codigo = $this->post('codigo');
         $name = $this->post('nombre');
         $modality = $this->post('radio');
         $facultad_id = intval($this->post('opcion'));
 
         //validación de campos
         if(
+            empty($codigo) ||
             empty($name) ||
             empty($modality) ||
             empty($facultad_id)
@@ -180,7 +187,7 @@ class CarreraController extends Controller{
 
         $acronym = $facultad->getAcronym();
 
-        $carrera = new CarreraModel($name,$modality,$facultad_id,$acronym);
+        $carrera = new CarreraModel($codigo,$name,$modality,$facultad_id,$acronym);
         $carrera->setId($id);
         $res = $carrera->updateCarrera();
 

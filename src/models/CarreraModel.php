@@ -10,14 +10,16 @@ use PDOException;
 class CarreraModel extends Model{
 
     private int $_id;
+    private ?string $_codigo = null;
     private string $_name;
     private string $_modality;
     private int $_facultad_id;
     private string $_acronym;
     private int $_status;
     
-    public function __construct(string $name, string $modality, int $facultad_id, $acronym){
+    public function __construct(?string $codigo = null,string $name, string $modality, int $facultad_id, $acronym){
         parent::__construct();
+        $this->_codigo = $codigo;
         $this->_name = $name;
         $this->_modality = $modality;
         $this->_facultad_id = $facultad_id;
@@ -38,18 +40,14 @@ class CarreraModel extends Model{
         }
     }
 
-    public static function getCarrera(int $data){
+    public static function getCarrera($data){
         try{
             $_db = new Database();
             $int = intval($data);
             $sql = "SELECT * FROM carrera WHERE carrera_id=$int";
             $query = $_db->connect()->query($sql);
             $res = $query->fetch(PDO::FETCH_ASSOC);
-            if(!$res){
-                return null;
-                exit();
-            }
-            $carreraModel = new CarreraModel($res['nombre_carrera'], $res['modalidad_carrera'], $res['facultad_id'],$res['acronimo_facultad']);
+            $carreraModel = new CarreraModel($res['codigo_carrera'],$res['nombre_carrera'], $res['modalidad_carrera'], $res['facultad_id'],$res['acronimo_facultad']);
             $carreraModel->setId($res['carrera_id']);
             $carreraModel->setStatus($res['status']);
             return $carreraModel; 
@@ -81,9 +79,11 @@ class CarreraModel extends Model{
             $int = intval($data);
             $sql = "SELECT * FROM carrera WHERE status=1 AND 
             (carrera_id=$int 
+            OR codigo_carrera LIKE '%$data%' 
             OR nombre_carrera LIKE '%$data%' 
             OR modalidad_carrera LIKE '%$data%'
             OR acronimo_facultad LIKE '%$data%') 
+            ORDER BY carrera_id DESC
             LIMIT $start, $end";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -103,10 +103,11 @@ class CarreraModel extends Model{
         try{
             $_db = new Database();
             $int = intval($data);
-            $sql = "SELECT * FROM carrera WHERE carrera_id=$int 
+            $sql = "SELECT * FROM carrera WHERE (carrera_id=$int
+            OR codigo_carrera LIKE '%".$data."%'
             OR nombre_carrera LIKE '%".$data."%' 
             OR modalidad_carrera LIKE '%".$data."%'
-            OR acronimo_facultad LIKE '%".$data."%' 
+            OR acronimo_facultad LIKE '%".$data."%')
             AND status=1";
             $query = $_db->connect()->prepare($sql);
             $query->execute();
@@ -160,9 +161,9 @@ class CarreraModel extends Model{
                 return $message;
                 exit();
             }
-            $sql = 'INSERT INTO carrera (carrera_id, nombre_carrera, modalidad_carrera, facultad_id, acronimo_facultad, status) VALUES(?, ?, ?, ?, ?, ?)';
+            $sql = 'INSERT INTO carrera (codigo_carrera, nombre_carrera, modalidad_carrera, facultad_id, acronimo_facultad, status) VALUES(?, ?, ?, ?, ?, ?)';
             $query = $this->prepare($sql);
-            $data = [$this->_id,$this->_name,$this->_modality,$this->_facultad_id,$this->_acronym,1];
+            $data = [$this->_codigo,$this->_name,$this->_modality,$this->_facultad_id,$this->_acronym,1];
             $res = $query->execute($data);
             return $res;           
         }
@@ -174,9 +175,9 @@ class CarreraModel extends Model{
 
     public function updateCarrera(){
         try{
-            $sql = 'UPDATE carrera SET nombre_carrera=?, modalidad_carrera=?, acronimo_facultad=? WHERE carrera_id=?';
+            $sql = 'UPDATE carrera SET codigo_carrera=?, nombre_carrera=?, modalidad_carrera=?, acronimo_facultad=? WHERE carrera_id=?';
             $query = $this->prepare($sql);
-            $data = [$this->_name,$this->_modality,$this->_acronym,$this->_id];
+            $data = [$this->_codigo,$this->_name,$this->_modality,$this->_acronym,$this->_id];
             $res = $query->execute($data);
             return $res;
         }
@@ -207,6 +208,14 @@ class CarreraModel extends Model{
 
     public function setId(int $value){
         return $this->_id = $value;
+    }
+
+    public function getCodigo(){
+        return $this->_codigo;
+    }
+
+    public function setCodigo($value){
+        return $this->_codigo = $value;
     }
 
     public function getName(){

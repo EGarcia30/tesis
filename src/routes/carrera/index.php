@@ -16,12 +16,13 @@ $router->get('/carreras/{pagina}', function($page){
 });
 
 //vista buscar carreras
-$router->post('/carreras/{page}', function($page){
+$router->get('/searchCarreras/{busqueda}/{page}', function($busqueda,$page){
     notAuth();
     $controller = new CarreraController;
     $page == 0 ? 1 : $page;
+    $_GET['busqueda'] = $busqueda;
     $_GET['pagina'] = $page;
-    $_GET['nombrePagina'] = 'carrera';
+    $_GET['nombrePagina'] = 'searchCarreras/'.$busqueda;
     $_GET['regresar'] = 'carreras/1';
     $controller->searchCarreras($page);
 });
