@@ -9,15 +9,21 @@ $router->get('/facultades/{pagina}', function($page){
     $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
     $_GET['nombrePagina'] = 'facultades';
+    $_GET['regresar'] = 'facultades';
     $controller = new FacultadController;
     $controller->getAllFacultad($page);
 });
 
 //buscando una facultad especifica
-$router->post('/facultades', function(){
+$router->get('/searchFacultades/{busqueda}/{pagina}', function($busqueda,$page){
     notAuth();
+    IsUser();
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = 'searchFacultades/'. $busqueda;
+    $_GET['regresar'] = 'facultades';
+    $_GET['busqueda'] = $busqueda;
     $controller = new FacultadController;
-    $controller->searchFacultades();
+    $controller->searchFacultades($page);
 });
 
 //vista create

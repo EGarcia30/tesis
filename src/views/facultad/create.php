@@ -1,37 +1,62 @@
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/header.main.php' ?>
-<main id="main-content" class="w-custom">
-    <div class="w-100 position-relative">
-        <div class="d-flex flex-column gap-4 container mx-auto p-3">
-            <div class="d-flex flex-wrap gap-2 text-center">
-                <a href="/tesis/facultades/1" class="btn btn-utec">Regresar</a>
-            </div>
 
-            <div class="position-absolute end-0 top-0 mt-1">
-                <?php require __DIR__ . '/../../components/alerts.php'; ?>
-            </div>
+<main id="main-content" class="create-user-container">
+    <div class="position-relative mb-3">
+        <div class="position-absolute end-0 top-0">
+            <?php require __DIR__ . '/../../components/alerts.php'; ?>
+        </div>
+    </div>
+    <div class="container mx-auto px-3">
+        <div class="header-actions">
+            <a href="/tesis/facultades/1" class="btn-back-modern">
+                <i class="fas fa-arrow-left"></i>
+                Regresar a Facultades
+            </a>
+        </div>
 
-            <div class="card card-height container p-3 bg-white">
-                <h1 class="header-font-custom text-utec text-center">Crear Facultad</h1>
-                <form action="/tesis/createFacultad" method="post" class="p-2">
-                    <div class="mb-3">
-                        <label for="" class="form-label text-utec">Nombre:</label>
-                        <input type="text"
-                        class="form-control" name="nombre" id="nombre" aria-describedby="helpId">
-                        <small id="helpId" class="form-text text-muted">Ejemplo: Facultad de Informática y Ciencias Aplicadas</small>
+        <div class="form-card" style="max-width: 700px; margin: 0 auto;">
+            <h1 class="form-title">Crear Facultad</h1>
+            
+            <form action="/tesis/createFacultad" method="post">
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-university"></i>
+                        Nombre de la Facultad
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-university input-icon-custom"></i>
+                        <input type="text" class="form-control-custom" name="nombre" id="nombre" placeholder="Ingresa el nombre completo" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label">Acronimo</label>
-                        <input type="text"
-                            class="form-control" name="acronimo" id="" aria-describedby="helpId">
-                        <small id="helpId" class="form-text text-muted">ejemplo: FICA</small>
-                    </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Ejemplo: Facultad de Informática y Ciencias Aplicadas
+                    </small>
+                </div>
 
-                    <div class="mt-5">
-                        <input type="submit" class="btn btn-utec" value="Crear facultad">
+                <div class="form-group-custom">
+                    <label class="form-label-custom">
+                        <i class="fas fa-tag"></i>
+                        Acrónimo
+                    </label>
+                    <div class="input-wrapper-custom">
+                        <i class="fas fa-tag input-icon-custom"></i>
+                        <input type="text" class="form-control-custom" name="acronimo" id="acronimo" placeholder="Ingresa el acrónimo" required maxlength="10">
                     </div>
-                </form>
-            </div>
+                    <small class="form-text-custom">
+                        <i class="fas fa-info-circle"></i>
+                        Ejemplo: FICA
+                    </small>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn-submit-custom">
+                        <i class="fas fa-plus-circle"></i>
+                        Crear Facultad
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </main>
+
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

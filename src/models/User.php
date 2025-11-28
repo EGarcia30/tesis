@@ -80,7 +80,9 @@ class User extends Model{
     public static function rowSearchUsers($data){
         try{
             $_db = new Database();
-            $sql = "SELECT * FROM usuarios WHERE status=1 AND (nombre_usuario LIKE '%$data%' 
+            $int = intval($data);
+            $sql = "SELECT * FROM usuarios WHERE status=1 AND (usuario_id=$int 
+            OR nombre_usuario LIKE '%$data%' 
             OR usuario LIKE '%$data%' OR rol_usuario LIKE '%$data%') ";
             $query = $_db->connect()->prepare($sql);
             $query->execute();

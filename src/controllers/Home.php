@@ -35,7 +35,7 @@ class Home extends Controller{
 
         if(is_null($search) || $search === ''){
             error_log('No recibió el input buscar');
-            header("Location: /tesis/Users");
+            header("Location: /tesis/Users/1");
             exit();
         }
         $user = $_SESSION['user'];

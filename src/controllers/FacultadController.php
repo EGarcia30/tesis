@@ -30,26 +30,25 @@ class FacultadController extends Controller{
     }
 
     //buscar facultad
-    public function searchFacultades(){
-        $search = $this->post('buscar');
-        $user = $_SESSION['user'];
+    public function searchFacultades($page){
+        // Obtenemos el término a buscar desde GET (no POST)
+        $search = isset($_GET['busqueda']) ? $_GET['busqueda'] : null;
 
-        //validar campo
-        if(empty($search)){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Ingresar datos.';
-            error_log('No recibio el input buscar');
-            header("location:/tesis/facultades/1");
+        if(is_null($search) || $search === ''){
+            error_log('No recibió el input buscar');
+            header("Location: /tesis/facultades/1");
             exit();
         }
+        $user = $_SESSION['user'];
 
-        //traemos objeto User de bd con su funcion estatica
-        $facultades = FacultadModel::searchFacultad($search);
+        //paginación para busqueda y obtención de datos
+        $totalItems = FacultadModel::rowSearchFacultad($search);
+        $itemShow = 6;
+        $start =  ($page - 1)* $itemShow;
+        $facultades = FacultadModel::searchFacultad($search,$start,$itemShow);
 
         //si no nos regresa el objeto regresamos a la vista inicial
-        if(!$facultades){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: no se encontro resultados.';
+        if(is_null($facultades)){
             error_log('No se pudo buscar en bd');
             header("location:/tesis/facultades/1");
             exit();
@@ -58,8 +57,11 @@ class FacultadController extends Controller{
         //pasamos los datos
         $data = [
             'title' => 'Facultad',
+            'busqueda' => $search,
             'user' => $user,
-            'facultades' => $facultades
+            'facultades' => $facultades,
+            'rows' => $totalItems,
+            'itemShow' => $itemShow
         ];
         // renderizamos nueva vista con sus datos
         $this->render('facultad/search', $data);

@@ -63,14 +63,35 @@ class FacultadModel extends Model{
         }
     }
 
-    public static function searchFacultad($data){
+    public static function rowSearchFacultad(){
         try{
             $_db = new Database();
             $int = intval($data);
             $sql = "SELECT * FROM facultad WHERE status=1 AND 
             (facultad_id=$int 
             OR nombre_facultad LIKE '$data%' 
-            OR acronimo_facultad LIKE '%$data%') ";
+            OR acronimo_facultad LIKE '%$data%')";
+            $query = $_db->connect()->prepare($sql);
+            $query->execute();
+            $rows = $query->rowCount();       
+            return $rows;            
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function searchFacultad($data,int $start,int $end){
+        try{
+            $_db = new Database();
+            $int = intval($data);
+            $sql = "SELECT * FROM facultad WHERE status=1 AND 
+            (facultad_id=$int 
+            OR nombre_facultad LIKE '%$data%' 
+            OR acronimo_facultad LIKE '%$data%')
+            ORDER BY facultad_id DESC
+            LIMIT $start, $end ";
             $query = $_db->connect()->query($sql);
             $res = $query->fetchAll(PDO::FETCH_ASSOC);
             if(!$res){
