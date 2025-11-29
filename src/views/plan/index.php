@@ -1,95 +1,112 @@
 <?php require_once __DIR__ . '/../../components/layoutPlan/header.plan.php' ?>
-<main id="main-content" class="w-custom">
-    <div class="w-100 position-relative">
-        <div class="d-flex flex-column gap-4 container mx-auto p-3">
-            <div class="d-flex flex-wrap gap-2 text-center">
-                <a href="/tesis/<?=$_GET['regresar']?>" class="btn btn-utec">Regresar</a>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    Crear nuevo Plan
+
+<main id="main-content" class="admin-container">
+    <!-- Alerts -->
+    <div class="position-relative mb-3">
+        <div class="position-absolute end-0 top-0">
+            <?php require __DIR__ . '/../../components/alerts.php'; ?>
+        </div>
+    </div>
+    <div class="container mx-auto px-3">
+        <!-- Header Actions -->
+        <div class="header-card">
+            <div class="d-flex flex-column flex-md-row gap-3 align-items-stretch align-items-md-center">
+                <a href="/tesis/<?=$_GET['regresar']?>" class="btn-modern btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Regresar
+                </a>
+                <button type="button" class="btn-modern btn-create <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#createPlanModal">
+                    <i class="fas fa-plus-circle"></i>
+                    Crear Plan de Estudio
                 </button>
-                <!-- modal crear -->
+                
+                <!-- Modal Crear -->
                 <?php require_once __DIR__ . '/../../components/modalPlan/modalCreatePlan.php' ?>
-                <form action="/tesis/planes/1" method="post" class="w-75 d-flex">
-                    <input type="text" name="buscar" class="form-control">
-                    <div>
-                        <button type="submit" class="btn btn-utec ms-0 ms-sm-2">
-                            <span class="icon search-icon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        </button>
+                
+                <form action="/tesis/planes/1" method="post" class="d-flex flex-grow-1 gap-2">
+                    <div class="search-box flex-grow-1">
+                        <input type="text" name="buscar" class="form-control search-input" placeholder="Buscar plan de estudio...">
                     </div>
+                    <button type="submit" class="btn-search">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </form>
             </div>
-            <!-- alerta -->
-            <div class="position-absolute end-0 top-0 mt-1">
-                <?php require __DIR__ . '/../../components/alerts.php'; ?>
-            </div>
-            <div class="table-responsive text-center rounded-2">
-                <table class="table table-dark table-hover table-bordered">
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="table modern-table">
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Titulo</th>
-                            <th scope="col">Vigencia</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Ps.Estudio<br>(Historial)</th>
-                            <th scope="col">Descargar</th>
-                            <th scope="col">Editor</th>
-                            <th scope="col">Eliminar</th>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Vigencia</th>
+                            <th>Estado</th>
+                            <th>Ver</th>
+                            <th>Descargar</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
                         </tr>
                     </thead>
-                    <tbody class="table-group-divider table-light align-middle">
+                    <tbody>
                     <?php foreach($this->d['studyPlan'] as $key => $value) :?>
-                        <tr >
-                            <td scope="row"><?= $value['plan_estudio_id'] ?></td>
+                        <tr>
+                            <td><strong><?= $value['plan_estudio_id'] ?></strong></td>
                             <td><?= $value['nombre_carrera'] ?></td>
                             <td><?= $value['vigencia_inicio'].' - '.$value['vigencia_final'] ?></td>
-                            <td><?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?></td>
                             <td>
-                                <a href="/tesis/<?= $value['nombre_carrera'] = str_replace(' ','-',$value['nombre_carrera'])?>/planes/1" class="btn btn-primary p-0 px-2">
-                                    <span class="icon profile-icon">
-                                        <i class="fas fa-eye"></i>
-                                    </span>
-                                </a>
+                                <span class="status-badge <?= $value['status'] == 1 ? 'status-active' : 'status-inactive' ?>">
+                                    <?= $value['status'] == 1 ? 'Activo' : 'Inactivo' ?>
+                                </span>
                             </td>
-                            <td><a href="/tesis/word/<?= $value['plan_estudio_id'] ?>" class="btn btn-utec p-0 px-2 <?= $value['vigencia_inicio'] == '' || $value['vigencia_final'] == '' ? 'disabled' : '' ?>">
-                                    <span class="icon profile-icon">
-                                        <img src="<?= URL_PATH ?>/img/word.png" class="img-fluid img-word" alt="">
-                                    </span>
+                            <td>
+                                <a href="/tesis/<?= $value['nombre_carrera'] = str_replace(' ','-',$value['nombre_carrera'])?>/historial/1" class="action-btn" style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);">
+                                    <i class="fas fa-eye text-light"></i>
                                 </a>
                             </td>
                             <td>
-                                <a href="/tesis/plan/editor/<?= $value['plan_estudio_id'] ?>" class="btn btn-success p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>">
-                                    <span class="icon profile-icon">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
+                                <a href="/tesis/word/<?= $value['plan_estudio_id'] ?>" class="action-btn <?= $value['vigencia_inicio'] == '' || $value['vigencia_final'] == '' ? 'disabled' : '' ?>" style="background: linear-gradient(135deg, #6d1d3c 0%, #8a2449 100%);">
+                                    <img src="<?= URL_PATH ?>/img/word.png" class="img-fluid img-word" alt="">
                                 </a>
                             </td>
                             <td>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2 <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $value['plan_estudio_id'] ?>">
-                                    <span class="icon profile-icon">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </span>
+                                <a href="/tesis/plan/editor/<?= $value['plan_estudio_id'] ?>" class="action-btn btn-edit <?= $this->d['user']->getRol() == "Usuario" ? 'disabled': ''?>">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <button type="button" class="action-btn btn-delete <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $value['plan_estudio_id'] ?>">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>
                         </tr>
+
                         <!-- Modal -->
-                        <div class="modal fade" id="staticBackdrop<?= $value['plan_estudio_id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteModal<?= $value['plan_estudio_id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content bg-dark text-white">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres eliminar este Plan?</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="text-start text-break"><b><?= $value['nombre_carrera']?></b>, Se borrará al apretar el boton Eliminar.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <a href="/tesis/deletePlan/<?= $value['plan_estudio_id'] ?>" class="btn btn-danger <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>">Eliminar</a>
-                                </div>
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            Confirmar Eliminación
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="mb-2">¿Estás seguro de eliminar este plan de estudio?</p>
+                                        <p class="text-muted mb-0">
+                                            <strong><?= $value['nombre_carrera']?></strong> será eliminado permanentemente.
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <a href="/tesis/deletePlan/<?= $value['plan_estudio_id'] ?>" class="btn btn-danger <?= $this->d['user']->getRol() == "Usuario" || $this->d['user']->getRol() == "Administrador" ? 'disabled': ''?>">
+                                            <i class="fas fa-trash me-1"></i>
+                                            Eliminar
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -97,9 +114,13 @@
                     </tbody>
                 </table>
             </div>
-            <!-- paginacion -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-4">
             <?php require_once __DIR__ . '/../../components/pagination.php'?>
         </div>
     </div>
 </main>
+
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>

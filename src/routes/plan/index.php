@@ -1,6 +1,7 @@
 <?php
 
 use Penad\Tesis\controllers\CurricularDesign;
+use Penad\Tesis\controllers\CarreraController;
 use Penad\Tesis\models\StudyPlan;
 use Penad\Tesis\models\CreadorModel;
 use Penad\Tesis\models\PlanEstudioCreador;
@@ -46,6 +47,17 @@ $router->get('/searchPlan/{pagina}', function($page){
     $_GET['regresar'] = 'planes/1';
     $controller = new CurricularDesign;
     $controller->getSearchPlans($page);
+});
+
+//VER HISTORIAL PLANES DE ESTUDIO DE LA CARRERA
+$router->get('/{carrera}/historial/{pagina}', function($carrera,$page){
+    notAuth();
+    $controller = new CarreraController;
+    $page == 0 ? 1 : $page;
+    $_GET['pagina'] = $page;
+    $_GET['nombrePagina'] = $carrera.'/planes';
+    $_GET['regresar'] = 'planes/1';
+    $controller->getCarreraPlanes($carrera,$page);
 });
 
 

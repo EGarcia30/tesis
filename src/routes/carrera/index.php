@@ -106,6 +106,6 @@ $router->get('/{carrera}/planes/{pagina}', function($carrera,$page){
     $page == 0 ? 1 : $page;
     $_GET['pagina'] = $page;
     $_GET['nombrePagina'] = $carrera.'/planes';
-    $_GET['regresar'] = 'planes/1';
+    $_GET['regresar'] = 'carrera/1';
     $controller->getCarreraPlanes($carrera,$page);
 });

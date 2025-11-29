@@ -226,8 +226,8 @@ class CarreraController extends Controller{
             'user' => $user,
             'rows' => $totalItems,
             'itemShow' => $itemShow,
-            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
-            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+            'color' => isset($_SESSION['color']) ? $_SESSION['color'] : null,
+            'message' => isset($_SESSION['message']) ? $_SESSION['message'] : null
         ];
         $this->render('carreraPlanes/index', $data);
     }

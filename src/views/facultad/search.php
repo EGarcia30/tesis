@@ -13,7 +13,7 @@
                 </a>
                 <form onsubmit="event.preventDefault(); buscarFacultad();" class="d-flex flex-grow-1 gap-2">
                     <div class="search-box flex-grow-1">
-                        <input type="text" id="inputBusqueda" class="form-control search-input" placeholder="Buscar usuario..." value="<?= isset($_GET['busqueda']) ? $_GET['busqueda'] : '' ?>">
+                        <input type="text" id="inputBusqueda" class="form-control search-input" placeholder="Buscar facultades..." value="<?= isset($_GET['busqueda']) ? $_GET['busqueda'] : '' ?>">
                     </div>
                     <button type="submit" class="btn-search">
                         <i class="fas fa-search"></i>
