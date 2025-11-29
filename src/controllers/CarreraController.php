@@ -105,6 +105,13 @@ class CarreraController extends Controller{
         $this->render('carrera/search', $data);
     }
 
+    //Obtener carreras por facultad (AJAX)
+    public function getCarrerasByFacultad($facultadId){
+        $carreras = CarreraModel::getCarrerasByFacultad($facultadId);
+        header('Content-Type: application/json');
+        echo json_encode($carreras);
+    }
+
     //crear carrera
     public function createCarrera(){
         $codigo = $this->post('codigo');

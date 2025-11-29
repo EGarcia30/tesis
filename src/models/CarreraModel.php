@@ -134,6 +134,22 @@ class CarreraModel extends Model{
         }
     }
 
+    //Obtener carreras por facultad
+    public static function getCarrerasByFacultad($facultadId){
+        try{
+            $_db = new Database();
+            $int = intval($facultadId);
+            $sql = "SELECT * FROM carrera WHERE facultad_id=$int AND status=1";
+            $query = $_db->connect()->query($sql);
+            $res = $query->fetchall(PDO::FETCH_ASSOC);
+            return $res;
+        }
+        catch(Exception $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //obtener usuario
     public static function existsCarrera(string $data){
         try{

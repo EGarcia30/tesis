@@ -7,6 +7,9 @@
     <!--Bootstrap y css-->
     <link rel="stylesheet" href="<?= URL_PATH ?>/css/styles.css">
     <link rel="stylesheet" href="<?= URL_PATH ?>/css/main.css">
+    <<!--Select2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.0.0/dist/select2-bootstrap-5-theme.min.css" />
     <!--ICONS-->
     <script src="https://kit.fontawesome.com/be9e926d45.js" crossorigin="anonymous"></script>
     <link rel="icon" href="<?= URL_PATH ?>/img/utec_favicon.png">

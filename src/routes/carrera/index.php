@@ -76,6 +76,13 @@ $router->get('/updateCarrera/{id}', function($id){
     $controller->render('carrera/update', $data);
 });
 
+//Obtener carreras por facultad (AJAX)
+$router->get('/getCarreras/{facultadId}', function($facultadId){
+    notAuth();
+    $controller = new CarreraController;
+    $controller->getCarrerasByFacultad($facultadId);
+});
+
 //CRUD
 //Crear carrera
 $router->post('/createCarreras', function(){

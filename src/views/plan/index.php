@@ -124,3 +124,68 @@
 </main>
 
 <?php require_once __DIR__ . '/../../components/layoutPrincipal/footer.main.php' ?>
+
+<!-- Select2 Initialization -->
+<script>
+    $(document).ready(function() {
+
+        $('#opcionFacultad').select2({
+            theme: 'bootstrap-5',
+            width: '100%',
+            dropdownParent: $('#createPlanModal'),
+        });
+
+    });
+</script>
+
+<!-- Onchange Facultad to load Carreras -->
+<script>
+    $(document).ready(function() {
+        $('#opcionFacultad').on('change', function() {
+            var facultadId = $(this).val();
+
+            $.ajax({
+                url: '/tesis/getCarreras/' + facultadId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    
+                    // REMOVER select anterior
+                    $('#opcionCarrera').parent().remove();
+                     // Encontrar el div contenedor de la facultad
+                    const $facultadContainer = $('#opcionFacultad').closest('.mb-5');
+                    
+                    // Crear el HTML exacto que quieres
+                    let htmlCarreras = `
+                        <div class="mb-4">
+                            <select name="opcionCarrera" id="opcionCarrera" class="form-select" aria-label="Default select example" style="width: 100%;">
+                                <option selected>Seleccionar Carrera:</option>
+                    `;
+                    
+                    // Agregar opciones dinámicamente (igual que tu PHP foreach)
+                    $.each(data, function(key, carrera) {
+                        htmlCarreras += `<option value="${carrera.carrera_id}">${carrera.nombre_carrera}</option>`;
+                    });
+                    
+                    htmlCarreras += `
+                            </select>
+                        </div>
+                    `;
+                    
+                    // Insertar JUSTO ABAJO del div de facultad
+                    $facultadContainer.after(htmlCarreras);
+                    
+                    // Re-inicializar Select2 en el nuevo select
+                    $('#opcionCarrera').select2({
+                        theme: 'bootstrap-5',
+                        width: '100%',
+                        dropdownParent: $('#createPlanModal'),
+                    });
+                },
+                error: function() {
+                    console.error('Error al cargar las carreras.');
+                }
+            });
+        });
+    });
+</script>
