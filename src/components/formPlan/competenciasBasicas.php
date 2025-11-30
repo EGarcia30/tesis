@@ -1,73 +1,146 @@
-<div class="position-relative form-container" id="formComBasico">
-    <h2 class="text-utec text-center header-font-custom">Competencias Básicas</h2>
+<div class="form-section" id="formComBasico">
+    <h2 class="section-title">Competencias Básicas</h2>
+    
     <?php require __DIR__ . '/../informacion.php'; ?>
-    <div class="d-flex flex-wrap-reverse justify-content-around w-75 mx-auto mt-3 mt-sm-5">
-        <div>
-            <div class="mb-3">
-                <form action="" method="post">
-                    <div id="comBasica">
-                        <label for="" class="text-utec font-custom">Ingrese Competencia Básica:</label>
-                        <input type="text" name="opcionBasica[]" class="form-control">
-
-                        <label for="" class="text-utec font-custom">Ingrese en que ciclo se cumple:</label>
-                        <input type="number" name="opcionBasica[]" step="1" class="form-control">
-                        <p class="text-utec font-custom">Los números pasarán a romanos en el documento de Word.</p>
+    
+    <div class="competence-grid">
+        <!-- Sección de Agregar -->
+        <div class="add-competence-section">
+            <form action="" method="post">
+                <div id="comBasica">
+                    <div class="form-group-custom competence-input-group">
+                        <label class="form-label-custom">
+                            <i class="fas fa-layer-group"></i>
+                            Competencia Básica
+                        </label>
+                        <div class="input-wrapper-custom">
+                            <i class="fas fa-layer-group input-icon-custom"></i>
+                            <textarea 
+                                name="opcionBasica[]" 
+                                class="textarea-modern" 
+                                rows="4"
+                                placeholder="Describe la competencia básica que el estudiante debe adquirir..."
+                                style="padding-left: 3rem;"
+                            ></textarea>
+                        </div>
                     </div>
-                </form>
-                <button type="button" class="btn btn-outline-primary p-0 px-2 rounded-5 me-0 me-sm-2" onclick="agregarComBasica()" >
-                    <span class="icon profile-icon">
+                    
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">
+                            <i class="fas fa-calendar"></i>
+                            Ciclo de Cumplimiento
+                        </label>
+                        <div class="input-wrapper-custom cycle-input-wrapper">
+                            <i class="fas fa-calendar input-icon-custom"></i>
+                            <input 
+                                type="number" 
+                                name="opcionBasica[]" 
+                                step="1" 
+                                min="1"
+                                max="10"
+                                class="form-control-custom" 
+                                placeholder="Ej: 2"
+                                oninput="updateCycleBadgeBasica(this)"
+                            >
+                            <span class="cycle-badge" id="cycleBadgeBasica" style="display: none;"></span>
+                        </div>
+                        <small class="form-text-custom">
+                            <i class="fas fa-info-circle"></i>
+                            Ingresa el número del ciclo (Ej: 1, 2, 3...)
+                        </small>
+                    </div>
+                    
+                    <div class="roman-note">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Los números se convertirán automáticamente a romanos (I, II, III...) en el documento Word</span>
+                    </div>
+                </div>
+                
+                <div class="btn-action-group mt-4">
+                    <button type="button" class="btn-add-specialist" onclick="agregarComBasica()">
                         <i class="fas fa-plus"></i>
-                    </span>
-                </button>
-                <button type="button" class="btn btn-outline-danger p-0 px-2 rounded-5" onclick="eliminarComBasica()" >
-                    <span class="icon profile-icon">
+                        Agregar Competencia
+                    </button>
+                    <button type="button" class="btn-remove-specialist" onclick="eliminarComBasica()">
                         <i class="fas fa-minus"></i>
-                    </span>
-                </button>
-            </div>
-            <div class="mb-2">
-                <button type="button" class="btn btn-outline-utec nav_link p-0 px-2" data-bs-target="formComGeneral">
-                    <span class="icon profile-icon">
-                        <i class="fas fa-angle-double-left"></i>
-                    </span>
-                </button>
-                <button type="button" class="btn btn-outline-utec nav_link p-0 px-2" data-bs-target="formComEspecialidad">
-                    <span class="icon profile-icon">
-                        <i class="fas fa-angle-double-right"></i>
-                    </span>
-                </button>
-            </div>
+                        Eliminar Última
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="mb-3 mb-sm-0">
-            <h3 class="header-font-custom text-utec mt-2">Asignados:</h3>
-            <table class="table table-bordered">
-                <tbody class="align-middle">
-                    <?php foreach($this->d['comBasica'] as $key => $value) :?>
-                        <tr>
-                            <td class="font-custom m-0"><?= $value['descripcion']?></td>
-                            <td class="font-custom m-0">Ciclo: <?= $value['ciclo']?></td>
-                            <td>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-success p-0 px-2" data-bs-toggle="modal" data-bs-target="#updateComBasica<?= $value['basico_id']?>">
-                                    <span class="icon profile-icon">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
-                                </button>
-                                <?php require __DIR__ . '/../../components/modalPlan/modalUpdateComBasica.php' ?>
-                            </td>
-                            <td>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger p-0 px-2" data-bs-toggle="modal" data-bs-target="#deleteComBasica<?= $value['basico_id']?>">
-                                    <span class="icon profile-icon">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </span>
-                                </button>
-                                <?php require __DIR__ . '/../../components/modalPlan/modalDeleteComBasica.php' ?>
-                            </td>
-                        </tr>
-                    <?php endforeach;?>
-                </tbody>
-            </table>
+        
+        <!-- Sección de Lista -->
+        <div class="competence-list-section">
+            <h3 class="assigned-title">
+                <i class="fas fa-list-check"></i>
+                Competencias Asignadas
+            </h3>
+            
+            <?php if(empty($this->d['comBasica'])): ?>
+                <div class="empty-state">
+                    <i class="fas fa-inbox" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                    <p>No hay competencias básicas asignadas aún</p>
+                </div>
+            <?php else: ?>
+                <div class="table-responsive">
+                    <table class="competence-table">
+                        <tbody>
+                            <?php foreach($this->d['comBasica'] as $key => $value) :?>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <strong><?= $value['descripcion']?></strong>
+                                    </td>
+                                    <td style="width: 25%; text-align: center;">
+                                        <span class="cycle-badge-table">
+                                            <i class="fas fa-calendar-alt me-1"></i>
+                                            Ciclo <?= $value['ciclo']?>
+                                        </span>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: center;">
+                                        <button type="button" class="action-btn btn-edit btn-table-action" data-bs-toggle="modal" data-bs-target="#updateComBasica<?= $value['basico_id']?>" title="Editar competencia">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <?php require __DIR__ . '/../../components/modalPlan/modalUpdateComBasica.php' ?>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: center;">
+                                        <button type="button" class="action-btn btn-delete btn-table-action" data-bs-toggle="modal" data-bs-target="#deleteComBasica<?= $value['basico_id']?>" title="Eliminar competencia">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <?php require __DIR__ . '/../../components/modalPlan/modalDeleteComBasica.php' ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach;?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
+    
+    <!-- Navegación -->
+    <div class="navigation-buttons">
+        <button type="button" class="btn-prev-section nav_link" data-bs-target="formComGeneral">
+            <i class="fas fa-arrow-left"></i>
+            Anterior
+        </button>
+        <button type="button" class="btn-next-section nav_link" data-bs-target="formComEspecialidad">
+            Siguiente
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
 </div>
+
+<script>
+// Función para actualizar el badge del ciclo (Básicas)
+function updateCycleBadgeBasica(input) {
+    const value = input.value;
+    const badge = document.getElementById('cycleBadgeBasica');
+    
+    if (value && value > 0) {
+        badge.textContent = `Ciclo ${value}`;
+        badge.style.display = 'block';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+</script>

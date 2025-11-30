@@ -80,7 +80,7 @@ function eliminarCreador(){
     }
 }
 
-function agregarComGeneral(){
+/*function agregarComGeneral(){
     const selectCom = document.querySelector('#comGeneral:last-of-type');
     const select2 = selectCom.cloneNode(true);
     // Get the inputs to clear in the cloned areas container
@@ -90,6 +90,27 @@ function agregarComGeneral(){
         input.value = "";
     });
     selectCom.parentNode.insertBefore(select2, selectCom.nextSibling);
+}*/
+
+function agregarComGeneral() {
+    const selectsCom = document.querySelectorAll('#comGeneral');
+    if (selectsCom.length === 0) {
+        console.error('No se encontró ningún elemento con id="comGeneral"');
+        return;
+    }
+    const selectCom = selectsCom[selectsCom.length - 1];  // Último elemento
+    const select2 = selectCom.cloneNode(true);
+    
+    // Limpiar inputs del clon
+    var inputsToClear = select2.querySelectorAll("input");
+    inputsToClear.forEach(function(input) {
+        input.value = "";
+    });
+    
+    selectCom.parentNode.insertBefore(select2, selectCom.nextSibling);
+    
+    // Cambiar ID del nuevo elemento para evitar duplicados
+    select2.id = 'comGeneral_' + Date.now();
 }
 
 function eliminarComGeneral(){

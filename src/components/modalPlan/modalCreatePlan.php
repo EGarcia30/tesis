@@ -9,7 +9,7 @@
             <form action="/tesis/planes" method="post">
                 <div class="modal-body">
                     <div class="mb-5">
-                        <select name="opcion" id="opcionFacultad" class="form-select" aria-label="Default select example">
+                        <select id="opcionFacultad" name="opcionFacultad" class="form-select" aria-label="Default select example">
                             <option selected>Seleccionar Facultad:</option>
                             <?php foreach($this->d['facultades'] as $key => $value) :?>
                                 <option value="<?= $value['facultad_id']?>"><?=$value['nombre_facultad']?></option>
@@ -18,8 +18,8 @@
                     </div>
 
                     <div class="mb-3 text-start">
-                        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="1" id="radio" name="radio" checked>
+                        <label class="form-check-label" for="radio">
                             Activo
                         </label>
                     </div>

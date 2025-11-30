@@ -7,7 +7,7 @@
     <!--Bootstrap y css-->
     <link rel="stylesheet" href="<?= URL_PATH ?>/css/styles.css">
     <link rel="stylesheet" href="<?= URL_PATH ?>/css/main.css">
-    <<!--Select2-->
+    <!--Select2-->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.0.0/dist/select2-bootstrap-5-theme.min.css" />
     <!--ICONS-->

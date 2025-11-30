@@ -146,13 +146,12 @@ class CurricularDesign extends Controller{
 
     //creamos plan de estudio
     public function createPlan(){
-        $id_facultad = intval($this->post('opcion'));
+        $id_facultad = intval($this->post('opcionFacultad'));
         $id_carrera = intval($this->post('opcionCarrera'));
         $id_status = intval($this->post('radio'));
         $facultad = [];
         $carrera = [];
 
-        // var_dump($id_facultad);
         //validacion de campos
         if(empty($id_facultad) || empty($id_carrera)){
             $_SESSION['color'] = 'warning';
