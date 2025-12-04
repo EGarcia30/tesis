@@ -53,8 +53,10 @@
     }
 </style>
 
-<form action="" method="post" class="form-section" id="formFundamentacion">
+<form class="form-section" id="formFundamentacion">
     <h2 class="section-title">Fundamentación</h2>
+
+    <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
     
     <div class="static-text">
         <p class="mb-0">
@@ -69,7 +71,7 @@
             <i class="fas fa-file-alt"></i>
             Continúa el texto con el apartado de fundamentación
         </label>
-        <textarea class="textarea-modern" name="txtFundamentacion" id="txtFundamentacion" rows="8" placeholder="Escribe aquí la fundamentación del plan de estudio..."><?=$this->d['plan']->getFundamentacion()?></textarea>
+        <textarea class="textarea-modern" name="fundamentacion" id="fundamentacion" rows="8" placeholder="Escribe aquí la fundamentación del plan de estudio..."><?=$this->d['plan']->getFundamentacion()?></textarea>
         <small class="form-text-custom">
             <i class="fas fa-info-circle"></i>
             Desarrolla los fundamentos académicos y profesionales de la carrera
@@ -90,9 +92,9 @@
             <i class="fas fa-arrow-left"></i>
             Anterior
         </button>
-        <button type="button" class="btn-next-section nav_link" data-bs-target="formCreador">
+        <button type="submit" class="btn-next-section nav_link" data-bs-target="formCreador">
             Siguiente
             <i class="fas fa-arrow-right"></i>
         </button>
     </div>
-</form>
+</form>     

@@ -170,12 +170,12 @@
         <!-- Editor Actions -->
         <div class="editor-actions">
             <div class="d-flex flex-wrap gap-2 align-items-center">
-                <a href="/tesis/planes/1" class="btn-editor btn-editor-back" onclick="emptyInformation()">
+                <a href="/tesis/planes/1" class="btn-editor btn-editor-back">
                     <i class="fas fa-arrow-left"></i>
                     Regresar
                 </a>
                 
-                <button type="button" class="btn-editor btn-editor-save" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="saveInformation()">
+                <button type="button" class="btn-editor btn-editor-save" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <i class="fas fa-save"></i>
                     Guardar
                 </button>
@@ -188,7 +188,7 @@
                     Exportar
                 </a>
                 
-                <a href="/tesis/<?= $name = str_replace(' ','-',$this->d['plan']->getNameCar())?>/planes/1" class="btn-editor btn-editor-view" onclick="emptyInformation()">
+                <a href="/tesis/<?= $name = str_replace(' ','-',$this->d['plan']->getNameCar())?>/planes/1" class="btn-editor btn-editor-view">
                     <i class="fas fa-eye"></i>
                     Ver Planes
                 </a>
@@ -224,3 +224,370 @@
 </main>
 
 <?php require_once __DIR__ . '/../../components/layoutEditorPlan/footer.php' ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        formInicioSubmit();
+        formFundamentacionSubmit();
+        formCreadorChange();
+    });
+
+    //PORTADA
+    function formInicioSubmit() {
+        const form = document.getElementById('formInicio');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita recargar la página
+
+            const formData = new FormData(event.target);
+
+            const idPlan = formData.get('id_plan');
+            const datosEnviar = new URLSearchParams(formData);
+
+            fetch(`/tesis/plan/portada/${idPlan}`, {
+                method: 'POST',
+                body: datosEnviar,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del controlador');
+                }
+                return response.json();
+            })
+            .then(data => {
+            //console.log('Respuesta de la API:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al guardar la portada.');
+            });
+        });
+    }
+
+    //FUNDAMENTACIÓN
+    function formFundamentacionSubmit() {
+        const form = document.getElementById('formFundamentacion');        
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita recargar la página
+
+            const formData = new FormData(event.target);
+
+            const idPlan = formData.get('id_plan');
+            const datosEnviar = new URLSearchParams(formData);
+
+            fetch(`/tesis/plan/fundamentacion/${idPlan}`, {
+                method: 'POST', 
+                body: datosEnviar,                                                                     
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del controlador');
+                }
+                return response.json();
+            })
+            .then(data => {
+                //console.log('Éxito:', data);
+                //alert('Fundamentación guardada correctamente.');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Hubo un error al guardar la fundamentación.');
+            });
+        });
+    }
+
+    //CREADOR
+    function formCreadorChange() {
+        const $form = $('#asignarCreador');
+        const $select = $('#opcionCreador');
+
+        $select.on('select2:select', function(event) {
+            const formData = new FormData($form[0]);
+            const idPlan = formData.get('id_plan');
+            const opcionCreador = formData.get('opcionCreador');
+
+            if (opcionCreador) {
+                const datosEnviar = new URLSearchParams(formData);
+
+                fetch(`/tesis/plan/creador/${idPlan}`, {
+                    method: 'POST',
+                    body: datosEnviar,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error en la respuesta');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Guardado OK:', data);
+                    
+                    if (data.status === 'success' && data.creador) {
+                        agregarCreadorATabla(data.creador, idPlan);
+                    }
+                    
+                    // Reiniciar select
+                    $select.val(null).trigger('change');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al guardar el especialista.');
+                });
+            }
+        });
+    }
+
+    // ✅ FUNCIÓN para agregar fila + modal dinámicamente
+    function agregarCreadorATabla(creador, idPlan) {
+        let tbody = document.querySelector('.specialists-table tbody');
+
+        if (!tbody) {
+            // La tabla no existe, crear estructura y agregar al DOM
+            const assignedSection = document.querySelector('.assigned-section');
+            
+            // Remover mensaje estado vacío si existe
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            const tableHTML = `
+                <div class="table-responsive">
+                    <table class="specialists-table">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            `;
+            assignedSection.insertAdjacentHTML('beforeend', tableHTML);
+            tbody = document.querySelector('.specialists-table tbody');
+        }
+
+        const nuevoTr = document.createElement('tr');
+        nuevoTr.innerHTML = `
+            <td style="width: 60%;">
+                <strong>${creador.nombre_creador}</strong>
+            </td>
+            <td style="width: 20%; text-align: center;">
+                <button type="button" class="action-btn btn-delete btn-table-action" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteCreadorPlan${creador.creador_id}" 
+                        title="Eliminar especialista">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+
+        // Crear el modal dinámico (como en tu código)
+        const modalId = `deleteCreadorPlan${creador.creador_id}`;
+        const modalHTML = `
+            <div class="modal fade" id="${modalId}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres desvincular el creador del plan de estudio?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-start text-break"><b>${creador.nombre_creador}</b>, Se eliminará la vinculación con este plan de estudio.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                            <a href="/tesis/creador/plan/${creador.creador_id}/${idPlan}" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        tbody.appendChild(nuevoTr);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    //ELIMINAR CREADOR
+    function eliminarCreador(idCreador, idPlan, filaTr) {
+        fetch(`/tesis/creador/plan/${idCreador}/${idPlan}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la eliminación');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                // 1. ✅ Remover fila de la tabla
+                if (filaTr) filaTr.remove();
+                
+                // 2. ✅ Mostrar alerta
+                mostrarMensaje('Creador desvinculado correctamente', 'success');
+                
+                // 3. ✅ LIMPIAR COMPLETAMENTE EL MODAL + BACKDROP
+                limpiarModalCompletamente(idCreador);
+                
+                // 4. ✅ Verificar estado vacío
+                const tbody = document.querySelector('.specialists-table tbody');
+                if (tbody && tbody.children.length === 0) {
+                    mostrarEstadoVacio();
+                }
+            } else {
+                mostrarMensaje(data.message || 'Error al eliminar el creador', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarMensaje('Error de conexión', 'danger');
+        });
+    }
+
+    // ✅ NUEVA FUNCIÓN: Limpia modal + backdrop completamente
+    function limpiarModalCompletamente(idCreador) {
+        const modalId = `deleteCreadorPlan${idCreador}`;
+        const modalElement = document.querySelector(`#${modalId}`);
+        
+        if (modalElement) {
+            // Obtener instancia del modal
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            
+            if (modal) {
+                // Escuchar evento 'hidden.bs.modal' para limpiar backdrop
+                modalElement.addEventListener('hidden.bs.modal', function cleanup() {
+                    // ✅ FORZAR LIMPIEZA DEL BACKDROP
+                    document.body.classList.remove('modal-open');
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => backdrop.remove());
+                    
+                    // Remover listener para evitar memory leaks
+                    modalElement.removeEventListener('hidden.bs.modal', cleanup);
+                }, { once: true });
+                
+                // Ocultar modal
+                modal.hide();
+            } else {
+                // Si no hay instancia, limpiar manualmente
+                modalElement.remove();
+                document.body.classList.remove('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            }
+        } else {
+            // Limpieza de emergencia si no encuentra el modal
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        }
+    }
+
+    // ✅ Usar tu sistema de alertas existente
+    // ✅ FUNCIÓN mostrarMensaje() - IDÉNTICA AL PHP
+    function mostrarMensaje(mensaje, tipo) {
+        // Buscar contenedor correcto
+        const alertWrapper = document.querySelector('.position-relative.mb-3 .position-absolute.end-0.top-0');
+        
+        if (!alertWrapper) {
+            console.warn('Contenedor para alertas no encontrado');
+            return;
+        }
+
+        // ✅ LIMPIAR alertas previas (igual que PHP)
+        alertWrapper.innerHTML = '';
+
+        // ✅ CONFIG ICONOS IDÉNTICA al PHP $iconMap
+        const config = {
+            'success': { icon: 'fa-check-circle', clase: 'alert-modern-success' },
+            'danger': { icon: 'fa-exclamation-circle', clase: 'alert-modern-danger' },
+            'warning': { icon: 'fa-exclamation-triangle', clase: 'alert-modern-warning' },
+            'info': { icon: 'fa-info-circle', clase: 'alert-modern-info' },
+            'primary': { icon: 'fa-bell', clase: 'alert-modern-primary' }
+        };
+
+        const tipoConfig = config[tipo] || config['info'];
+
+        // ✅ HTML EXACTAMENTE IGUAL al PHP
+        const alertaHTML = `
+            <div id="alerta" class="alert alert-modern ${tipoConfig.clase} alert-dismissible fade show" role="alert">
+                <div class="alert-icon">
+                    <i class="fas ${tipoConfig.icon}"></i>
+                </div>
+                <div class="alert-content">
+                    ${mensaje}
+                </div>
+                <button type="button" class="btn-close btn-close-modern" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+
+        alertWrapper.insertAdjacentHTML('afterbegin', alertaHTML);
+        
+        // ✅ INICIALIZAR Bootstrap Alert (igual que PHP)
+        const alerta = new bootstrap.Alert(document.getElementById('alerta'));
+    }
+
+    function crearContenedorAlerta() {
+        const alertaContainer = document.createElement('div');
+        alertaContainer.id = 'alertas-container';
+        alertaContainer.className = 'position-relative mt-3';
+        document.querySelector('.form-section')?.insertAdjacentElement('afterbegin', alertaContainer);
+        return alertaContainer;
+    }
+
+    function mostrarEstadoVacio() {
+        // Buscar la sección de asignados
+        const assignedSection = document.querySelector('.assigned-section');
+        if (!assignedSection) return;
+
+        // Remover tabla si existe
+        const tableContainer = assignedSection.querySelector('.table-responsive');
+        if (tableContainer) {
+            tableContainer.remove();
+        }
+
+        // Remover cualquier tbody vacío que quede
+        const tbody = assignedSection.querySelector('.specialists-table tbody');
+        if (tbody) {
+            tbody.remove();
+        }
+
+        // Insertar estado vacío
+        assignedSection.insertAdjacentHTML('beforeend', `
+            <div class="empty-state">
+                <i class="fas fa-inbox" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                <p>No hay especialistas asignados aún</p>
+            </div>
+        `);
+    }
+
+    window.limpiarBackdrops = function() {
+        document.body.classList.remove('modal-open');
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    };
+
+    // ✅ INTERCEPTAR CLICKS DE BOTONES ELIMINAR EN MODALES (IMPORTANTE)
+    // ✅ INTERCEPTADOR QUE MANEJA AMBOS TIPOS DE BOTONES
+    document.addEventListener('click', function(e) {
+        const btnEliminar = e.target.closest('.modal .btn-danger');
+        if (btnEliminar) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // ✅ MÉTODO 1: Si tiene data attributes (modales estáticos/dinámicos corregidos)
+            let idCreador = btnEliminar.getAttribute('data-creador-id');
+            let idPlan = btnEliminar.getAttribute('data-plan-id');
+            
+            // ✅ MÉTODO 2: Fallback por ID del modal (modales antiguos)
+            if (!idCreador) {
+                const modal = btnEliminar.closest('.modal');
+                const modalId = modal.id;
+                idCreador = modalId.replace('deleteCreadorPlan', '');
+                idPlan = document.getElementById('id_plan').value;
+            }
+            
+            const filaTr = document.querySelector(`[data-bs-target="#${btnEliminar.closest('.modal').id}"]`)?.closest('tr');
+            
+            eliminarCreador(idCreador, idPlan, filaTr);
+        }
+    });
+    </script>

@@ -215,6 +215,36 @@ class StudyPlan extends Model{
         }
     }
 
+    public static function guardarPortada(array $data){
+        try{
+            $_db = new Database();
+            $sql = "update plan_estudio set vigencia_inicio=?, vigencia_final=?, fecha_presentacion=? where plan_estudio_id=?";
+            $query = $_db->connect()->prepare($sql);
+            $info = [$data['inicio'],$data['final'],$data['presentacion'],$data['id']];
+            $res = $query->execute($info);
+            return $res; 
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public static function guardarFundamentacion(array $data){
+        try{
+            $_db = new Database();
+            $sql = "update plan_estudio set fundamentacion=? where plan_estudio_id=?";
+            $query = $_db->connect()->prepare($sql);
+            $info = [$data['fundamentacion'],$data['id']];
+            $res = $query->execute($info);
+            return $res; 
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     //eliminar plan de estudio
     public static function deletePlan($id){
         try{

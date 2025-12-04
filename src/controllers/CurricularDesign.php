@@ -7,6 +7,7 @@ use Penad\Tesis\models\StudyPlan;
 use Penad\Tesis\models\CarreraModel;
 use Penad\Tesis\models\FacultadModel;
 use Penad\Tesis\models\PlanEstudioCreador;
+use Penad\Tesis\models\CreadorModel;
 use Penad\Tesis\models\CreadorGradoAcademico;
 use Penad\Tesis\models\CreadorExperiencia;
 use Penad\Tesis\models\CreadorParticipacion;
@@ -322,6 +323,81 @@ class CurricularDesign extends Controller{
         header("location:/tesis/plan/editor/$id");
     }
 
+    public function guardarPortada($id){
+        $idPlan = intval($id);
+        $vigInicio = $this->post('vigenciaInicio');
+        $vigFinal = $this->post('vigenciaFinal');
+        $presentacion = $this->post('fechaPresentacion');
+
+        $data=[
+            'id' => $idPlan,
+            'inicio' => $vigInicio,
+            'final' => $vigFinal,
+            'presentacion' => $presentacion
+        ];
+
+        //traemos objeto StudyPlan de bd con su funcion estatica
+        $studyPlan = StudyPlan::guardarPortada($data);
+
+        // retornar respuesta
+        if(!$studyPlan){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Datos guardados correctamente']);
+    }
+
+    public function guardarFundamentacion($id){
+        $idPlan = intval($id);
+        $fundamentacion = $this->post('fundamentacion');
+
+        $data=[
+            'id' => $idPlan,
+            'fundamentacion' => $fundamentacion
+        ];
+
+        //traemos objeto StudyPlan de bd con su funcion estatica
+        $studyPlan = StudyPlan::guardarFundamentacion($data);
+
+        // retornar respuesta
+        if(!$studyPlan){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Datos guardados correctamente']);
+    }
+
+    public function guardarCreador($id){
+        $idPlan = intval($id);
+        $creador = $this->post('opcionCreador');
+        $data=[
+            'creador' => $creador
+        ];
+
+        //traemos objeto StudyPlan de bd con su funcion estatica
+        $planCreador = new PlanEstudioCreador($idPlan,$data);
+        $planCreador->createPlanCreador();
+
+        $creadorBD = CreadorModel::getCreador($creador);
+
+        // retornar respuesta
+        if(!$planCreador){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode([
+        'status' => 'success', 
+        'creador' => ['creador_id' => $creadorBD->getId(), 'nombre_creador' => $creadorBD->getName()]
+        ]);
+    }
+
+    //eliminar plan de estudio
     public function deletePlan($id){
 
         $res = StudyPlan::deletePlan($id);
@@ -332,19 +408,16 @@ class CurricularDesign extends Controller{
     //VINCULACIONES CON EL PLAN DE ESTUDIO
 
     //CREADOR-PLAN DE ESTUDIO
-    public function deletePlanCreador($idCreador,$idPlan){
-        $delete = PlanEstudioCreador::deletePlanCreador($idCreador,$idPlan);
-
-        if(!$delete){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: desvinculación del creador.';
-            header("location:/tesis/plan/editor/$idPlan");
+    public function deletePlanCreador($idCreador, $idPlan) {       
+        $delete = PlanEstudioCreador::deletePlanCreador($idCreador, $idPlan);
+        
+        if (!$delete) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'ERROR: No se pudo desvincular el creador.']);
             exit();
         }
-
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se desvinculo el creador.';
-        header("location:/tesis/plan/editor/$idPlan");
+        http_response_code(201);
+        echo json_encode(['status' => 'success', 'message' => 'Se desvinculó el creador correctamente.']);
     }
 
     //Competencia General - Plan de estudio

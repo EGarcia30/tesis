@@ -9,7 +9,7 @@
             <form id="enviar">
                 <div class="modal-body">
 
-                <small>Guardarás hasta donde te quedaste del plan de estudio: <br> <b><?= $this->d['plan']->getNameCar()?></b></small>
+                <small>Guardarás plan de estudio: <br> <b><?= $this->d['plan']->getNameCar()?></b></small>
                     
                 </div>
                 <div class="modal-footer">

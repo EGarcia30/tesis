@@ -90,8 +90,8 @@ $router->get('/plan/editor/{id}', function($id){
         'comBasica' => $comBasica,
         'comEspecialidad' => $comEspecialidad,
         'areas' => $areas,
-        'color' => $_SESSION['color'] == '' ? '' : $_SESSION['color'],
-        'message' => $_SESSION['message'] == '' ? '' : $_SESSION['message']
+        'color' => isset($_SESSION['color']) ? $_SESSION['color'] : null,
+        'message' => isset($_SESSION['message']) ? $_SESSION['message'] : null
     ];
     $controller->render('plan/editor', $data);
 });
@@ -118,6 +118,27 @@ $router->post('/plan/editor/{id}', function($id){
     $controller->savePlan($id);
 });
 
+$router->post('/plan/portada/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->guardarPortada($id);
+});
+
+$router->post('/plan/fundamentacion/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->guardarFundamentacion($id);
+});
+
+$router->post('/plan/creador/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->guardarCreador($id);
+});
+
 //eliminar plan de estudio o desactivar
 $router->get('/deletePlan/{id}', function($id){
     notAuth();
@@ -127,7 +148,7 @@ $router->get('/deletePlan/{id}', function($id){
 });
 
 //PLAN-CREADOR
-$router->get('/creador/plan/{idCreador}/{idPlan}', function($idCreador,$idPlan){
+$router->delete('/creador/plan/{idCreador}/{idPlan}', function($idCreador,$idPlan){ 
     notAuth();
     $controller = new CurricularDesign;
     $controller->deletePlanCreador($idCreador,$idPlan);

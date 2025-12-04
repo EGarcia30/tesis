@@ -9,11 +9,14 @@
     <link rel="stylesheet" href="<?= URL_PATH ?>/css/main.css">
     <!--ICONS-->
     <script src="https://kit.fontawesome.com/be9e926d45.js" crossorigin="anonymous"></script>
-    <link rel="icon" href="<?= URL_PATH ?>/img/utec_favicon.png">
+    <link rel="icon" href="<?= URL_PATH ?>/img/utec_favicon.png">   
+    <!--Select2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.0.0/dist/select2-bootstrap-5-theme.min.css" />        
     <!--Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">-->
     <!-- JQUERY -->
     <script src="<?= URL_PATH ?>/js/jquery-3.6.4.min.js"></script>
 
@@ -355,13 +358,13 @@
                             </span>
                         </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li onclick="emptyInformation()">
+                        <li>
                             <a class="dropdown-item" href="/tesis/perfil">
                                 <i class="fas fa-user-circle me-2"></i>
                                 Mi Perfil
                             </a>
                         </li>
-                        <li class="<?= $this->d['user']->getRol() == "Usuario" ? 'd-none' : '' ?>" onclick="emptyInformation()">
+                        <li class="<?= $this->d['user']->getRol() == "Usuario" ? 'd-none' : '' ?>">
                             <a class="dropdown-item" href="/tesis/users/1">
                                 <i class="fas fa-users-cog me-2"></i>
                                 Administrar Usuarios
@@ -435,7 +438,7 @@
                 <span>Áreas de Desempeño</span>
             </a>
             
-            <a href="/tesis/plan/materia/<?=$this->d['plan']->getId()?>" type="button" class="menu-item" onclick="saveInformation()">
+            <a href="/tesis/plan/materia/<?=$this->d['plan']->getId()?>" type="button" class="menu-item">
                 <i class="fas fa-clipboard-list"></i>
                 <span>Materias</span>
             </a>
@@ -445,7 +448,7 @@
     <!-- Menu Backdrop -->
     <div class="menu-backdrop" id="menuBackdrop"></div>
 
-    <script>
+<script>
     // Menu Toggle Functionality
     const menuToggle = document.getElementById('menuToggle');
     const menuClose = document.getElementById('menuClose');
@@ -512,7 +515,7 @@
         
         // Botones de navegación (.nav_link)
         if (e.target.closest('.nav_link[data-bs-target]')) {
-            e.preventDefault();
+            //e.preventDefault();
             const targetId = e.target.closest('.nav_link[data-bs-target]').getAttribute('data-bs-target');
             navigateToSection(targetId);
         }
@@ -521,8 +524,8 @@
     // Inicializar primera sección visible
     function initializeSections() {
         const visibleSection = document.querySelector('[id^="form"].d-block') || 
-                              document.getElementById('formInicio') || 
-                              document.querySelector('[id^="form"]');
+                            document.getElementById('formInicio') || 
+                            document.querySelector('[id^="form"]');
         if (visibleSection && !visibleSection.classList.contains('d-block')) {
             navigateToSection(visibleSection.id);
         }

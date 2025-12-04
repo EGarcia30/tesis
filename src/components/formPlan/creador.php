@@ -172,25 +172,15 @@
                     Asignar Especialistas
                 </label>
                 
-                <form action="" method="post">
+                <form id="asignarCreador">
+                    <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
                     <div id="selectsCreador" class="mb-3">
-                        <select class="select-modern" name="opcionCreador[]" id="opcionCreador">
+                        <select class="select-modern" name="opcionCreador" id="opcionCreador">
                             <option value="">Seleccionar especialista...</option>
                             <?php foreach($this->d['creadores'] as $key => $value) :?>
                                 <option value="<?= $value['creador_id']?>"><?= $value['nombre_creador']?></option>
                             <?php endforeach; ?>
                         </select>
-                    </div>
-                    
-                    <div class="btn-action-group">
-                        <button type="button" class="btn-add-specialist" onclick="agregarCreador()">
-                            <i class="fas fa-plus"></i>
-                            Agregar
-                        </button>
-                        <button type="button" class="btn-remove-specialist" onclick="eliminarCreador()">
-                            <i class="fas fa-minus"></i>
-                            Eliminar
-                        </button>
                     </div>
                 </form>
             </div>
@@ -226,11 +216,6 @@
                                         <strong><?= $value['Creador']?></strong>
                                     </td>
                                     <td style="width: 20%; text-align: center;">
-                                        <a href="/tesis/creador/editor/<?= $value['creador_id']?>" class="action-btn btn-edit btn-table-action" title="Editar especialista">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
-                                    <td style="width: 20%; text-align: center;">
                                         <button type="button" class="action-btn btn-delete btn-table-action" data-bs-toggle="modal" data-bs-target="#deleteCreadorPlan<?= $value['creador_id']?>" title="Eliminar especialista">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
@@ -257,3 +242,15 @@
         </button>
     </div>
 </div>
+
+<!-- Select2 Initialization -->
+<script>
+    $(document).ready(function() {
+
+        $('#opcionCreador').select2({
+            theme: 'bootstrap-5',
+            width: '100%'
+        });
+
+    });
+</script>

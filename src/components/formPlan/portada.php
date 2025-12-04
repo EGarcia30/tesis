@@ -63,7 +63,7 @@
     }
 </style>
 
-<form action="" method="post" class="form-section" id="formInicio">
+<form class="form-section" id="formInicio">
     <h2 class="section-title">Portada</h2>
     
     <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
@@ -119,7 +119,7 @@
     </div>
     
     <div>
-        <button type="button" class="btn-next-section nav_link" data-bs-target="formFundamentacion">
+        <button type="submit" class="btn-next-section nav_link" data-bs-target="formFundamentacion">
             Siguiente Sección
             <i class="fas fa-arrow-right"></i>
         </button>
