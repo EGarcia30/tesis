@@ -19,16 +19,18 @@ class GeneralidadesCarrera extends Model{
     private string $_responsible;
     private int $_anio_inicio;
 
-    public function __construct(array $data = []){
+    
+
+    public function __construct($requisito, $duration_years, $duration_ciclos, $num_Asignatura, $num_Unidades_Valorativas, $sede, $responsible, $anio_inicio){
         parent::__construct();
-        $this->_requisito = $data[0];
-        $this->_duration_years = intval($data[1]);
-        $this->_duration_ciclos = intval($data[2]);
-        $this->_num_Asignatura = intval($data[3]);
-        $this->_num_Unidades_Valorativas = intval($data[4]);
-        $this->_sede = $data[5];
-        $this->_responsible = $data[6];
-        $this->_anio_inicio = intval($data[7]);
+        $this->_requisito = $requisito;
+        $this->_duration_years = $duration_years;
+        $this->_duration_ciclos = $duration_ciclos;
+        $this->_num_Asignatura = $num_Asignatura;
+        $this->_num_Unidades_Valorativas = $num_Unidades_Valorativas;
+        $this->_sede = $sede;
+        $this->_responsible = $responsible;
+        $this->_anio_inicio = $anio_inicio;
     }
 
     public static function getGeneralidades(){
@@ -67,7 +69,7 @@ class GeneralidadesCarrera extends Model{
             $res[0]['sede']== null ? '' :$res[0]['sede'],
             $res[0]['responsable']== null ? '' :$res[0]['responsable'],
             $res[0]['inicio']== null ? 0 :$res[0]['inicio']];
-            $Generalidad = new GeneralidadesCarrera($data);
+            $Generalidad = new GeneralidadesCarrera($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[6],$data[7]);
             $Generalidad->setId($res[0]['Id'] == null ? 0 : $res[0]['Id']);
             return $Generalidad;
         }

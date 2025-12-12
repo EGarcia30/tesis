@@ -36,9 +36,10 @@
 </style>
 
 <form action="" method="post" class="form-section" id="formGeneralidades">
+    <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
     <h2 class="section-title">Generalidades de la Carrera</h2>
     
-    <input type="hidden" name="opcionGeneralidad[]" value="<?= $this->d['generalidad'] == NULL ? 0 : $this->d['generalidad']->getId() ?>">
+    <input type="hidden" name="generalidad_id" id="generalidad_id" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ?  $this->d['generalidad']->getId() : 0?>">
     
     <!-- Información de la Carrera -->
     <div class="info-display">
@@ -54,7 +55,7 @@
         </label>
         <div class="input-wrapper-custom">
             <i class="fas fa-clipboard-check input-icon-custom"></i>
-            <input type="text" name="opcionGeneralidad[]" id="requisito" class="form-control-custom" placeholder="Ejemplo: Bachillerato" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getRequisito() ?>">
+            <input type="text" name="generalidadRequisito" id="requisito" class="form-control-custom" placeholder="Ejemplo: Bachillerato" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getRequisito() : '' ?>">
         </div>
     </div>
     
@@ -73,7 +74,7 @@
             </label>
             <div class="input-wrapper-custom">
                 <i class="fas fa-calendar-alt input-icon-custom"></i>
-                <input type="number" name="opcionGeneralidad[]" id="duracionAnios" class="form-control-custom" placeholder="Ej: 2" step="1" min="1" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getYears() ?>">
+                <input type="number" name="generalidadAnios" id="duracionAnios" class="form-control-custom" placeholder="Ej: 2" step="1" min="0" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getYears() : 0 ?>"">
             </div>
         </div>
         
@@ -84,7 +85,7 @@
             </label>
             <div class="input-wrapper-custom">
                 <i class="fas fa-calendar input-icon-custom"></i>
-                <input type="number" name="opcionGeneralidad[]" id="duracionCiclos" class="form-control-custom" placeholder="Ej: 4" step="1" min="1" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getCiclos() ?>">
+                <input type="number" name="generalidadCiclos" id="duracionCiclos" class="form-control-custom" placeholder="Ej: 4" step="1" min="0" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getCiclos() : 0 ?>"">
             </div>
         </div>
     </div>
@@ -98,7 +99,7 @@
             </label>
             <div class="input-wrapper-custom">
                 <i class="fas fa-book input-icon-custom"></i>
-                <input type="number" name="opcionGeneralidad[]" id="numAsignatura" class="form-control-custom" placeholder="Ej: 30" step="1" min="1" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getAsignatura() ?>">
+                <input type="number" name="generalidadAsignatura" id="numAsignatura" class="form-control-custom" placeholder="Ej: 30" step="1" min="0" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getAsignatura() : 0 ?>"">
             </div>
         </div>
         
@@ -109,7 +110,7 @@
             </label>
             <div class="input-wrapper-custom">
                 <i class="fas fa-star input-icon-custom"></i>
-                <input type="number" name="opcionGeneralidad[]" id="unidadesValorativas" class="form-control-custom" placeholder="Ej: 120" step="1" min="1" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getValorativas() ?>">
+                <input type="number" name="generalidadValorativas" id="unidadesValorativas" class="form-control-custom" placeholder="Ej: 120" step="1" min="0" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getValorativas() : 0 ?>"">
             </div>
         </div>
     </div>
@@ -128,7 +129,7 @@
         </label>
         <div class="input-wrapper-custom">
             <i class="fas fa-map-marker-alt input-icon-custom"></i>
-            <input type="text" name="opcionGeneralidad[]" id="sede" class="form-control-custom" placeholder="Universidad Tecnológica de El Salvador" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getSede() ?>">
+            <input type="text" name="generalidadSede" id="sede" class="form-control-custom" placeholder="Universidad Tecnológica de El Salvador" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getSede() : '' ?>"">
         </div>
     </div>
     
@@ -140,7 +141,7 @@
         </label>
         <div class="input-wrapper-custom">
             <i class="fas fa-university input-icon-custom"></i>
-            <input type="text" name="opcionGeneralidad[]" id="responsable" class="form-control-custom" placeholder="Facultad de Informática y Ciencias Aplicadas" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getResponsible()?>">
+            <input type="text" name="generalidadResponsable" id="responsable" class="form-control-custom" placeholder="Facultad de Informática y Ciencias Aplicadas" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getResponsible() : '' ?>"">
         </div>
     </div>
     
@@ -158,7 +159,7 @@
         </label>
         <div class="input-wrapper-custom">
             <i class="fas fa-calendar-day input-icon-custom"></i>
-            <input type="number" name="opcionGeneralidad[]" id="inicio" class="form-control-custom" placeholder="Ej: 2023" step="1" min="2000" max="2100" value="<?= $this->d['generalidad'] == NULL ? '' : $this->d['generalidad']->getInicio() ?>">
+            <input type="number" name="generalidadInicio" id="inicio" class="form-control-custom" placeholder="Ej: 2023" step="1" value="<?= isset($this->d['generalidad']) && $this->d['generalidad'] !== false ? $this->d['generalidad']->getInicio() : 0 ?>"">
         </div>
     </div>
     
@@ -180,7 +181,7 @@
             <i class="fas fa-arrow-left"></i>
             Anterior
         </button>
-        <button type="button" class="btn-next-section nav_link" data-bs-target="formProposito">
+        <button type="submit" class="btn-next-section nav_link" data-bs-target="formProposito">
             Siguiente
             <i class="fas fa-arrow-right"></i>
         </button>

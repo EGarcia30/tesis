@@ -242,15 +242,3 @@
         </button>
     </div>
 </div>
-
-<!-- Select2 Initialization -->
-<script>
-    $(document).ready(function() {
-
-        $('#opcionCreador').select2({
-            theme: 'bootstrap-5',
-            width: '100%'
-        });
-
-    });
-</script>

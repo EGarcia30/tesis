@@ -230,6 +230,7 @@
         formInicioSubmit();
         formFundamentacionSubmit();
         formCreadorChange();
+        formGeneralidadesSubmit();
     });
 
     //PORTADA
@@ -304,6 +305,16 @@
     }
 
     //CREADOR
+    //Select2 Initialization
+    $(document).ready(function() {
+
+        $('#opcionCreador').select2({
+            theme: 'bootstrap-5',
+            width: '100%'
+        });
+
+    });
+
     function formCreadorChange() {
         const $form = $('#asignarCreador');
         const $select = $('#opcionCreador');
@@ -328,7 +339,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Guardado OK:', data);
+                    //console.log('Guardado OK:', data);
                     
                     if (data.status === 'success' && data.creador) {
                         agregarCreadorATabla(data.creador, idPlan);
@@ -590,4 +601,61 @@
             eliminarCreador(idCreador, idPlan, filaTr);
         }
     });
+
+    //GENERALIDADES
+    function formGeneralidadesSubmit() {
+        const form = document.getElementById('formGeneralidades');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const idPlan = formData.get('id_plan');
+            const idGeneralidad = formData.get('generalidad_id');
+            
+            const esUpdate = idGeneralidad != 0;
+            
+            if (esUpdate) {
+                // PUT: JSON
+                const datosEnviar = Object.fromEntries(formData);
+                fetch(`/tesis/plan/generalidades/${idPlan}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosEnviar)
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error servidor');
+                    return response.json();
+                })
+                .then(data => {
+                    const divGeneralidades = document.getElementById('generalidad_id');
+                    divGeneralidades.value = data.id_generalidad;
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error al guardar');
+                });
+            } else {
+                // POST: FormData nativo (sin headers)
+                fetch(`/tesis/plan/generalidades/${idPlan}`, {
+                    method: 'POST',
+                    body: formData  // FormData directo
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error servidor');
+                    return response.json();
+                })
+                .then(data => {
+                    const divGeneralidades = document.getElementById('generalidad_id');
+                    divGeneralidades.value = data.id_generalidad;
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error al guardar');
+                });
+            }
+        });
+    }
+
     </script>

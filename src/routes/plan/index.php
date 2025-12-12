@@ -71,7 +71,7 @@ $router->get('/plan/editor/{id}', function($id){
     $creadores = CreadorModel::getCreadoresPlan();
     $creador = PlanEstudioCreador::getCreadorPlan($id);
     $generalidades = PlanEstudioGeneralidadesCarrera::getPlanGeneralidad($id);
-    $generalidad = GeneralidadesCarrera::getGeneralidad($generalidades == NULL ? 0 : $generalidades[0]['Id']);
+    $generalidad = GeneralidadesCarrera::getGeneralidad(is_array($generalidades) && !empty($generalidades) ? (int)$generalidades[0]['Id'] : 0);
     $proId = PlanEstudioPropositoCarrera::getPlanPropositoId($id);
     $proposito = PropositoCarrera::getProposito($proId == NULL ? 0 : $proId[0]['Id']);
     $comGeneral = PlanEstudioCompetenciaGeneral::getPlanComGenerales($id);
@@ -138,6 +138,21 @@ $router->post('/plan/creador/{id}', function($id){
     $controller = new CurricularDesign;
     $controller->guardarCreador($id);
 });
+
+$router->post('/plan/generalidades/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->guardarGeneralidades($id);
+});
+
+$router->put('/plan/generalidades/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->actualizarGeneralidades($id);
+});
+
 
 //eliminar plan de estudio o desactivar
 $router->get('/deletePlan/{id}', function($id){

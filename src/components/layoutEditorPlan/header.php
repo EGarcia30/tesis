@@ -17,8 +17,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!--<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">-->
-    <!-- JQUERY -->
-    <script src="<?= URL_PATH ?>/js/jquery-3.6.4.min.js"></script>
 
     <title><?= $this->d['title']. " - " . institution ?></title>
 

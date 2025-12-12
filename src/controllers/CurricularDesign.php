@@ -48,8 +48,8 @@ class CurricularDesign extends Controller{
             'carreras' => $carreras,
             'rows' => $totalItems,
             'itemShow' => $itemShow,
-            'color' => $_SESSION['color'] == '' ? null : $_SESSION['color'],
-            'message' => $_SESSION['message'] == '' ? null : $_SESSION['message']
+            'color' => isset($_SESSION['color']) ? $_SESSION['color'] : null,
+            'message' => isset($_SESSION['message']) ? $_SESSION['message'] : null
         ];
 
         $this->render('plan/index', $data);
@@ -395,6 +395,74 @@ class CurricularDesign extends Controller{
         'status' => 'success', 
         'creador' => ['creador_id' => $creadorBD->getId(), 'nombre_creador' => $creadorBD->getName()]
         ]);
+    }
+
+    public function guardarGeneralidades($id){ 
+        $idPlan = intval($id);
+        $generalidad_id = intval($this->post('generalidad_id'));
+        $generalidad_requisito = $this->post('generalidadRequisito');
+        $generalidad_anios = intval($this->post('generalidadAnios'));
+        $generalidad_ciclos = intval($this->post('generalidadCiclos'));
+        $generalidad_asignatura = intval($this->post('generalidadAsignatura'));
+        $generalidad_valorativas = intval($this->post('generalidadValorativas'));
+        $generalidad_sede = $this->post('generalidadSede');
+        $generalidad_responsable = $this->post('generalidadResponsable');
+        $generalidad_inicio = intval($this->post('generalidadInicio'));
+
+        //Creando nueva generalidad
+        $generalidadCarrera = new GeneralidadesCarrera($generalidad_requisito,$generalidad_anios,$generalidad_ciclos,
+        $generalidad_asignatura,$generalidad_valorativas,$generalidad_sede,$generalidad_responsable,$generalidad_inicio);
+        $idGenCarrera =  $generalidadCarrera->createGeneralidad();
+        //Haciendo la relacion generdlidades de la carrera con el plan de estudio
+        $idGC = intval($idGenCarrera['id_generalidades']);
+        $PlanE_GeneralidadCar = new PlanEstudioGeneralidadesCarrera($idPlan,$idGC);
+        $PlanE_GeneralidadCar->createPlanGeneralidad();
+        // retornar respuesta
+        if(!$PlanE_GeneralidadCar){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Datos guardados correctamente', 'id_generalidad' => $idGC]);
+    }
+
+    public function actualizarGeneralidades($id) { 
+        $idPlan = intval($id);
+        
+        // Leer JSON del body PUT
+        $input = file_get_contents('php://input');
+        $datos = json_decode($input, true);
+        
+        if (!$datos) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Datos JSON inválidos']);
+            return;
+        }
+        
+        $generalidad_id = intval($datos['generalidad_id'] ?? 0);
+        $generalidad_requisito = $datos['generalidadRequisito'] ?? '';
+        $generalidad_anios = intval($datos['generalidadAnios'] ?? 0);
+        $generalidad_ciclos = intval($datos['generalidadCiclos'] ?? 0);
+        $generalidad_asignatura = intval($datos['generalidadAsignatura'] ?? 0);
+        $generalidad_valorativas = intval($datos['generalidadValorativas'] ?? 0);
+        $generalidad_sede = $datos['generalidadSede'] ?? '';
+        $generalidad_responsable = $datos['generalidadResponsable'] ?? '';
+        $generalidad_inicio = intval($datos['generalidadInicio'] ?? 0);
+
+        $generalidadCarrera = new GeneralidadesCarrera($generalidad_requisito, $generalidad_anios, $generalidad_ciclos,
+            $generalidad_asignatura, $generalidad_valorativas, $generalidad_sede, $generalidad_responsable, $generalidad_inicio);
+        $generalidadCarrera->setId($generalidad_id);
+        $updateGen = $generalidadCarrera->updateGeneralidad();
+
+        if (!$updateGen) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo actualizar en bd']);
+            return;
+        }
+        
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Datos actualizados correctamente', 'id_generalidad' => $generalidad_id]);
     }
 
     //eliminar plan de estudio
