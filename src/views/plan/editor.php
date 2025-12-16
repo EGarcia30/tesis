@@ -231,6 +231,7 @@
         formFundamentacionSubmit();
         formCreadorChange();
         formGeneralidadesSubmit();
+        formPropositoSubmit();
     });
 
     //PORTADA
@@ -649,6 +650,62 @@
                 .then(data => {
                     const divGeneralidades = document.getElementById('generalidad_id');
                     divGeneralidades.value = data.id_generalidad;
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error al guardar');
+                });
+            }
+        });
+    }
+
+    //PROPÓSITO
+    function formPropositoSubmit() {
+        const form = document.getElementById('formProposito');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const idPlan = formData.get('id_plan');
+            const idProposito = formData.get('proposito_id');
+            
+            const esUpdate = idProposito != 0;
+            
+            if (esUpdate) {
+                // PUT: JSON
+                const datosEnviar = Object.fromEntries(formData);
+                fetch(`/tesis/plan/proposito/${idPlan}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosEnviar)
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error servidor');
+                    return response.json();
+                })
+                .then(data => {
+                    const divProposito = document.getElementById('proposito_id');
+                    divProposito.value = data.id_proposito;
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error al guardar');
+                });
+            } else {
+                // POST: FormData nativo (sin headers)
+                fetch(`/tesis/plan/proposito/${idPlan}`, {
+                    method: 'POST',
+                    body: formData  // FormData directo
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error servidor');
+                    return response.json();
+                })
+                .then(data => {
+                    const divProposito = document.getElementById('proposito_id');
+                    divProposito.value = data.id_proposito;
                 })
                 .catch(error => {
                     console.error(error);

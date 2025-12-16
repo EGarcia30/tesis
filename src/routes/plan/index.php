@@ -153,6 +153,20 @@ $router->put('/plan/generalidades/{id}', function($id){
     $controller->actualizarGeneralidades($id);
 });
 
+$router->put('/plan/proposito/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->actualizarProposito($id);
+});
+
+
+$router->post('/plan/proposito/{id}', function($id){
+    notAuth();
+    IsUser();
+    $controller = new CurricularDesign;
+    $controller->guardarProposito($id);
+});
 
 //eliminar plan de estudio o desactivar
 $router->get('/deletePlan/{id}', function($id){

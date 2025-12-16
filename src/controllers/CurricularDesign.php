@@ -465,6 +465,59 @@ class CurricularDesign extends Controller{
         echo json_encode(['status' => 'success', 'message' => 'Datos actualizados correctamente', 'id_generalidad' => $generalidad_id]);
     }
 
+    public function actualizarProposito($id) { 
+        $idPlan = intval($id);
+        
+        // Leer JSON del body PUT
+        $input = file_get_contents('php://input');
+        $datos = json_decode($input, true);
+        
+        if (!$datos) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Datos JSON inválidos']);
+            return;
+        }
+        
+        $proposito_id = intval($datos['proposito_id'] ?? 0);
+        $descripcion = $datos['proposito'] ?? '';
+
+        $propositoCarrera = new PropositoCarrera($descripcion);
+        $propositoCarrera->setId($proposito_id);
+        $updatePro = $propositoCarrera->updateProposito();
+
+        if (!$updatePro) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo actualizar en bd']);
+            return;
+        }
+        
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Datos actualizados correctamente', 'id_proposito' => $proposito_id]);
+    }
+
+    public function guardarProposito($id){ 
+        $idPlan = intval($id);
+        $proposito = $this->post('proposito');
+
+        //Creando un Proposito de Carrera en el plan de estudio
+        $propositoCarrera = new PropositoCarrera($proposito);
+        $idNew = $propositoCarrera->createProposito();
+
+        $idNewPro = intval($idNew['id_proposito']);
+        //se asocia al plan de estudio
+        $planProposito = new PlanEstudioPropositoCarrera($idPlan,$idNewPro);
+        $planProposito->createPlanProposito();
+
+        // retornar respuesta
+        if(!$planProposito){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Datos guardados correctamente', 'id_proposito' => $idNewPro]);
+    }
+
     //eliminar plan de estudio
     public function deletePlan($id){
 

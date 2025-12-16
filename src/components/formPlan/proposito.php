@@ -41,8 +41,8 @@
 
 <form action="" method="post" class="form-section" id="formProposito">
     <h2 class="section-title">Propósito de la Carrera</h2>
-    
-    <input type="hidden" name="opcionProposito[]" value="<?= $this->d['proposito'] == NULL ? 0 : $this->d['proposito']->getId()?>">
+    <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
+    <input type="hidden" name="proposito_id" id="proposito_id" value="<?= isset($this->d['proposito']) && $this->d['proposito'] !== false ? $this->d['proposito']->getId() : 0 ?>">
     
     <div class="form-group-custom">
         <label class="form-label-custom">
@@ -51,13 +51,13 @@
         </label>
         <textarea 
             class="textarea-modern" 
-            name="opcionProposito[]" 
-            id="txtProposito" 
+            name="proposito" 
+            id="proposito" 
             rows="14"
             placeholder="Describe el propósito, objetivos y alcance de la carrera. Explica qué competencias desarrollará el estudiante y cómo contribuirá a su desarrollo profesional..."
             maxlength="5000"
             oninput="updateCharCounter(this)"
-        ><?= $this->d['proposito'] == NULL ? '' : $this->d['proposito']->getDescripcion()?></textarea>
+        ><?= isset($this->d['proposito']) && $this->d['proposito'] !== false ? $this->d['proposito']->getDescripcion() : '' ?></textarea>
         
         <div class="textarea-counter">
             <small class="form-text-custom" style="padding-left: 0;">
@@ -88,7 +88,7 @@
             <i class="fas fa-arrow-left"></i>
             Anterior
         </button>
-        <button type="button" class="btn-next-section nav_link" data-bs-target="formComGeneral">
+        <button type="submit" class="btn-next-section nav_link" data-bs-target="formComGeneral">
             Siguiente
             <i class="fas fa-arrow-right"></i>
         </button>
@@ -118,7 +118,7 @@ function updateCharCounter(textarea) {
 
 // Inicializar contador al cargar
 document.addEventListener('DOMContentLoaded', function() {
-    const textarea = document.getElementById('txtProposito');
+    const textarea = document.getElementById('proposito');
     if (textarea) {
         updateCharCounter(textarea);
     }
