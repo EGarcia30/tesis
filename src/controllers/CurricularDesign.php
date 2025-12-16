@@ -518,6 +518,52 @@ class CurricularDesign extends Controller{
         echo json_encode(['status' => 'success', 'message' => 'Datos guardados correctamente', 'id_proposito' => $idNewPro]);
     }
 
+    public function guardarComGeneral($id){ 
+        $idPlan = intval($id);
+        $descripcion = $this->post('competenciaGeneral');
+        $ciclo = intval($this->post('ciclo'));
+
+        //Ingresando nueva competencia general al plan de estudio
+        $competenciaGeneral = new CompetenciaGeneral($descripcion,$ciclo);
+        $id = $competenciaGeneral->createComGeneral();
+
+        $planCompetenciaGen = new PlanEstudioCompetenciaGeneral($idPlan, $id['id_general']);
+        $planCompetenciaGen->createPlanComGeneral();
+
+        // retornar respuesta
+        if(!$planCompetenciaGen){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'descripcion' => $descripcion, 'ciclo' => $ciclo , 'general_id' => $id['id_general']]);
+    }
+
+    public function eliminarComGeneral($idPlan, $idComGeneral){ 
+        $idPlan = intval($idPlan);
+        $idComGeneral = intval($idComGeneral);
+
+        $deletePC = PlanEstudioCompetenciaGeneral::deletePlanComGeneral($idComGeneral,$idPlan);
+
+        if(!$deletePC){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar la competencia general del plan de estudio']);
+            exit();
+        }
+
+        $delete = CompetenciaGeneral::deleteComGeneral($idComGeneral);
+
+        if(!$delete){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar la competencia general']);
+            exit();
+        }
+
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Competencia general eliminada correctamente']);
+    }
+
     //eliminar plan de estudio
     public function deletePlan($id){
 

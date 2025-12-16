@@ -184,6 +184,17 @@ $router->delete('/creador/plan/{idCreador}/{idPlan}', function($idCreador,$idPla
 });
 
 //PLAN-COMPETENCIA GENERAL
+$router->post('/plan/competencias-generales/{idPlan}', function($idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->guardarComGeneral($idPlan);
+});
+
+$router->delete('/plan/competencias-generales/{idPlan}/{idComGeneral}', function($idPlan, $idComGeneral){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->eliminarComGeneral($idPlan, $idComGeneral);
+});
 //actualizar
 $router->post('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$idPlan){
     notAuth();

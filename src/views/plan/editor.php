@@ -232,6 +232,7 @@
         formCreadorChange();
         formGeneralidadesSubmit();
         formPropositoSubmit();
+        formComGeneralSubmit();
     });
 
     //PORTADA
@@ -439,7 +440,7 @@
                 mostrarMensaje('Creador desvinculado correctamente', 'success');
                 
                 // 3. ✅ LIMPIAR COMPLETAMENTE EL MODAL + BACKDROP
-                limpiarModalCompletamente(idCreador);
+                limpiarModalCompletamenteCreador(idCreador);
                 
                 // 4. ✅ Verificar estado vacío
                 const tbody = document.querySelector('.specialists-table tbody');
@@ -457,7 +458,7 @@
     }
 
     // ✅ NUEVA FUNCIÓN: Limpia modal + backdrop completamente
-    function limpiarModalCompletamente(idCreador) {
+    function limpiarModalCompletamenteCreador(idCreador) {
         const modalId = `deleteCreadorPlan${idCreador}`;
         const modalElement = document.querySelector(`#${modalId}`);
         
@@ -580,7 +581,7 @@
     // ✅ INTERCEPTAR CLICKS DE BOTONES ELIMINAR EN MODALES (IMPORTANTE)
     // ✅ INTERCEPTADOR QUE MANEJA AMBOS TIPOS DE BOTONES
     document.addEventListener('click', function(e) {
-        const btnEliminar = e.target.closest('.modal .btn-danger');
+        const btnEliminar = e.target.closest('[data-creador-id]');
         if (btnEliminar) {
             e.preventDefault();
             e.stopPropagation();
@@ -714,5 +715,206 @@
             }
         });
     }
+
+    //COMPETENCIAS GENERALES
+    function formComGeneralSubmit() {
+        const form = document.getElementById('comGeneral');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const idPlan = formData.get('id_plan');
+            
+            fetch(`/tesis/plan/competencias-generales/${idPlan}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && data.descripcion) {
+                    agregarCompetenciaGeneralATabla(data, idPlan);
+                    form.reset();
+                    updateCycleBadge(document.getElementById('ciclo'));
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Error al guardar');
+            });
+        });
+    }
+
+    // ✅ FUNCIÓN para agregar competencia general + modal dinámicamente (CORREGIDA)
+    function agregarCompetenciaGeneralATabla(data, idPlan) {
+        let tbody = document.querySelector('.competence-table tbody');
+
+        if (!tbody) {
+            // La tabla no existe, crear estructura y agregar al DOM
+            const assignedSection = document.querySelector('.competence-list-section'); // ✅ Sección específica
+            
+            // Remover mensaje estado vacío si existe
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            const tableHTML = `
+                <div class="table-responsive">
+                    <table class="competence-table">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            `;
+            assignedSection.insertAdjacentHTML('beforeend', tableHTML);
+            tbody = document.querySelector('.competence-table tbody');
+        }
+
+        // Convertir ciclo a romano
+        const cicloRomano = toRoman(data.ciclo);
+        
+        const nuevoTr = document.createElement('tr');
+        nuevoTr.innerHTML = `
+            <td style="width: 50%;">
+                <strong>${data.descripcion}</strong>
+            </td>
+            <td style="width: 25%; text-align: center;">
+                <span class="cycle-badge-table">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    Ciclo ${cicloRomano}
+                </span>
+            </td>
+            <td style="width: 25%; text-align: center;">
+                <button type="button" class="action-btn btn-delete btn-table-action" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteComGeneral${data.general_id}" 
+                        title="Eliminar competencia">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+
+        // Crear el modal dinámico (EXACTAMENTE como agregarCreadorATabla)
+        const modalId = `deleteComGeneral${data.general_id}`;
+        const modalHTML = `
+            <div class="modal fade" id="${modalId}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres eliminar la competencia general?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-start text-break"><b>${data.descripcion}</b>, Se eliminará la vinculación con este plan de estudio.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-danger btn-eliminar" 
+                                    data-general-id="${data.general_id}"
+                                    data-plan-id="${idPlan}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        tbody.appendChild(nuevoTr);
+        document.body.insertAdjacentHTML('beforeend', modalHTML); // ✅ Solo modalDeleteHTML
+    }
+
+    //Elinar competencia general
+    function eliminarComGeneral(idPlan, idComGeneral, filaTr) {
+        fetch(`/tesis/plan/competencias-generales/${idPlan}/${idComGeneral}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la eliminación');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                // 1. ✅ Remover fila de la tabla
+                if (filaTr) filaTr.remove();
+                
+                // 2. ✅ Mostrar alerta
+                mostrarMensaje('Competencia general eliminada correctamente', 'success');
+                
+                // 3. ✅ LIMPIAR COMPLETAMENTE EL MODAL + BACKDROP
+                limpiarModalCompletamenteComGeneral(idComGeneral);
+                
+                // 4. ✅ Verificar estado vacío
+                const tbody = document.querySelector('.competence-table tbody');
+                if (tbody && tbody.children.length === 0) {
+                    mostrarEstadoVacio();
+                }
+            } else {
+                mostrarMensaje(data.message || 'Error al eliminar la competencia general', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarMensaje('Error de conexión', 'danger');
+        });
+    }
+
+    function limpiarModalCompletamenteComGeneral(idComGeneral) {
+        const modalId = `deleteComGeneral${idComGeneral}`;
+        const modalElement = document.querySelector(`#${modalId}`);
+        
+        if (modalElement) {
+            // Obtener instancia del modal
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            
+            if (modal) {
+                // Escuchar evento 'hidden.bs.modal' para limpiar backdrop
+                modalElement.addEventListener('hidden.bs.modal', function cleanup() {
+                    // ✅ FORZAR LIMPIEZA DEL BACKDROP
+                    document.body.classList.remove('modal-open');
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => backdrop.remove());
+                    
+                    // Remover listener para evitar memory leaks
+                    modalElement.removeEventListener('hidden.bs.modal', cleanup);
+                }, { once: true });
+                
+                // Ocultar modal
+                modal.hide();
+            } else {
+                // Si no hay instancia, limpiar manualmente
+                modalElement.remove();
+                document.body.classList.remove('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            }
+        } else {
+            // Limpieza de emergencia si no encuentra el modal
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        }
+    }
+
+    // ✅ INTERCEPTAR CLICKS DE BOTONES ELIMINAR EN MODALES (IMPORTANTE)
+    // ✅ INTERCEPTADOR QUE MANEJA AMBOS TIPOS DE BOTONES
+    document.addEventListener('click', function(e) {
+        const btnEliminar = e.target.closest('[data-general-id]');
+        if (btnEliminar) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // ✅ MÉTODO 1: Si tiene data attributes (modales estáticos/dinámicos corregidos)
+            let idComGeneral = btnEliminar.getAttribute('data-general-id');
+            let idPlan = btnEliminar.getAttribute('data-plan-id');
+            
+            // ✅ MÉTODO 2: Fallback por ID del modal (modales antiguos)
+            if (!idComGeneral) {
+                const modal = btnEliminar.closest('.modal');
+                const modalId = modal.id;
+                idComGeneral = modalId.replace('deleteComGeneral', '');
+                idPlan = document.getElementById('id_plan').value;
+            }
+            
+            const filaTr = document.querySelector(`[data-bs-target="#${btnEliminar.closest('.modal').id}"]`)?.closest('tr');
+            
+            eliminarComGeneral(idPlan, idComGeneral, filaTr);
+        }
+    });
 
     </script>
