@@ -10,12 +10,12 @@ use PDOException;
 class PlanEstudioCompetenciaEspecialidad extends Model{
 
     private int $_idPlan;
-    private array $_idComEspecialidad;
+    private int $_idComEspecialidad;
 
-    public function __construct(int $idPlan, array $data = []){
+    public function __construct(int $idPlan, int $idComEspecialidad){
         parent::__construct();
         $this->_idPlan = $idPlan;
-        $this->_idComEspecialidad = $data;
+        $this->_idComEspecialidad = $idComEspecialidad;
     }
 
     public static function getPlanComEspecialidades($id){
@@ -37,12 +37,10 @@ class PlanEstudioCompetenciaEspecialidad extends Model{
 
     public function createPlanComEspecialidad(){
         try{
-            foreach($this->_idComEspecialidad as $key => $value){
-                $sql = 'INSERT INTO plan_estudio_competencia_especialidad(plan_estudio_id, especialidad_id) VALUES(?,?)';
-                $query = $this->prepare($sql);
-                $data = [$this->_idPlan,$value['id_especialidad']];
-                $res = $query->execute($data);
-            }
+            $sql = 'INSERT INTO plan_estudio_competencia_especialidad(plan_estudio_id, especialidad_id) VALUES(?,?)';
+            $query = $this->prepare($sql);
+            $data = [$this->_idPlan,$this->_idComEspecialidad];
+            $res = $query->execute($data);
             return $res;
         }
         catch(PDOException $e){

@@ -10,32 +10,23 @@ use PDOException;
 class CompetenciaEspecialidad extends Model{
 
     private int $_id;
-    private array $_comEspecialidad = [];
-    private array $_nvlCiclo = [];
+    private string $_comEspecialidad;
+    private string $_nvlCiclo;
 
-    public function __construct(array $data = []){
+    public function __construct($comEspecialidad, $nvlCiclo){
         parent::__construct();
-        for($i = 0; $i < count($data); $i++){
-            if($i % 2 == 0){
-                array_push($this->_comEspecialidad, $data[$i]);
-            }else{
-                array_push($this->_nvlCiclo, $data[$i]);
-            }
-        }
+        $this->_comEspecialidad = $comEspecialidad;
+        $this->_nvlCiclo = $nvlCiclo;
     }
 
     public function createComEspecialidad(){
         try{
-            $arrRes = [];
-            for($i = 0; $i < count($this->_comEspecialidad); $i++){
-                $idCiclo = $this->_nvlCiclo[$i];
-                $sql = "INSERT INTO competencia_especialidad(descripcion,ciclo) VALUES(?,?)";
-                $query = $this->prepare($sql);
-                $data = [$this->_comEspecialidad[$i],$this->_nvlCiclo[$i]];
-                $query->execute($data);
-                array_push($arrRes, $this->getLastId());
-            }
-            return $arrRes;
+            $sql = "INSERT INTO competencia_especialidad(descripcion,ciclo) VALUES(?,?)";
+            $query = $this->prepare($sql);
+            $data = [$this->_comEspecialidad,$this->_nvlCiclo];
+            $query->execute($data);
+            $id = $this->getLastId();
+            return $id;
         }
         catch(PDOException $e){
             error_log($e->getMessage());

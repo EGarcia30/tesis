@@ -190,11 +190,25 @@ $router->post('/plan/competencias-generales/{idPlan}', function($idPlan){
     $controller->guardarComGeneral($idPlan);
 });
 
-$router->delete('/plan/competencias-generales/{idPlan}/{idComGeneral}', function($idPlan, $idComGeneral){
+$router->delete('/plan/competencias-basicas/{idPlan}/{idComBasica}', function($idPlan, $idComBasica){
     notAuth();
     $controller = new CurricularDesign;
-    $controller->eliminarComGeneral($idPlan, $idComGeneral);
+    $controller->eliminarComBasica($idPlan, $idComBasica);
 });
+
+//PLAN-COMPETENCIA ESPECIALIDAD
+$router->post('/plan/competencias-especialidad/{idPlan}', function($idPlan){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->guardarComEspecialidad($idPlan);
+});
+
+$router->delete('/plan/competencias-especialidad/{idPlan}/{idComEspecialidad}', function($idPlan, $idComEspecialidad){
+    notAuth();
+    $controller = new CurricularDesign;
+    $controller->eliminarComEspecialidad($idPlan, $idComEspecialidad);
+});
+
 //actualizar
 $router->post('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$idPlan){
     notAuth();

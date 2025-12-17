@@ -1,13 +1,12 @@
 <div class="form-section" id="formComEspecialidad">
     <h2 class="section-title">Competencias de Especialidad</h2>
     
-    <?php require __DIR__ . '/../informacion.php'; ?>
-    
     <div class="competence-grid">
         <!-- Sección de Agregar -->
         <div class="add-competence-section">
-            <form action="" method="post">
-                <div id="comEspecialidad">
+            <form action="" method="post" id="comEspecialidad">
+                <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
+                <div>
                     <div class="form-group-custom competence-input-group">
                         <label class="form-label-custom">
                             <i class="fas fa-certificate"></i>
@@ -16,7 +15,7 @@
                         <div class="input-wrapper-custom">
                             <i class="fas fa-certificate input-icon-custom"></i>
                             <textarea 
-                                name="opcionEspecialidad[]" 
+                                name="competenciaEspecialidad" 
                                 class="textarea-modern" 
                                 rows="4"
                                 placeholder="Describe la competencia específica de la especialidad que el estudiante dominará..."
@@ -34,7 +33,7 @@
                             <i class="fas fa-calendar input-icon-custom"></i>
                             <input 
                                 type="number" 
-                                name="opcionEspecialidad[]" 
+                                name="cicloEspecialidad" 
                                 step="1" 
                                 min="1"
                                 max="10"
@@ -57,13 +56,9 @@
                 </div>
                 
                 <div class="btn-action-group mt-4">
-                    <button type="button" class="btn-add-specialist" onclick="agregarComEspecialidad()">
-                        <i class="fas fa-plus"></i>
-                        Agregar Competencia
-                    </button>
-                    <button type="button" class="btn-remove-specialist" onclick="eliminarComEspecialidad()">
-                        <i class="fas fa-minus"></i>
-                        Eliminar Última
+                    <button type="submit" class="btn-add-specialist">
+                        <i class="fas fa-save"></i>
+                        Guardar
                     </button>
                 </div>
             </form>
@@ -83,7 +78,7 @@
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="competence-table">
+                    <table class="competence-table competence-table-especialidad">
                         <tbody>
                             <?php foreach($this->d['comEspecialidad'] as $key => $value) :?>
                                 <tr>
@@ -95,12 +90,6 @@
                                             <i class="fas fa-calendar-alt me-1"></i>
                                             Ciclo <?= $value['ciclo']?>
                                         </span>
-                                    </td>
-                                    <td style="width: 12.5%; text-align: center;">
-                                        <button type="button" class="action-btn btn-edit btn-table-action" data-bs-toggle="modal" data-bs-target="#updateComEspecialidad<?= $value['especialidad_id']?>" title="Editar competencia">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <?php require __DIR__ . '/../../components/modalPlan/modalUpdateComEspecialidad.php' ?>
                                     </td>
                                     <td style="width: 12.5%; text-align: center;">
                                         <button type="button" class="action-btn btn-delete btn-table-action" data-bs-toggle="modal" data-bs-target="#deleteComEspecialidad<?= $value['especialidad_id']?>" title="Eliminar competencia">

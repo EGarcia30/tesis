@@ -564,6 +564,52 @@ class CurricularDesign extends Controller{
         echo json_encode(['status' => 'success', 'message' => 'Competencia general eliminada correctamente']);
     }
 
+    public function guardarComEspecialidad($id){ 
+        $idPlan = intval($id);
+        $descripcion = $this->post('competenciaEspecialidad');
+        $ciclo = intval($this->post('cicloEspecialidad'));
+
+        //Ingresando nueva competencia especialidad al plan de estudio
+        $competenciaEspecialidad = new CompetenciaEspecialidad($descripcion,$ciclo);
+        $id = $competenciaEspecialidad->createComEspecialidad();
+
+        $planCompetenciaEsp = new PlanEstudioCompetenciaEspecialidad($idPlan, $id['id_especialidad']);
+        $planCompetenciaEsp->createPlanComEspecialidad();
+
+        // retornar respuesta
+        if(!$planCompetenciaEsp){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'descripcion' => $descripcion, 'ciclo' => $ciclo , 'especialidad_id' => $id['id_especialidad']]);
+    }
+
+    public function eliminarComEspecialidad($idPlan, $idComEspecialidad){ 
+        $idPlan = intval($idPlan);
+        $idComEspecialidad = intval($idComEspecialidad);
+
+        $deletePC = PlanEstudioCompetenciaEspecialidad::deletePlanComEspecialidad($idComEspecialidad,$idPlan);
+
+        if(!$deletePC){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar la competencia de especialidad del plan de estudio']);
+            exit();
+        }
+
+        $delete = CompetenciaEspecialidad::deleteComEspecialidad($idComEspecialidad);
+
+        if(!$delete){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar la competencia de especialidad']);
+            exit();
+        }
+
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Competencia de especialidad eliminada correctamente']);
+    }
+
     //eliminar plan de estudio
     public function deletePlan($id){
 
