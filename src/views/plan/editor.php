@@ -1514,5 +1514,28 @@
             document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
         }
     }
-
+    
+    document.addEventListener('click', function(e) {
+        const btnEliminar = e.target.closest('[data-area-id]');
+        if (btnEliminar) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // ✅ MÉTODO 1: Si tiene data attributes (modales estáticos/dinámicos corregidos)
+            let idArea = btnEliminar.getAttribute('data-area-id');
+            let idPlan = btnEliminar.getAttribute('data-plan-id');
+            
+            // ✅ MÉTODO 2: Fallback por ID del modal (modales antiguos)
+            if (!idArea) {
+                const modal = btnEliminar.closest('.modal');
+                const modalId = modal.id;
+                idArea = modalId.replace('deleteArea', '');
+                idPlan = document.getElementById('id_plan').value;
+            }
+            
+            const filaTr = document.querySelector(`[data-bs-target="#${btnEliminar.closest('.modal').id}"]`)?.closest('tr');
+            
+            eliminarArea(idPlan, idArea, filaTr);
+        }
+    });
 </script>
