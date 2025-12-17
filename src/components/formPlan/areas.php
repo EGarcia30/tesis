@@ -249,13 +249,12 @@
 <div class="form-section" id="formAreas">
     <h2 class="section-title">Áreas de Desempeño</h2>
     
-    <?php require __DIR__ . '/../informacion.php'; ?>
-    
     <div class="areas-layout">
         <!-- Formulario de Áreas -->
         <div class="area-form-section">
-            <form action="" method="post">
-                <div id="areas">
+            <form action="" method="post" id="areas">
+                <input type="hidden" name="id_plan" id="id_plan" value="<?=$this->d['plan']->getId()?>">
+                <div>
                     <hr class="form-divider">
                     
                     <div class="form-group-custom">
@@ -265,7 +264,7 @@
                         </label>
                         <div class="input-wrapper-custom">
                             <i class="fas fa-briefcase input-icon-custom"></i>
-                            <input type="text" name="opcionAreas[]" class="form-control-custom" placeholder="Ej: Desarrollo de Software">
+                            <input type="text" name="competenciaArea" class="form-control-custom" placeholder="Ej: Desarrollo de Software">
                         </div>
                     </div>
                     
@@ -276,7 +275,7 @@
                         </label>
                         <div class="input-wrapper-custom">
                             <i class="fas fa-user-tie input-icon-custom"></i>
-                            <input type="text" name="opcionAreas[]" class="form-control-custom" placeholder="Ej: Desarrollador Full Stack">
+                            <input type="text" name="competenciaAreaPuesto" class="form-control-custom" placeholder="Ej: Desarrollador Full Stack">
                         </div>
                     </div>
                     
@@ -286,7 +285,7 @@
                             Funciones del Puesto
                         </label>
                         <textarea 
-                            name="opcionAreas[]" 
+                            name="competenciaAreaFunciones" 
                             class="textarea-modern" 
                             rows="5"
                             placeholder="Describe las principales funciones y responsabilidades del puesto..."
@@ -302,7 +301,7 @@
                             <div class="checkbox-modern">
                                 <input 
                                     class="form-check-input" 
-                                    name="opcionAreas[]" 
+                                    name="competenciaAreaOrganizacion" 
                                     type="checkbox" 
                                     value="empresa privada" 
                                     id="empresaPrivada"
@@ -315,7 +314,7 @@
                             <div class="checkbox-modern">
                                 <input 
                                     class="form-check-input" 
-                                    name="opcionAreas[]" 
+                                    name="competenciaAreaOrganizacion" 
                                     type="checkbox" 
                                     value="empresa publica" 
                                     id="empresaPublica"
@@ -330,13 +329,9 @@
                 </div>
                 
                 <div class="btn-action-group mt-4">
-                    <button type="button" class="btn-add-specialist" onclick="agregarAreas()">
-                        <i class="fas fa-plus"></i>
-                        Agregar Área
-                    </button>
-                    <button type="button" class="btn-remove-specialist" onclick="eliminarAreas()">
-                        <i class="fas fa-minus"></i>
-                        Eliminar Última
+                    <button type="submit" class="btn-add-specialist">
+                        <i class="fas fa-save"></i>
+                        Guardar
                     </button>
                 </div>
             </form>
@@ -359,12 +354,11 @@
                     <table class="areas-table">
                         <thead>
                             <tr>
-                                <th style="width: 20%;">Área</th>
-                                <th style="width: 20%;">Puesto</th>
-                                <th style="width: 30%;">Funciones</th>
-                                <th style="width: 15%;">Organización</th>
-                                <th style="width: 7.5%;">Editar</th>
-                                <th style="width: 7.5%;">Eliminar</th>
+                                <th>Área</th>
+                                <th>Puesto</th>
+                                <th>Funciones</th>
+                                <th>Organización</th>
+                                <th>Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -374,12 +368,6 @@
                                     <td><?= $value['puesto']?></td>
                                     <td><?= $value['funciones_puesto']?></td>
                                     <td><?= $value['tipo_organizacion']?></td>
-                                    <td style="text-align: center;">
-                                        <button type="button" class="action-btn btn-edit btn-table-action" data-bs-toggle="modal" data-bs-target="#updateArea<?= $value['area_id']?>" title="Editar área">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <?php require __DIR__ . '/../../components/modalPlan/modalUpdateArea.php' ?>
-                                    </td>
                                     <td style="text-align: center;">
                                         <button type="button" class="action-btn btn-delete btn-table-action" data-bs-toggle="modal" data-bs-target="#deleteArea<?= $value['area_id']?>" title="Eliminar área">
                                             <i class="fas fa-trash-alt"></i>
@@ -396,7 +384,7 @@
     </div>
     
     <!-- Navegación Final -->
-    <div class="navigation-buttons">
+    <div class="navigation-buttons mb-3">
         <button type="button" class="btn-prev-section nav_link" data-bs-target="formComEspecialidad">
             <i class="fas fa-arrow-left"></i>
             Anterior

@@ -222,51 +222,15 @@ $router->delete('/plan/competencias-basicas/{idPlan}/{idComBasica}', function($i
     $controller->eliminarComBasica($idPlan, $idComBasica);
 });
 
-//actualizar
-$router->post('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$idPlan){
+//PLAN-AREAS
+$router->post('/plan/areas/{idPlan}', function($idPlan){
     notAuth();
     $controller = new CurricularDesign;
-    $controller->updatePlanComGeneral($idComGeneral,$idPlan);
-});
-//eliminar
-$router->get('/general/plan/{idComGeneral}/{idPlan}', function($idComGeneral,$idPlan){
-    notAuth();
-    $controller = new CurricularDesign;
-    $controller->deletePlanComGeneral($idComGeneral,$idPlan);
+    $controller->guardarArea($idPlan);
 });
 
-$router->post('/basica/plan/{idComBasica}/{idPlan}', function($idComBasica,$idPlan){
+$router->delete('/plan/areas/{idPlan}/{idArea}', function($idPlan, $idArea){
     notAuth();
     $controller = new CurricularDesign;
-    $controller->updatePlanComBasica($idComBasica,$idPlan);
-});
-//eliminar
-$router->get('/basica/plan/{idComBasica}/{idPlan}', function($idComBasica,$idPlan){
-    notAuth();
-    $controller = new CurricularDesign;
-    $controller->deletePlanComBasica($idComBasica,$idPlan);
-});
-
-$router->post('/especialidad/plan/{idComEspecialidad}/{idPlan}', function($idComEspecialidad,$idPlan){
-    notAuth();
-    $controller = new CurricularDesign;
-    $controller->updatePlanComEspecialidad($idComEspecialidad,$idPlan);
-});
-//eliminar
-$router->get('/especialidad/plan/{idComEspecialidad}/{idPlan}', function($idComEspecialidad,$idPlan){
-    notAuth();
-    $controller = new CurricularDesign;
-    $controller->deletePlanComEspecialidad($idComEspecialidad,$idPlan);
-});
-
-$router->post('/area/plan/{idAreas}/{idPlan}', function($idAreas,$idPlan){
-    notAuth();
-    $controller = new CurricularDesign;
-    $controller->updatePlanAreas($idAreas,$idPlan);
-});
-//eliminar
-$router->get('/area/plan/{idAreas}/{idPlan}', function($idAreas,$idPlan){
-    notAuth();
-    $controller = new CurricularDesign;
-    $controller->deletePlanAreas($idAreas,$idPlan);
+    $controller->eliminarArea($idPlan, $idArea);
 });

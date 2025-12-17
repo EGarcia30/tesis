@@ -11,7 +11,11 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-            <a href="/tesis/area/plan/<?= $value['area_id']?>/<?=$this->d['plan']->getId()?>" class="btn btn-danger">Eliminar</a>
+            <button type="button" class="btn btn-danger btn-eliminar" 
+                    data-area-id="<?= $value['area_id']?>" 
+                    data-plan-id="<?= $this->d['plan']->getId()?>">
+                Eliminar
+            </button>
         </div>
         </div>
     </div>

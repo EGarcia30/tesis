@@ -235,6 +235,7 @@
         formComGeneralSubmit();
         formComBasicasSubmit();
         formComEspecialidadSubmit();
+        formAreasSubmit();
     });
 
     //PORTADA
@@ -1339,4 +1340,179 @@
         }
     });
 
-    </script>
+    //AREAS
+    function formAreasSubmit() {
+        const form = document.getElementById('areas');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita recargar la página
+
+            const formData = new FormData(event.target);
+
+            const idPlan = formData.get('id_plan');
+
+            fetch(`/tesis/plan/areas/${idPlan}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && data.puesto) {
+                    agregarAreaATabla(data, idPlan);
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al guardar');
+            });
+        });
+    }
+
+    function agregarAreaATabla(data, idPlan) {
+        let tbody = document.querySelector('.areas-table tbody');
+
+        if (!tbody) {
+            // La tabla no existe, crear estructura completa
+            const container = document.querySelector('.areas-container'); // Sección contenedora
+            
+            // Remover mensaje estado vacío si existe
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            const tableHTML = `
+                <div class="table-responsive">
+                    <table class="areas-table">
+                        <thead>
+                            <tr>
+                                <th>Área</th>
+                                <th>Puesto</th>
+                                <th>Funciones</th>
+                                <th>Organización</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', tableHTML);
+            tbody = document.querySelector('.areas-table tbody');
+        }
+
+        const nuevoTr = document.createElement('tr');
+        nuevoTr.innerHTML = `
+            <td><strong>${data.area}</strong></td>
+            <td>${data.puesto}</td>
+            <td>${data.funciones}</td>
+            <td>${data.organizacion}</td>
+            <td style="text-align: center;">
+                <button type="button" class="action-btn btn-delete btn-table-action" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteArea${data.area_id}" 
+                        title="Eliminar área">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+
+        // Crear el modal dinámico
+        const modalId = `deleteArea${data.area_id}`;
+        const modalHTML = `
+            <div class="modal fade" id="${modalId}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres eliminar el area de desempeño?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-start text-break"><b>${data.area}</b>, Se eliminará la vinculación con este plan de estudio.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-danger btn-eliminar" 
+                                    data-area-id="${data.area_id}" 
+                                    data-plan-id="${idPlan}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        tbody.appendChild(nuevoTr);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function eliminarArea(idPlan, idArea, filaTr) {
+        fetch(`/tesis/plan/area/${idPlan}/${idArea}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la eliminación');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                // 1. Remover fila de la tabla
+                if (filaTr) filaTr.remove();
+                
+                // 2. Mostrar alerta
+                mostrarMensaje('Área de desempeño eliminada correctamente', 'success');
+                
+                // 3. LIMPIAR COMPLETAMENTE EL MODAL + BACKDROP
+                limpiarModalCompletamenteArea(idArea);
+                
+                // 4. Verificar estado vacío
+                const tbody = document.querySelector('.areas-table tbody');
+                if (tbody && tbody.children.length === 0) {
+                    mostrarEstadoVacio();
+                }
+            } else {
+                mostrarMensaje(data.message || 'Error al eliminar el área de desempeño', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarMensaje('Error de conexión', 'danger');
+        });
+    }
+
+    function limpiarModalCompletamenteArea(idArea) {
+        const modalId = `deleteArea${idArea}`;
+        const modalElement = document.querySelector(`#${modalId}`);
+        
+        if (modalElement) {
+            // Obtener instancia del modal
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            
+            if (modal) {
+                // Escuchar evento 'hidden.bs.modal' para limpiar backdrop
+                modalElement.addEventListener('hidden.bs.modal', function cleanup() {
+                    // FORZAR LIMPIEZA DEL BACKDROP
+                    document.body.classList.remove('modal-open');
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => backdrop.remove());
+                    
+                    // Remover listener para evitar memory leaks
+                    modalElement.removeEventListener('hidden.bs.modal', cleanup);
+                }, { once: true });
+                
+                // Ocultar modal
+                modal.hide();
+            } else {
+                // Si no hay instancia, limpiar manualmente
+                modalElement.remove();
+                document.body.classList.remove('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            }
+        } else {
+            // Limpieza de emergencia si no encuentra el modal
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        }
+    }
+
+</script>

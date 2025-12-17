@@ -656,228 +656,56 @@ class CurricularDesign extends Controller{
         echo json_encode(['status' => 'success', 'message' => 'Competencia de especialidad eliminada correctamente']);
     }
 
+    public function guardarArea($id){ 
+        $idPlan = intval($id);
+        $area = $this->post('competenciaArea');
+        $areaPuesto = $this->post('competenciaAreaPuesto');
+        $areaFunciones = $this->post('competenciaAreaFunciones');
+        $areaOrganizacion = $this->post('competenciaAreaOrganizacion');
+
+        //ingresando areas de desempeño en el plan de estudio
+        $area_desempenio = new Areas($area,$areaPuesto,$areaFunciones,$areaOrganizacion,$idPlan);
+        $area_desempenio->createAreas();
+
+        // retornar respuesta
+        if(!$area_desempenio){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode([
+            'status' => 'success', 
+            'area' => $area, 
+            'puesto' => $areaPuesto,
+            'funciones' => $areaFunciones,
+            'organizacion' => $areaOrganizacion,
+            'message' => 'Datos guardados correctamente'
+        ]);
+    }
+
+    public function eliminarArea($idPlan, $idArea){ 
+        $idPlan = intval($idPlan);
+        $idArea = intval($idArea);
+
+        $delete = Areas::deleteAreas($idArea);
+
+        if(!$delete){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar el area de desempeño']);
+            exit();
+        }
+
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Area de desempeño eliminada correctamente']);
+    }
+
     //eliminar plan de estudio
     public function deletePlan($id){
 
         $res = StudyPlan::deletePlan($id);
 
         header("location:/tesis/planes/1");
-    }
-
-    //VINCULACIONES CON EL PLAN DE ESTUDIO
-
-    //CREADOR-PLAN DE ESTUDIO
-    public function deletePlanCreador($idCreador, $idPlan) {       
-        $delete = PlanEstudioCreador::deletePlanCreador($idCreador, $idPlan);
-        
-        if (!$delete) {
-            http_response_code(400);
-            echo json_encode(['status' => 'error', 'message' => 'ERROR: No se pudo desvincular el creador.']);
-            exit();
-        }
-        http_response_code(201);
-        echo json_encode(['status' => 'success', 'message' => 'Se desvinculó el creador correctamente.']);
-    }
-
-    //Competencia General - Plan de estudio
-    public function updatePlanComGeneral($idComGeneral,$idPlan){
-        $funcion = $this->post('descripcion');
-        $ciclo = $this->post('ciclo');
-
-        if(empty($descripcion) || empty($ciclo)){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Ingrese datos.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $updateComGeneral = CompetenciaGeneral::updateComGeneral($idComGeneral,$descripcion,$ciclo);
-
-        if(!$updateComGeneral){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al actualizar competencia general.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Cambios realizados.';
-        header("location:/tesis/plan/editor/$idPlan");
-
-    }
-    
-    public function deletePlanComGeneral($idComGeneral,$idPlan){
-        $deletePC = PlanEstudioCompetenciaGeneral::deletePlanComGeneral($idComGeneral,$idPlan);
-
-        if(!$deletePC){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar competencia general.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $delete = CompetenciaGeneral::deleteComGeneral($idComGeneral);
-
-        if(!$delete){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar competencia general.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        error_log('funciona');
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se eliminó la competencia general.';
-        header("location:/tesis/plan/editor/$idPlan");
-    }
-
-    //Competencia Basica - Plan de estudio
-    public function updatePlanComBasica($idComBasica,$idPlan){
-        $descripcion = $this->post('descripcion');
-        $ciclo = $this->post('ciclo');
-
-        if(empty($descripcion) || empty($ciclo)){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Ingrese datos.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $updateComBasica = CompetenciaBasica::updateComBasica($idComBasica,$descripcion,$ciclo);
-
-        if(!$updateComBasica){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al actualizar competencia basica.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Cambios realizados.';
-        header("location:/tesis/plan/editor/$idPlan");
-
-    }
-    
-    public function deletePlanComBasica($idComBasica,$idPlan){
-        $deletePC = PlanEstudioCompetenciaBasica::deletePlanComBasica($idComBasica,$idPlan);
-
-        if(!$deletePC){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar competencia basica.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $delete = CompetenciaBasica::deleteComBasica($idComBasica);
-
-        if(!$delete){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar competencia basica.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        error_log('funciona');
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se eliminó la competencia basica.';
-        header("location:/tesis/plan/editor/$idPlan");
-    }
-
-    //Competencia Basica - Plan de estudio
-    public function updatePlanComEspecialidad($idComEspecialidad,$idPlan){
-        $descripcion = $this->post('descripcion');
-        $ciclo = $this->post('ciclo');
-
-        if(empty($descripcion) || empty($ciclo)){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Ingrese datos.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $updateComEspecialidad = CompetenciaEspecialidad::updateComEspecialidad($idComEspecialidad,$descripcion,$ciclo);
-
-        if(!$updateComEspecialidad){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al actualizar competencia especialidad.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Cambios realizados.';
-        header("location:/tesis/plan/editor/$idPlan");
-
-    }
-    
-    public function deletePlanComEspecialidad($idComEspecialidad,$idPlan){
-        $deletePC = PlanEstudioCompetenciaEspecialidad::deletePlanComEspecialidad($idComEspecialidad,$idPlan);
-
-        if(!$deletePC){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar competencia especialidad.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $delete = CompetenciaEspecialidad::deleteComEspecialidad($idComEspecialidad);
-
-        if(!$delete){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar competencia especialidad.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        error_log('funciona');
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se eliminó la competencia especialidad.';
-        header("location:/tesis/plan/editor/$idPlan");
-    }
-
-    //Areas - Plan de estudio
-    public function updatePlanAreas($idAreas,$idPlan){
-        $area = $this->post('area');
-        $puesto = $this->post('puesto');
-        $funcion = $this->post('funcion');
-        $tipo = $this->post('tipo');
-
-        if(empty($area) || empty($puesto) || empty($funcion) || empty($tipo)){
-            $_SESSION['color'] = 'warning';
-            $_SESSION['message'] = 'Ingrese datos.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $updateAreas = Areas::updateAreas($idAreas,$area,$puesto,$funcion,$tipo);
-
-        if(!$updateAreas){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al actualizar área de desempeño.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Cambios realizados.';
-        header("location:/tesis/plan/editor/$idPlan");
-
-    }
-    
-    public function deletePlanAreas($idAreas,$idPlan){
-        $delete = Areas::deleteAreas($idAreas);
-
-        if(!$delete){
-            $_SESSION['color'] = 'danger';
-            $_SESSION['message'] = 'ERROR: Al eliminar área de desempeño.';
-            header("location:/tesis/plan/editor/$idPlan");
-            exit();
-        }
-
-        error_log('funciona');
-        $_SESSION['color'] = 'success';
-        $_SESSION['message'] = 'Se eliminó la área de desempeño.';
-        header("location:/tesis/plan/editor/$idPlan");
     }
 
     //descargar documento de word

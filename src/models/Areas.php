@@ -10,35 +10,18 @@ use PDOException;
 class Areas extends Model{
 
     private int $_id;
-    private array $_area = [];
-    private array $_puesto = [];
-    private array $_funciones = [];
-    private array $_tipo = [];
+    private string $_area;
+    private string $_puesto;
+    private string $_funciones;
+    private string $_tipo;
     private int $_idPlan;
 
-    public function __construct(array $data = [], int $idPlan){
+    public function __construct($area, $areaPuesto, $areaFunciones, $areaOrganizacion, int $idPlan){
         parent::__construct();
-        $actualArrPar = $this->_area;
-        $actualArrImpar = $this->_funciones;
-        for ($i = 0; $i < count($data); $i++) {
-            if ($i % 2 == 0) {
-                if($actualArrPar === $this->_area){
-                    array_push($this->_area, $data[$i]);
-                    $actualArrPar = $this->_puesto;
-                }else{
-                    array_push($this->_puesto, $data[$i]);
-                    $actualArrPar = $this->_area;
-                }
-            } else {
-                if($actualArrImpar === $this->_funciones){
-                    array_push($this->_funciones, $data[$i]);
-                    $actualArrImpar = $this->_tipo;
-                }else{
-                    array_push($this->_tipo, $data[$i]);
-                    $actualArrImpar = $this->_funciones;
-                }
-            }
-        }
+        $this->_area = $area;
+        $this->_puesto = $areaPuesto;
+        $this->_funciones = $areaFunciones;
+        $this->_tipo = $areaOrganizacion;
         $this->_idPlan = intval($idPlan);
     }
 
@@ -59,12 +42,10 @@ class Areas extends Model{
 
     public function createAreas(){
         try{
-            for($i = 0; $i < count($this->_area); $i++){
-                $sql = "INSERT INTO area_desempenio(area,puesto,funciones_puesto,tipo_organizacion,plan_estudio_id) VALUES(?,?,?,?,?)";
-                $query = $this->prepare($sql);
-                $data = [$this->_area[$i],$this->_puesto[$i],$this->_funciones[$i],$this->_tipo[$i],$this->_idPlan];
-                $res = $query->execute($data);
-            }
+            $sql = "INSERT INTO area_desempenio(area,puesto,funciones_puesto,tipo_organizacion,plan_estudio_id) VALUES(?,?,?,?,?)";
+            $query = $this->prepare($sql);
+            $data = [$this->_area,$this->_puesto,$this->_funciones,$this->_tipo,$this->_idPlan];
+            $res = $query->execute($data);
             return $res;
         }
         catch(PDOException $e){
