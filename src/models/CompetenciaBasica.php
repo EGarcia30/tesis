@@ -10,32 +10,23 @@ use PDOException;
 class CompetenciaBasica extends Model{
 
     private int $_id;
-    private array $_comBasica = [];
-    private array $_nvlCiclo = [];
+    private string $_comBasica;
+    private string $_nvlCiclo;
 
-    public function __construct(array $data = []){
+    public function __construct($comBasica, $nvlCiclo){
         parent::__construct();
-        for($i = 0; $i < count($data); $i++){
-            if($i % 2 == 0){
-                array_push($this->_comBasica, $data[$i]);
-            }else{
-                array_push($this->_nvlCiclo, $data[$i]);
-            }
-        }
+        $this->_comBasica = $comBasica;
+        $this->_nvlCiclo = $nvlCiclo;
     }
 
     public function createComBasica(){
         try{
-            $arrRes = [];
-            for($i = 0; $i < count($this->_comBasica); $i++){
-                $idCiclo = $this->_nvlCiclo[$i];
-                $sql = "INSERT INTO competencia_basica(descripcion,ciclo) VALUES(?,?)";
-                $query = $this->prepare($sql);
-                $data = [$this->_comBasica[$i],$this->_nvlCiclo[$i]];
-                $query->execute($data);
-                array_push($arrRes, $this->getLastId());
-            }
-            return $arrRes;
+            $sql = "INSERT INTO competencia_basica(descripcion,ciclo) VALUES(?,?)";
+            $query = $this->prepare($sql);
+            $data = [$this->_comBasica,$this->_nvlCiclo];
+            $query->execute($data);
+            $id = $this->getLastId();
+            return $id;
         }
         catch(PDOException $e){
             error_log($e->getMessage());

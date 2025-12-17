@@ -564,6 +564,52 @@ class CurricularDesign extends Controller{
         echo json_encode(['status' => 'success', 'message' => 'Competencia general eliminada correctamente']);
     }
 
+    public function guardarComBasica($id){ 
+        $idPlan = intval($id);
+        $descripcion = $this->post('competenciaBasica');
+        $ciclo = intval($this->post('cicloBasica'));
+
+        //Ingresando nueva competencia basica al plan de estudio
+        $competenciaBasica = new CompetenciaBasica($descripcion,$ciclo);
+        $id = $competenciaBasica->createComBasica();
+
+        $planCompetenciaBas = new PlanEstudioCompetenciaBasica($idPlan, $id['id_basico']);
+        $planCompetenciaBas->createPlanComBasica();
+
+        // retornar respuesta
+        if(!$planCompetenciaBas){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo guardar en bd']);
+            exit();
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'descripcion' => $descripcion, 'ciclo' => $ciclo , 'basica_id' => $id['id_basico']]);
+    }
+
+    public function eliminarComBasica($idPlan, $idComBasica){ 
+        $idPlan = intval($idPlan);
+        $idComBasica = intval($idComBasica);
+
+        $deletePC = PlanEstudioCompetenciaBasica::deletePlanComBasica($idComBasica,$idPlan);
+
+        if(!$deletePC){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar la competencia basica del plan de estudio']);
+            exit();
+        }
+
+        $delete = CompetenciaBasica::deleteComBasica($idComBasica);
+
+        if(!$delete){
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar la competencia basica']);
+            exit();
+        }
+
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'Competencia basica eliminada correctamente']);
+    }
+
     public function guardarComEspecialidad($id){ 
         $idPlan = intval($id);
         $descripcion = $this->post('competenciaEspecialidad');

@@ -233,6 +233,7 @@
         formGeneralidadesSubmit();
         formPropositoSubmit();
         formComGeneralSubmit();
+        formComBasicasSubmit();
         formComEspecialidadSubmit();
     });
 
@@ -918,6 +919,215 @@
         }
     });
 
+    //COMPETENCIAS BASICAS
+    function formComBasicasSubmit() {
+        const form = document.getElementById('comBasica');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita recargar la página
+
+            const formData = new FormData(event.target);
+
+            const idPlan = formData.get('id_plan');
+            const datosEnviar = new URLSearchParams(formData);
+
+            fetch(`/tesis/plan/competencias-basicas/${idPlan}`, {
+                method: 'POST',
+                body: datosEnviar,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del controlador');
+                }
+                return response.json();
+            })
+            .then(data => {
+                //console.log('Respuesta de la API:', data);
+                if (data.status === 'success' && data.descripcion) {
+                    agregarCompetenciaBasicaATabla(data, idPlan);
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al guardar la competencia básica.');
+            });
+        });
+    }
+
+    function agregarCompetenciaBasicaATabla(data, idPlan) {
+        let tbody = document.querySelector('.competence-table-basica tbody');
+
+        if (!tbody) {
+            // La tabla no existe, crear estructura y agregar al DOM
+            const assignedSection = document.querySelector('.competence-list-section'); // ✅ Sección específica
+            
+            // Remover mensaje estado vacío si existe
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            const tableHTML = `
+                <div class="table-responsive">
+                    <table class="competence-table competence-table-basica">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            `;
+            assignedSection.insertAdjacentHTML('beforeend', tableHTML);
+            tbody = document.querySelector('.competence-table-basica tbody');
+        }
+        // Convertir ciclo a romano
+        const cicloRomano = toRoman(data.ciclo);
+        
+        const nuevoTr = document.createElement('tr');
+        nuevoTr.innerHTML = `
+            <td style="width: 50%;">
+                <strong>${data.descripcion}</strong>
+            </td>
+            <td style="width: 25%; text-align: center;">
+                <span class="cycle-badge-table">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    Ciclo ${cicloRomano}
+                </span>
+            </td>
+            <td style="width: 25%; text-align: center;">
+                <button type="button" class="action-btn btn-delete btn-table-action" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteComBasica${data.basica_id}" 
+                        title="Eliminar competencia">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+
+        // Crear el modal dinámico (EXACTAMENTE como agregarbasicaATabla)
+        const modalId = `deleteComBasica${data.basica_id}`;
+        const modalHTML = `
+            <div class="modal fade" id="${modalId}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres eliminar la competencia basica?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-start text-break"><b>${data.descripcion}</b>, Se eliminará la vinculación con este plan de estudio.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                            <button type="button" class="btn btn-danger btn-eliminar" 
+                                    data-basica-id="${data.basica_id}"
+                                    data-plan-id="${idPlan}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        tbody.appendChild(nuevoTr);
+        document.body.insertAdjacentHTML('beforeend', modalHTML); // ✅ Solo modalDeleteHTML
+    }
+
+    //Elinar competencia basica
+    function eliminarComBasica(idPlan, idComBasica, filaTr) {
+        fetch(`/tesis/plan/competencias-basicas/${idPlan}/${idComBasica}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la eliminación');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                // 1. ✅ Remover fila de la tabla
+                if (filaTr) filaTr.remove();
+                
+                // 2. ✅ Mostrar alerta
+                mostrarMensaje('Competencia basica eliminada correctamente', 'success');
+                
+                // 3. ✅ LIMPIAR COMPLETAMENTE EL MODAL + BACKDROP
+                limpiarModalCompletamenteComBasica(idComBasica);
+                
+                // 4. ✅ Verificar estado vacío
+                const tbody = document.querySelector('.competence-table .competence-table-basica tbody');
+                if (tbody && tbody.children.length === 0) {
+                    mostrarEstadoVacio();
+                }
+            } else {
+                mostrarMensaje(data.message || 'Error al eliminar la competencia basica', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarMensaje('Error de conexión', 'danger');
+        });
+    }
+
+    function limpiarModalCompletamenteComBasica(idComBasica) {
+        const modalId = `deleteComBasica${idComBasica}`;
+        const modalElement = document.querySelector(`#${modalId}`);
+        
+        if (modalElement) {
+            // Obtener instancia del modal
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            
+            if (modal) {
+                // Escuchar evento 'hidden.bs.modal' para limpiar backdrop
+                modalElement.addEventListener('hidden.bs.modal', function cleanup() {
+                    // ✅ FORZAR LIMPIEZA DEL BACKDROP
+                    document.body.classList.remove('modal-open');
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => backdrop.remove());
+                    
+                    // Remover listener para evitar memory leaks
+                    modalElement.removeEventListener('hidden.bs.modal', cleanup);
+                }, { once: true });
+                
+                // Ocultar modal
+                modal.hide();
+            } else {
+                // Si no hay instancia, limpiar manualmente
+                modalElement.remove();
+                document.body.classList.remove('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            }
+        } else {
+            // Limpieza de emergencia si no encuentra el modal
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const btnEliminar = e.target.closest('[data-basica-id]');
+        if (btnEliminar) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // ✅ MÉTODO 1: Si tiene data attributes (modales estáticos/dinámicos corregidos)
+            let idComBasica = btnEliminar.getAttribute('data-basica-id');
+            let idPlan = btnEliminar.getAttribute('data-plan-id');
+            
+            // ✅ MÉTODO 2: Fallback por ID del modal (modales antiguos)
+            if (!idComBasica) {
+                const modal = btnEliminar.closest('.modal');
+                const modalId = modal.id;
+                idComBasica = modalId.replace('deleteComBasica', '');
+                idPlan = document.getElementById('id_plan').value;
+            }
+            
+            const filaTr = document.querySelector(`[data-bs-target="#${btnEliminar.closest('.modal').id}"]`)?.closest('tr');
+            
+            eliminarComBasica(idPlan, idComBasica, filaTr);
+        }
+    });
+
+
     //COMPETENCIAS ESPECIALIDAD
 
     function formComEspecialidadSubmit() {
@@ -959,7 +1169,7 @@
         });
     }
 
-    // ✅ FUNCIÓN para agregar competencia general + modal dinámicamente (CORREGIDA)
+    // ✅ FUNCIÓN para agregar competencia especialidad + modal dinámicamente (CORREGIDA)
     function agregarCompetenciaEspecialidadATabla(data, idPlan) {
         let tbody = document.querySelector('.competence-table-especialidad tbody');
 
@@ -973,7 +1183,7 @@
 
             const tableHTML = `
                 <div class="table-responsive">
-                    <table class="competence-table">
+                    <table class="competence-table competence-table-especialidad">
                         <tbody></tbody>
                     </table>
                 </div>
@@ -1061,7 +1271,7 @@
                     mostrarEstadoVacio();
                 }
             } else {
-                mostrarMensaje(data.message || 'Error al eliminar la competencia general', 'danger');
+                mostrarMensaje(data.message || 'Error al eliminar la competencia especialidad', 'danger');
             }
         })
         .catch(error => {
