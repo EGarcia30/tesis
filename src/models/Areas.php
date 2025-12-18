@@ -45,7 +45,21 @@ class Areas extends Model{
             $sql = "INSERT INTO area_desempenio(area,puesto,funciones_puesto,tipo_organizacion,plan_estudio_id) VALUES(?,?,?,?,?)";
             $query = $this->prepare($sql);
             $data = [$this->_area,$this->_puesto,$this->_funciones,$this->_tipo,$this->_idPlan];
-            $res = $query->execute($data);
+            $query->execute($data);
+            $id = $this->getLastId();
+            return $id;
+        }
+        catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public function getLastId(){
+        try{
+            $sql = "SELECT LAST_INSERT_ID(area_id) as area_id from area_desempenio ORDER BY area_id DESC";
+            $query = $this->query($sql);
+            $res = $query->fetch(PDO::FETCH_ASSOC);
             return $res;
         }
         catch(PDOException $e){
@@ -53,6 +67,7 @@ class Areas extends Model{
             return false;
         }
     }
+
 
     public static function updateAreas($id,$area,$puesto,$funcion,$tipo){
         try{

@@ -964,8 +964,8 @@
 
         if (!tbody) {
             // La tabla no existe, crear estructura y agregar al DOM
-            const assignedSection = document.querySelector('.competence-list-section'); // ✅ Sección específica
-            
+            const assignedSection = document.querySelector('.competence-list-basica'); // ✅ Sección específica
+
             // Remover mensaje estado vacío si existe
             const emptyState = document.querySelector('.empty-state');
             if (emptyState) emptyState.remove();
@@ -1171,12 +1171,12 @@
     }
 
     // ✅ FUNCIÓN para agregar competencia especialidad + modal dinámicamente (CORREGIDA)
-    function agregarCompetenciaEspecialidadATabla(data, idPlan) {
+    function agregarCompetenciaEspecialidadATabla(data, idPlan) {   
         let tbody = document.querySelector('.competence-table-especialidad tbody');
 
         if (!tbody) {
             // La tabla no existe, crear estructura y agregar al DOM
-            const assignedSection = document.querySelector('.competence-list-section'); // ✅ Sección específica
+            const assignedSection = document.querySelector('.competence-list-especialidad'); // ✅ Sección específica
             
             // Remover mensaje estado vacío si existe
             const emptyState = document.querySelector('.empty-state');
@@ -1421,7 +1421,7 @@
         const modalHTML = `
             <div class="modal fade" id="${modalId}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content bg-dark text-white">
+                    <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres eliminar el area de desempeño?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1447,7 +1447,7 @@
     }
 
     function eliminarArea(idPlan, idArea, filaTr) {
-        fetch(`/tesis/plan/area/${idPlan}/${idArea}`, {
+        fetch(`/tesis/plan/areas/${idPlan}/${idArea}`, {
             method: 'DELETE'
         })
         .then(response => {

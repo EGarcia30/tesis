@@ -665,7 +665,7 @@ class CurricularDesign extends Controller{
 
         //ingresando areas de desempeño en el plan de estudio
         $area_desempenio = new Areas($area,$areaPuesto,$areaFunciones,$areaOrganizacion,$idPlan);
-        $area_desempenio->createAreas();
+        $lastId = $area_desempenio->createAreas();
 
         // retornar respuesta
         if(!$area_desempenio){
@@ -676,6 +676,7 @@ class CurricularDesign extends Controller{
         http_response_code(200);
         echo json_encode([
             'status' => 'success', 
+            'area_id' => $lastId['area_id'],
             'area' => $area, 
             'puesto' => $areaPuesto,
             'funciones' => $areaFunciones,

@@ -65,7 +65,7 @@
         </div>
         
         <!-- Sección de Lista -->
-        <div class="competence-list-section">
+        <div class="competence-list-section competence-list-basica">
             <h3 class="assigned-title">
                 <i class="fas fa-list-check"></i>
                 Competencias Asignadas
